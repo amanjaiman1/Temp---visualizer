@@ -270,17 +270,13 @@ let teachMode = false;
 // Lower multipliers (0.5×, 0.75×) play SLOWER so learners can follow each step;
 // the `delay` is the milliseconds spent on every animation frame.
 const speedLevels = [
-  { label: '0.25×', delay: 1150 },
-  { label: '0.5×',  delay: 760 },
-  { label: '0.75×', delay: 480 },
-  { label: '1×',    delay: 300 },
-  { label: '1.5×',  delay: 190 },
-  { label: '2×',    delay: 120 },
-  { label: '3×',    delay: 70  },
-  { label: '4×',    delay: 40  },
-  { label: '6×',    delay: 20  },
-  { label: '8×',    delay: 9   },
-  { label: '10×',   delay: 3   },
+  { label: '0.05×', delay: 2400 },
+  { label: '0.1×',  delay: 1600 },
+  { label: '0.15×', delay: 1100 },
+  { label: '0.2×',  delay: 800 },
+  { label: '0.3×',  delay: 550 },
+  { label: '0.4×',  delay: 380 },
+  { label: '0.5×',  delay: 260 },
 ];
 
 let audioCtx = null;
@@ -886,10 +882,9 @@ function finish() {
     const done = 'All done! Every box is now lined up from shortest to tallest. It took <b class="ev">' +
       comparisons + '</b> comparisons and <b class="ev">' + swaps + '</b> moves to sort just ' +
       array.length + ' boxes — imagine doing that by hand! <span class="teach-extra">Tip: try another algorithm to see how the number of steps changes.</span>';
-    setExplain('🎉', done);
     showTeachPopup('🎉', done);
   } else {
-    setExplain('🎉', 'Done! Every bar is now arranged from shortest to tallest — the list is fully sorted.');
+    showTeachPopup('🎉', 'Done! Every bar is now arranged from shortest to tallest — the list is fully sorted.');
   }
   // celebration beep sequence
   if (soundOn) {
@@ -1040,14 +1035,13 @@ const PLAIN_INTRO = {
 };
 
 function setExplain(icon, html) {
-  const iconEl = document.getElementById('explainIcon');
-  const textEl = document.getElementById('explainText');
-  if (iconEl) iconEl.textContent = icon;
-  if (textEl) textEl.innerHTML = html;
+  // Narration is shown only in the floating popup.
+  showTeachPopup(icon, html);
 }
 
 function showAlgoIntro(algoId) {
-  setExplain('💡', PLAIN_INTRO[algoId] || 'Press ▶ Sort to watch this algorithm work step by step.');
+  // Show intro only in the popup briefly, then hide
+  showTeachPopup('💡', PLAIN_INTRO[algoId] || 'Press ▶ Sort to watch this algorithm work step by step.');
 }
 
 function rolesOf(states) {
@@ -1137,10 +1131,9 @@ function updateExplain(f) {
   if (teachMode) {
     const extra = teachExtra(f);
     const html = msg.text + (extra ? ' <span class="teach-extra">' + extra + '</span>' : '');
-    setExplain(msg.icon, html);
     showTeachPopup(msg.icon, html);
   } else {
-    setExplain(msg.icon, msg.text);
+    showTeachPopup(msg.icon, msg.text);
   }
 }
 
@@ -1185,15 +1178,15 @@ function startTeachMode() {
 
   // fewer boxes so each step is easy to follow
   const sizeSlider = document.getElementById('sizeSlider');
-  if (sizeSlider) { sizeSlider.value = 10; onSizeChange(10); }
+  if (sizeSlider) { sizeSlider.value = 8; onSizeChange(8); }
 
-  // 0.25× speed (slider position 1) — nice and slow
+  // 0.05× speed (slider position 1) — very slow for learning
   const speedSlider = document.getElementById('speedSlider');
   if (speedSlider) { speedSlider.value = 1; onSpeedChange(1); }
 
   // intro popup, then auto-start the sort after a short beat
   showTeachPopup('🎓',
-    'Teach Mode is on. Speed is set to <b class="ev">0.25×</b> and the list is trimmed to <b class="ev">10</b> boxes. ' +
+    'Teach Mode is on. Speed is set to <b class="ev">0.05×</b> and the list is trimmed to <b class="ev">8</b> boxes. ' +
     'I\'ll now sort it slowly and explain every single step right here. Watch the boxes!');
 
   setTimeout(() => {

@@ -71,10 +71,7 @@
         <div class="axis-line"></div>
       </div>
 
-      <div class="explain-bar" id="explainBar">
-        <div class="explain-icon" id="explainIcon">💡</div>
-        <div class="explain-text" id="explainText">Pick an algorithm, then press ▶ Sort — this box explains every step in plain English.</div>
-      </div>
+
 
       <div class="controls-bar">
         <button class="btn btn-primary" id="btnSort" onclick="startSort()">▶ Sort</button>
@@ -85,19 +82,17 @@
         <button class="btn btn-teach" id="btnTeach" onclick="startTeachMode()">🎓 Teach Me</button>
 
         <div class="ctrl-group" id="sizeGroup">
-          <div class="ctrl-label">Array Size <span id="sizeVal">60</span></div>
-          <input type="range" class="slider" id="sizeSlider" min="10" max="120" value="60" oninput="onSizeChange(this.value)">
+          <div class="ctrl-label">Array Size <span id="sizeVal">30</span></div>
+          <input type="range" class="slider" id="sizeSlider" min="8" max="50" value="30" oninput="onSizeChange(this.value)">
         </div>
 
         <div class="ctrl-group" id="speedGroup">
-          <div class="ctrl-label">Speed <span id="speedVal">1×</span></div>
-          <input type="range" class="slider" id="speedSlider" min="1" max="11" value="4" list="speedTicks" oninput="onSpeedChange(this.value)">
+          <div class="ctrl-label">Speed <span id="speedVal">0.2×</span></div>
+          <input type="range" class="slider" id="speedSlider" min="1" max="7" value="4" list="speedTicks" oninput="onSpeedChange(this.value)">
           <datalist id="speedTicks">
-            <option value="1" label="0.25×"></option>
-            <option value="2"></option>
-            <option value="4" label="1×"></option>
-            <option value="7"></option>
-            <option value="11" label="10×"></option>
+            <option value="1" label="0.05×"></option>
+            <option value="4" label="0.2×"></option>
+            <option value="7" label="0.5×"></option>
           </datalist>
         </div>
 

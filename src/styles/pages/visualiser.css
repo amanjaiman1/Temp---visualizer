@@ -389,45 +389,6 @@ main {
 }
 
 
-/* ── Plain-English step narration bar ── */
-.explain-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  border-top: 1px solid var(--border2);
-  background: linear-gradient(90deg, rgba(0,255,200,0.06), rgba(176,111,255,0.04));
-  flex-shrink: 0;
-  position: relative;
-  z-index: 5;
-  min-height: 52px;
-}
-.explain-icon {
-  font-size: 1.3rem;
-  line-height: 1;
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
-.explain-text {
-  font-family: var(--font-ui);
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: #cfe0e8;
-}
-.explain-text .ev {
-  color: var(--cyan);
-  font-weight: 800;
-  font-family: var(--font-mono);
-  padding: 0 2px;
-}
-
 
 .btn {
   display: inline-flex;
@@ -921,16 +882,9 @@ footer span { color: var(--cyan); }
 
 /* ── Narration bar responsiveness ── */
 @media (max-width: 680px) {
-  .explain-bar { padding: 11px 14px; gap: 10px; }
-  .explain-text { font-size: 0.95rem; }
-  .explain-icon { width: 32px; height: 32px; font-size: 1.2rem; }
   /* When the bar canvas is fixed-height on mobile, let the page scroll
      so the narration + controls remain reachable below the bars. */
   .visualiser { overflow: visible; }
-}
-@media (max-width: 460px) {
-  .explain-bar { padding: 10px 12px; }
-  .explain-text { font-size: 0.9rem; }
 }
 
 
