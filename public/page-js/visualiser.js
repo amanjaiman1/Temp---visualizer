@@ -1215,6 +1215,8 @@ function showTeachPopup(icon, html) {
   el.querySelector('#teachPopupIcon').textContent = icon;
   el.querySelector('#teachPopupText').innerHTML = html;
   el.classList.add('show');
+  // On mobile, only show popup in Teach Mode
+  el.classList.toggle('teach-active', !!teachMode);
   // tiny pop animation each iteration so it reads as a fresh popup
   el.classList.remove('pulse');
   void el.offsetWidth; // reflow to restart the animation
@@ -1223,6 +1225,6 @@ function showTeachPopup(icon, html) {
 
 function hideTeachPopup() {
   const el = document.getElementById('teachPopup');
-  if (el) el.classList.remove('show', 'pulse');
+  if (el) el.classList.remove('show', 'pulse', 'teach-active');
   if (teachPopupTimer) { clearTimeout(teachPopupTimer); teachPopupTimer = null; }
 }
