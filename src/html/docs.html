@@ -1,0 +1,861 @@
+<!-- NAV -->
+
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-eyebrow">The Complete 2026 Reference</div>
+  <h1 class="page-title">Sorting Algorithms —<br>Every Answer, <em>Visualised</em></h1>
+  <p class="page-sub">The only sorting algorithm guide that answers every real question: which is fastest, which to pick for interviews, how they compare, and why theory sometimes lies. With live interactive examples.</p>
+  <div class="hero-tags">
+    <a href="#fastest" class="hero-tag">🏆 Fastest Algorithm</a>
+    <a href="#cheatsheet" class="hero-tag">📋 Big-O Cheatsheet</a>
+    <a href="#quicksort-vs-mergesort" class="hero-tag">⚔ QuickSort vs MergeSort</a>
+    <a href="#stability" class="hero-tag">⚖ Stability Explained</a>
+    <a href="#algorithms" class="hero-tag">📖 All 10 Algorithms</a>
+    <a href="#which-to-use" class="hero-tag">🎯 Which to Use When</a>
+    <a href="#interview" class="hero-tag">🎤 Interview Guide</a>
+    <a href="#real-world" class="hero-tag">🌍 Real-World Usage</a>
+  </div>
+</div>
+
+<!-- DOCS LAYOUT -->
+<div class="docs-layout">
+
+  <!-- ════ SIDEBAR TOC ════ -->
+  <aside class="toc-sidebar">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list" id="tocList">
+      <li class="toc-item"><a href="#fastest">🏆 Fastest Sorting Algorithm</a></li>
+      <li class="toc-item"><a href="#cheatsheet">📋 Big-O Cheatsheet</a></li>
+      <li class="toc-item"><a href="#quicksort-vs-mergesort">⚔ QuickSort vs MergeSort</a></li>
+      <li class="toc-item"><a href="#stability">⚖ What is Stability?</a></li>
+      <li class="toc-item"><a href="#algorithms">📖 All 10 Algorithms</a></li>
+      <li class="toc-item sub"><a href="#alg-bubble">  Bubble Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-insertion">  Insertion Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-selection">  Selection Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-merge">  Merge Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-quick">  Quick Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-heap">  Heap Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-shell">  Shell Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-counting">  Counting Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-radix">  Radix Sort</a></li>
+      <li class="toc-item sub"><a href="#alg-tim">  Tim Sort</a></li>
+      <li class="toc-item"><a href="#which-to-use">🎯 Which to Use When</a></li>
+      <li class="toc-item"><a href="#interview">🎤 Interview Guide</a></li>
+      <li class="toc-item"><a href="#real-world">🌍 Real-World Usage</a></li>
+    </ul>
+
+    <a href="/visualiser" class="toc-cta">
+      <span class="toc-cta-label">Try it live</span>
+      <span class="toc-cta-text">▶ Launch Visualiser</span>
+    </a>
+  </aside>
+
+  <!-- ════ MAIN CONTENT ════ -->
+  <main class="docs-content">
+
+    <!-- ══ SECTION 1: FASTEST ══ -->
+    <section class="doc-section" id="fastest">
+      <div class="section-label amber">The #1 Question</div>
+      <h2 class="doc-h2">What is the <span class="em-amber">fastest</span> sorting algorithm?</h2>
+
+      <div class="verdict-card">
+        <div class="verdict-badge">⚡ Sort &amp; Visualize Verdict</div>
+        <div class="verdict-answer">It depends — but <em>QuickSort</em> wins in most real scenarios.</div>
+        <p class="verdict-sub">QuickSort averages O(n log n) with exceptional cache efficiency, making it 2–3× faster than MergeSort on in-memory arrays. For integers in a bounded range, Counting Sort or Radix Sort run in O(n) — theoretically faster than any comparison sort. For nearly-sorted real-world data, TimSort wins. There is no single "fastest" — there is only the fastest <strong>for your data.</strong></p>
+      </div>
+
+      <div class="race-section">
+        <div class="race-title">⏱ SPEED RACE — 100,000 random integers, in-memory (relative performance)</div>
+        <div class="race-row">
+          <div class="race-name">QuickSort</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:97%;background:linear-gradient(90deg,#00d4a8,#00ffc8);animation-delay:0.1s">FASTEST</div></div>
+          <div class="race-complexity">O(n log n)</div>
+        </div>
+        <div class="race-row">
+          <div class="race-name">IntroSort (C++)</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:95%;background:linear-gradient(90deg,#00a898,#00d4a8);animation-delay:0.2s">≈QS</div></div>
+          <div class="race-complexity">O(n log n)</div>
+        </div>
+        <div class="race-row">
+          <div class="race-name">TimSort</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:82%;background:linear-gradient(90deg,#6030bb,#b06fff);animation-delay:0.3s">fast</div></div>
+          <div class="race-complexity">O(n log n)</div>
+        </div>
+        <div class="race-row">
+          <div class="race-name">MergeSort</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:70%;background:linear-gradient(90deg,#cc8800,#ffb830);animation-delay:0.4s">good</div></div>
+          <div class="race-complexity">O(n log n)</div>
+        </div>
+        <div class="race-row">
+          <div class="race-name">HeapSort</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:58%;background:linear-gradient(90deg,#8c6010,#ffb830);animation-delay:0.5s">ok</div></div>
+          <div class="race-complexity">O(n log n)</div>
+        </div>
+        <div class="race-row">
+          <div class="race-name">ShellSort</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:48%;background:linear-gradient(90deg,#4a3a6a,#7a5aaa);animation-delay:0.6s">ok</div></div>
+          <div class="race-complexity">O(n log²n)</div>
+        </div>
+        <div class="race-row">
+          <div class="race-name">InsertionSort</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:14%;background:linear-gradient(90deg,#882010,#ff4060);animation-delay:0.7s">slow</div></div>
+          <div class="race-complexity">O(n²)</div>
+        </div>
+        <div class="race-row">
+          <div class="race-name">BubbleSort</div>
+          <div class="race-bar-wrap"><div class="race-bar" style="width:4%;background:linear-gradient(90deg,#660010,#cc1030);animation-delay:0.8s"></div></div>
+          <div class="race-complexity">O(n²)</div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div class="callout-text"><strong>Why QuickSort beats MergeSort in practice despite equal Big-O:</strong> QuickSort sorts <em>in-place</em>, so it makes sequential memory accesses that fit beautifully into CPU cache lines. MergeSort copies data to auxiliary arrays — those non-local memory reads are expensive. On a modern CPU with L1/L2 cache, this cache locality advantage makes QuickSort 2–3× faster for typical in-memory workloads.</div>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-text"><strong>QuickSort's Achilles' heel:</strong> On already-sorted or reverse-sorted input with a naive pivot (first/last element), QuickSort degrades to O(n²). Always use a randomised pivot or median-of-three strategy in production code.</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SECTION 2: CHEATSHEET ══ -->
+    <section class="doc-section" id="cheatsheet">
+      <div class="section-label">Big-O Reference</div>
+      <h2 class="doc-h2">Sorting Algorithm <em>Complexity Cheatsheet</em></h2>
+      <p class="doc-p">Every algorithm's time and space complexity at a glance. Bookmark this. It's what you'll reach for before every interview and every code review.</p>
+
+      <div class="cheat-table-wrap">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Best Case</th>
+              <th>Average Case</th>
+              <th>Worst Case</th>
+              <th>Space</th>
+              <th>Stable?</th>
+              <th>Method</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="algo-col">Bubble Sort</td><td class="t-good">O(n)</td><td class="t-bad">O(n²)</td><td class="t-bad">O(n²)</td><td class="t-good">O(1)</td><td><span class="tag tag-stable">✔ Stable</span></td><td class="t-muted" style="color:var(--muted)">Exchange</td></tr>
+            <tr><td class="algo-col">Selection Sort</td><td class="t-bad">O(n²)</td><td class="t-bad">O(n²)</td><td class="t-bad">O(n²)</td><td class="t-good">O(1)</td><td><span class="tag tag-unstable">✗ Unstable</span></td><td class="t-muted" style="color:var(--muted)">Selection</td></tr>
+            <tr><td class="algo-col">Insertion Sort</td><td class="t-good">O(n)</td><td class="t-bad">O(n²)</td><td class="t-bad">O(n²)</td><td class="t-good">O(1)</td><td><span class="tag tag-stable">✔ Stable</span></td><td class="t-muted" style="color:var(--muted)">Insertion</td></tr>
+            <tr><td class="algo-col">Merge Sort</td><td class="t-ok">O(n log n)</td><td class="t-ok">O(n log n)</td><td class="t-ok">O(n log n)</td><td class="t-bad">O(n)</td><td><span class="tag tag-stable">✔ Stable</span></td><td class="t-muted" style="color:var(--muted)">Merge D&C</td></tr>
+            <tr><td class="algo-col">Quick Sort</td><td class="t-ok">O(n log n)</td><td class="t-ok">O(n log n)</td><td class="t-bad">O(n²)*</td><td class="t-good">O(log n)</td><td><span class="tag tag-unstable">✗ Unstable</span></td><td class="t-muted" style="color:var(--muted)">Partition D&C</td></tr>
+            <tr><td class="algo-col">Heap Sort</td><td class="t-ok">O(n log n)</td><td class="t-ok">O(n log n)</td><td class="t-ok">O(n log n)</td><td class="t-good">O(1)</td><td><span class="tag tag-unstable">✗ Unstable</span></td><td class="t-muted" style="color:var(--muted)">Selection</td></tr>
+            <tr><td class="algo-col">Shell Sort</td><td class="t-ok">O(n log n)</td><td class="t-ok">O(n log²n)</td><td class="t-ok">O(n log²n)</td><td class="t-good">O(1)</td><td><span class="tag tag-unstable">✗ Unstable</span></td><td class="t-muted" style="color:var(--muted)">Insertion</td></tr>
+            <tr><td class="algo-col">Counting Sort</td><td class="t-good">O(n+k)</td><td class="t-good">O(n+k)</td><td class="t-good">O(n+k)</td><td class="t-ok">O(k)</td><td><span class="tag tag-stable">✔ Stable</span></td><td class="t-muted" style="color:var(--muted)">Non-comparison</td></tr>
+            <tr><td class="algo-col">Radix Sort</td><td class="t-good">O(nk)</td><td class="t-good">O(nk)</td><td class="t-good">O(nk)</td><td class="t-ok">O(n+k)</td><td><span class="tag tag-stable">✔ Stable</span></td><td class="t-muted" style="color:var(--muted)">Non-comparison</td></tr>
+            <tr><td class="algo-col">Tim Sort</td><td class="t-good">O(n)</td><td class="t-ok">O(n log n)</td><td class="t-ok">O(n log n)</td><td class="t-bad">O(n)</td><td><span class="tag tag-stable">✔ Stable</span></td><td class="t-muted" style="color:var(--muted)">Hybrid</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="doc-p" style="font-size:0.7rem;color:var(--muted)">* QuickSort worst-case O(n²) is rare in practice and avoided with randomised pivot. <strong>k</strong> = range of input values. <strong>n</strong> = number of elements.</p>
+
+      <div class="callout tip">
+        <div class="callout-icon">🎯</div>
+        <div class="callout-text"><strong>Interview tip:</strong> Examiners love to ask about worst-case. Memorise that QuickSort's worst case is O(n²) (though avoidable), and that MergeSort, HeapSort, and TimSort all guarantee O(n log n) in all cases. Counting and Radix Sort beat this lower bound by not using comparisons — but only for specific input types.</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SECTION 3: QS vs MS ══ -->
+    <section class="doc-section" id="quicksort-vs-mergesort">
+      <div class="section-label red">Most Asked Comparison</div>
+      <h2 class="doc-h2"><span class="em-red">QuickSort</span> vs <span class="em-amber">MergeSort</span> — The Definitive Verdict</h2>
+      <p class="doc-p">This is the single most-asked sorting algorithm interview question. Here is the honest, nuanced answer — not the generic textbook version.</p>
+
+      <div class="showdown">
+        <div class="showdown-side">
+          <div class="showdown-name">QuickSort <span class="win">↑ Wins for arrays</span></div>
+          <div class="sw-row"><span class="sw-key">Average speed</span><span class="sw-val sw-good">2–3× faster*</span></div>
+          <div class="sw-row"><span class="sw-key">Space</span><span class="sw-val sw-good">O(log n) in-place</span></div>
+          <div class="sw-row"><span class="sw-key">Cache locality</span><span class="sw-val sw-good">Excellent</span></div>
+          <div class="sw-row"><span class="sw-key">Stable?</span><span class="sw-val sw-bad">No</span></div>
+          <div class="sw-row"><span class="sw-key">Worst case</span><span class="sw-val sw-bad">O(n²) naïve</span></div>
+          <div class="sw-row"><span class="sw-key">External sort</span><span class="sw-val sw-bad">No</span></div>
+          <div class="sw-row"><span class="sw-key">Linked lists</span><span class="sw-val sw-bad">Poor</span></div>
+          <div class="sw-row"><span class="sw-key">Used in</span><span class="sw-val sw-muted">C++ std::sort*</span></div>
+        </div>
+        <div class="showdown-vs"><div class="vs-circle">VS</div></div>
+        <div class="showdown-side">
+          <div class="showdown-name">MergeSort <span class="win">↑ Wins for guarantees</span></div>
+          <div class="sw-row"><span class="sw-key">Average speed</span><span class="sw-val sw-ok">Consistently good</span></div>
+          <div class="sw-row"><span class="sw-key">Space</span><span class="sw-val sw-bad">O(n) auxiliary</span></div>
+          <div class="sw-row"><span class="sw-key">Cache locality</span><span class="sw-val sw-bad">Poor (non-local)</span></div>
+          <div class="sw-row"><span class="sw-key">Stable?</span><span class="sw-val sw-good">Yes</span></div>
+          <div class="sw-row"><span class="sw-key">Worst case</span><span class="sw-val sw-good">O(n log n)</span></div>
+          <div class="sw-row"><span class="sw-key">External sort</span><span class="sw-val sw-good">Yes (disk sorting)</span></div>
+          <div class="sw-row"><span class="sw-key">Linked lists</span><span class="sw-val sw-good">Excellent</span></div>
+          <div class="sw-row"><span class="sw-key">Used in</span><span class="sw-val sw-muted">TimSort (Python, Java)</span></div>
+        </div>
+      </div>
+
+      <h3 class="doc-h3">The Deeper Story: Cache Lines and Why Theory Lies</h3>
+      <p class="doc-p">Both QuickSort and MergeSort have O(n log n) average complexity — identical on paper. But <strong>constants matter</strong>, and those constants are dominated by how your CPU handles memory. QuickSort pivots around a single element and swaps nearby elements, so all accesses stay in L1/L2 cache (64–256KB). MergeSort allocates a fresh O(n) array at every merge step, causing cache misses. On a modern CPU sorting 1M integers, QuickSort finishes in ~80ms; MergeSort takes ~200ms — same Big-O, 2.5× real difference.</p>
+
+      <p class="doc-p">C++'s <code>std::sort</code> uses <strong>IntroSort</strong> — a hybrid that starts as QuickSort, switches to HeapSort if recursion depth exceeds 2·log(n) (to avoid O(n²) worst case), and falls back to InsertionSort for small arrays. Java's <code>Arrays.sort()</code> for primitives uses <strong>Dual-Pivot QuickSort</strong> (Yaroslavskiy, 2009); for objects it uses <strong>TimSort</strong> to preserve stability.</p>
+
+      <div class="callout info">
+        <div class="callout-icon">📌</div>
+        <div class="callout-text"><strong>Definitive answer for interviews:</strong> "QuickSort is faster in practice for in-memory arrays due to cache locality. MergeSort is preferred when you need guaranteed O(n log n), stable sort, or when sorting linked lists or external data. The real world uses hybrids — IntroSort in C++, TimSort in Python and Java."</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SECTION 4: STABILITY ══ -->
+    <section class="doc-section" id="stability">
+      <div class="section-label green">Often Misunderstood</div>
+      <h2 class="doc-h2">What does <em>stable</em> mean — and why does it matter?</h2>
+      <p class="doc-p">A sorting algorithm is <strong>stable</strong> if it preserves the original relative order of elements that compare as equal. This sounds abstract — here's why it's crucial in practice.</p>
+
+      <h3 class="doc-h3">A Concrete Example: Sorting a Student Roster</h3>
+      <p class="doc-p">Imagine you have a list of students, each with a name and grade. You want to sort <strong>first by grade, then by name</strong> within each grade.</p>
+
+      <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:20px;margin-bottom:20px;overflow-x:auto;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;min-width:400px;">
+          <div>
+            <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Input (sorted by name already)</div>
+            <div style="font-size:0.75rem;font-family:var(--font-mono);line-height:2;color:#8899aa;">Alice — A<br>Bob — B<br>Carol — A<br>Dave — B<br>Eve — A</div>
+          </div>
+          <div>
+            <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Sort by grade with <span style="color:var(--green)">Stable</span> sort</div>
+            <div style="font-size:0.75rem;font-family:var(--font-mono);line-height:2;color:#8899aa;"><span style="color:var(--green)">Alice — A</span><br><span style="color:var(--green)">Carol — A</span><br><span style="color:var(--green)">Eve — A</span><br>Bob — B<br>Dave — B</div>
+          </div>
+        </div>
+        <p style="font-size:0.72rem;color:#5a6a7a;margin-top:14px;line-height:1.6;">With a <strong>stable</strong> sort, Alice, Carol, and Eve maintain their alphabetical order within grade A — the sub-sort is preserved for free. An <strong>unstable</strong> sort may output Eve, Alice, Carol in any order.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+        <div style="background:rgba(57,255,133,0.04);border:1px solid rgba(57,255,133,0.15);border-radius:8px;padding:16px;">
+          <div style="font-family:var(--font-ui);font-weight:700;font-size:0.85rem;color:var(--green);margin-bottom:10px;">✔ Stable Algorithms</div>
+          <div style="font-size:0.75rem;color:#6a7a8a;line-height:2;font-family:var(--font-mono);">Bubble Sort<br>Insertion Sort<br>Merge Sort<br>Tim Sort<br>Counting Sort<br>Radix Sort</div>
+        </div>
+        <div style="background:rgba(255,64,96,0.04);border:1px solid rgba(255,64,96,0.15);border-radius:8px;padding:16px;">
+          <div style="font-family:var(--font-ui);font-weight:700;font-size:0.85rem;color:var(--red);margin-bottom:10px;">✗ Unstable Algorithms</div>
+          <div style="font-size:0.75rem;color:#6a7a8a;line-height:2;font-family:var(--font-mono);">Quick Sort<br>Heap Sort<br>Selection Sort<br>Shell Sort<br>IntroSort (C++)</div>
+        </div>
+      </div>
+
+      <p class="doc-p">Stability matters when you sort by multiple criteria sequentially, sort objects where equality is partial, or guarantee deterministic output for user-facing features (like sort-by-date that preserves name order). Python's built-in <code>sorted()</code> is stable <em>by design</em> — it was a deliberate choice that enables the Schwartzian transform idiom.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SECTION 5: ALL ALGORITHMS ══ -->
+    <section class="doc-section" id="algorithms">
+      <div class="section-label purple">Deep Dives</div>
+      <h2 class="doc-h2">All 10 Algorithms — <em>Fully Explained</em></h2>
+      <p class="doc-p">Click any algorithm to expand the full technical breakdown: how it works, pseudocode, when to use it, and what to avoid.</p>
+
+      <!-- BUBBLE SORT -->
+      <div class="algo-deep-card" id="alg-bubble">
+        <div class="algo-deep-head" onclick="toggleCard('alg-bubble')">
+          <div class="algo-deep-name">Bubble Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(255,64,96,0.1);color:var(--red);border:1px solid rgba(255,64,96,0.2);">O(n²) avg</span>
+              <span class="tag" style="background:rgba(0,255,200,0.08);color:var(--cyan2);border:1px solid rgba(0,255,200,0.15);">O(1) space</span>
+              <span class="tag tag-stable">Stable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <div class="algo-deep-grid">
+            <div class="ada-col">
+              <div class="ada-label">How It Works</div>
+              <p class="ada-desc">Repeatedly steps through the array, compares adjacent pairs, and swaps them if out of order. After each full pass, the largest unsorted element "bubbles" to its correct position at the end. The optimised version stops early if no swaps occurred in a pass — achieving O(n) on already-sorted input.</p>
+              <div class="ada-label" style="margin-top:16px;">Best For</div>
+              <ul class="when-use">
+                <li>Learning and teaching algorithm fundamentals</li>
+                <li>Detecting if an array is already sorted (O(n) best case)</li>
+                <li>Arrays so small that code simplicity > performance</li>
+              </ul>
+              <div class="ada-label" style="margin-top:12px;">Avoid When</div>
+              <ul class="when-use avoid-use">
+                <li>Any production sorting of non-trivial data sizes</li>
+                <li>N > ~100 elements</li>
+              </ul>
+            </div>
+            <div class="ada-col">
+              <div class="ada-label">Pseudocode</div>
+              <div class="pseudo-mini"><span class="k">procedure</span> bubbleSort(A, n):
+  <span class="k">repeat</span>
+    swapped ← <span class="k">false</span>
+    <span class="k">for</span> i ← 0 <span class="k">to</span> n−2 <span class="k">do</span>
+      <span class="k">if</span> A[i] > A[i+1] <span class="k">then</span>
+        swap(A[i], A[i+1])
+        swapped ← <span class="k">true</span>
+    n ← n − 1
+  <span class="k">until</span> <span class="k">not</span> swapped
+<span class="c">  // With swapped flag: O(n) best case</span></div>
+            </div>
+          </div>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Bubble Sort animate live →</a>
+        </div>
+      </div>
+
+      <!-- INSERTION SORT -->
+      <div class="algo-deep-card" id="alg-insertion">
+        <div class="algo-deep-head" onclick="toggleCard('alg-insertion')">
+          <div class="algo-deep-name">Insertion Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n) best</span>
+              <span class="tag" style="background:rgba(255,64,96,0.1);color:var(--red);border:1px solid rgba(255,64,96,0.2);">O(n²) avg</span>
+              <span class="tag tag-stable">Stable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <div class="algo-deep-grid">
+            <div class="ada-col">
+              <div class="ada-label">How It Works</div>
+              <p class="ada-desc">Maintains a sorted sub-array from the left. For each new element, "inserts" it into the correct position by shifting larger sorted elements right. Like sorting playing cards in your hand — you pick each card and slide it into position.</p>
+              <p class="ada-desc" style="margin-top:8px;"><strong>Key insight:</strong> InsertionSort is the algorithm of choice for small arrays (n ≤ 32). Both TimSort and IntroSort use InsertionSort internally for subarrays below a threshold because its low overhead beats O(n log n) algorithms at small scales.</p>
+              <div class="ada-label" style="margin-top:16px;">Best For</div>
+              <ul class="when-use">
+                <li>Nearly-sorted data (O(n·k) where k = max displacement)</li>
+                <li>Online sorting — elements arriving one at a time</li>
+                <li>Small arrays or as subroutine in hybrid sorts</li>
+              </ul>
+            </div>
+            <div class="ada-col">
+              <div class="ada-label">Pseudocode</div>
+              <div class="pseudo-mini"><span class="k">procedure</span> insertionSort(A):
+  <span class="k">for</span> i ← 1 <span class="k">to</span> length(A)−1 <span class="k">do</span>
+    key ← A[i]
+    j ← i − 1
+    <span class="k">while</span> j ≥ 0 <span class="k">and</span> A[j] > key <span class="k">do</span>
+      A[j+1] ← A[j]   <span class="c">// shift right</span>
+      j ← j − 1
+    A[j+1] ← key      <span class="c">// insert</span>
+<span class="c">// O(n) on nearly sorted — uses no swaps,</span>
+<span class="c">// only shifts (cache friendly)</span></div>
+            </div>
+          </div>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Insertion Sort animate live →</a>
+        </div>
+      </div>
+
+      <!-- SELECTION SORT -->
+      <div class="algo-deep-card" id="alg-selection">
+        <div class="algo-deep-head" onclick="toggleCard('alg-selection')">
+          <div class="algo-deep-name">Selection Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(255,64,96,0.1);color:var(--red);border:1px solid rgba(255,64,96,0.2);">O(n²) always</span>
+              <span class="tag" style="background:rgba(0,255,200,0.08);color:var(--cyan2);border:1px solid rgba(0,255,200,0.15);">O(1) space</span>
+              <span class="tag tag-unstable">Unstable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <div class="algo-deep-grid">
+            <div class="ada-col">
+              <div class="ada-label">How It Works</div>
+              <p class="ada-desc">Divides the array into sorted and unsorted portions. On each pass, scans the unsorted portion to find the minimum element, then swaps it into the correct position. Exactly n−1 swaps total, regardless of input.</p>
+              <p class="ada-desc" style="margin-top:8px;"><strong>Why it matters despite O(n²):</strong> In environments where writes are very expensive (e.g. EEPROM, flash memory with limited write cycles), Selection Sort's guaranteed O(n) swaps makes it the right choice even though comparisons are still O(n²).</p>
+              <div class="ada-label" style="margin-top:16px;">Best For</div>
+              <ul class="when-use">
+                <li>Minimising write operations (flash memory, EEPROM)</li>
+                <li>When write cost >> read cost</li>
+                <li>Teaching selection-based algorithm design</li>
+              </ul>
+            </div>
+            <div class="ada-col">
+              <div class="ada-label">Pseudocode</div>
+              <div class="pseudo-mini"><span class="k">procedure</span> selectionSort(A):
+  n ← length(A)
+  <span class="k">for</span> i ← 0 <span class="k">to</span> n−1 <span class="k">do</span>
+    minIdx ← i
+    <span class="k">for</span> j ← i+1 <span class="k">to</span> n−1 <span class="k">do</span>
+      <span class="k">if</span> A[j] < A[minIdx] <span class="k">then</span>
+        minIdx ← j
+    swap(A[i], A[minIdx])
+<span class="c">// Always O(n²) — no early exit possible</span>
+<span class="c">// Exactly n−1 swaps regardless of input</span></div>
+            </div>
+          </div>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Selection Sort animate live →</a>
+        </div>
+      </div>
+
+      <!-- MERGE SORT -->
+      <div class="algo-deep-card" id="alg-merge">
+        <div class="algo-deep-head" onclick="toggleCard('alg-merge')">
+          <div class="algo-deep-name">Merge Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n log n) always</span>
+              <span class="tag" style="background:rgba(255,64,96,0.1);color:var(--red);border:1px solid rgba(255,64,96,0.2);">O(n) space</span>
+              <span class="tag tag-stable">Stable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <div class="algo-deep-grid">
+            <div class="ada-col">
+              <div class="ada-label">How It Works</div>
+              <p class="ada-desc">Classic divide-and-conquer: recursively split the array in half until each subarray has one element (trivially sorted), then merge pairs of sorted subarrays into a single sorted array. Invented by John von Neumann in 1945.</p>
+              <p class="ada-desc" style="margin-top:8px;"><strong>External sorting:</strong> MergeSort is the algorithm of choice for sorting data that doesn't fit in memory (database records, log files). You can merge sorted chunks from disk without loading everything into RAM.</p>
+              <div class="ada-label" style="margin-top:16px;">Best For</div>
+              <ul class="when-use">
+                <li>When stability is non-negotiable</li>
+                <li>External sorting (data larger than RAM)</li>
+                <li>Sorting linked lists (no random access needed)</li>
+                <li>Guaranteed O(n log n) — no worst-case surprise</li>
+              </ul>
+            </div>
+            <div class="ada-col">
+              <div class="ada-label">Pseudocode</div>
+              <div class="pseudo-mini"><span class="k">procedure</span> mergeSort(A, l, r):
+  <span class="k">if</span> l ≥ r <span class="k">then return</span>
+  mid ← (l + r) / 2
+  mergeSort(A, l, mid)
+  mergeSort(A, mid+1, r)
+  merge(A, l, mid, r)
+
+<span class="k">procedure</span> merge(A, l, mid, r):
+  left  ← A[l..mid]
+  right ← A[mid+1..r]
+  i,j,k ← 0,0,l
+  <span class="k">while</span> i < |left| <span class="k">and</span> j < |right|:
+    <span class="k">if</span> left[i] ≤ right[j]:
+      A[k++] ← left[i++]
+    <span class="k">else</span>: A[k++] ← right[j++]</div>
+            </div>
+          </div>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Merge Sort animate live →</a>
+        </div>
+      </div>
+
+      <!-- QUICK SORT -->
+      <div class="algo-deep-card open" id="alg-quick">
+        <div class="algo-deep-head" onclick="toggleCard('alg-quick')">
+          <div class="algo-deep-name">Quick Sort ⚡</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n log n) avg</span>
+              <span class="tag" style="background:rgba(255,64,96,0.1);color:var(--red);border:1px solid rgba(255,64,96,0.2);">O(n²) worst</span>
+              <span class="tag tag-unstable">Unstable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <div class="algo-deep-grid">
+            <div class="ada-col">
+              <div class="ada-label">How It Works</div>
+              <p class="ada-desc">Selects a pivot element and partitions the array so all smaller elements move left and all larger elements move right. Recursively applies to both partitions. Invented by Tony Hoare in 1959–1961. The fastest in-memory comparison sort for random data.</p>
+              <p class="ada-desc" style="margin-top:8px;"><strong>Pivot strategies:</strong> (1) <em>Last element</em> — simple but O(n²) on sorted input. (2) <em>Random pivot</em> — avoids adversarial inputs. (3) <em>Median-of-three</em> — best practical heuristic. (4) <em>Dual-pivot</em> — Java's approach, reduces average comparisons by ~5%.</p>
+              <div class="ada-label" style="margin-top:16px;">Best For</div>
+              <ul class="when-use">
+                <li>General-purpose in-memory sorting</li>
+                <li>Arrays that fit in CPU cache</li>
+                <li>When average-case speed matters most</li>
+                <li>Random or uniformly distributed data</li>
+              </ul>
+            </div>
+            <div class="ada-col">
+              <div class="ada-label">Pseudocode (Randomised)</div>
+              <div class="pseudo-mini"><span class="k">procedure</span> quickSort(A, lo, hi):
+  <span class="k">if</span> lo < hi <span class="k">then</span>
+    pivot ← randomPivot(lo, hi)
+    swap(A[pivot], A[hi])
+    p ← partition(A, lo, hi)
+    quickSort(A, lo, p−1)
+    quickSort(A, p+1, hi)
+
+<span class="k">procedure</span> partition(A, lo, hi):
+  pivot ← A[hi]; i ← lo−1
+  <span class="k">for</span> j ← lo <span class="k">to</span> hi−1 <span class="k">do</span>
+    <span class="k">if</span> A[j] ≤ pivot:
+      i++; swap(A[i], A[j])
+  swap(A[i+1], A[hi])
+  <span class="k">return</span> i+1</div>
+            </div>
+          </div>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Quick Sort animate live →</a>
+        </div>
+      </div>
+
+      <!-- HEAP SORT -->
+      <div class="algo-deep-card" id="alg-heap">
+        <div class="algo-deep-head" onclick="toggleCard('alg-heap')">
+          <div class="algo-deep-name">Heap Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n log n) always</span>
+              <span class="tag" style="background:rgba(0,255,200,0.08);color:var(--cyan2);border:1px solid rgba(0,255,200,0.15);">O(1) space</span>
+              <span class="tag tag-unstable">Unstable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <div class="algo-deep-grid">
+            <div class="ada-col">
+              <div class="ada-label">How It Works</div>
+              <p class="ada-desc">Uses a max-heap data structure. Phase 1: Build a max-heap in O(n) time — rearrange the array so every parent is larger than its children. Phase 2: Repeatedly extract the maximum (root), swap it to the end, then re-heapify the reduced heap. Gives O(n log n) guaranteed with O(1) extra space.</p>
+              <p class="ada-desc" style="margin-top:8px;"><strong>The catch:</strong> Poor cache locality (accesses jump around the array non-sequentially) makes it slower than QuickSort by a constant factor, despite identical Big-O. Used mainly when O(1) space and O(n log n) worst-case are both required.</p>
+              <div class="ada-label" style="margin-top:16px;">Best For</div>
+              <ul class="when-use">
+                <li>Memory-constrained environments (O(1) space)</li>
+                <li>Real-time systems needing worst-case guarantees</li>
+                <li>Part of IntroSort (fallback when QS recurses too deep)</li>
+              </ul>
+            </div>
+            <div class="ada-col">
+              <div class="ada-label">Pseudocode</div>
+              <div class="pseudo-mini"><span class="k">procedure</span> heapSort(A):
+  buildMaxHeap(A)           <span class="c">// O(n)</span>
+  <span class="k">for</span> i ← n−1 <span class="k">downto</span> 1 <span class="k">do</span>
+    swap(A[0], A[i])        <span class="c">// max → end</span>
+    heapify(A, 0, i)        <span class="c">// O(log n)</span>
+
+<span class="k">procedure</span> heapify(A, i, n):
+  largest ← i
+  l,r ← 2i+1, 2i+2
+  <span class="k">if</span> l < n <span class="k">and</span> A[l] > A[largest]: largest ← l
+  <span class="k">if</span> r < n <span class="k">and</span> A[r] > A[largest]: largest ← r
+  <span class="k">if</span> largest ≠ i:
+    swap(A[i], A[largest])
+    heapify(A, largest, n)</div>
+            </div>
+          </div>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Heap Sort animate live →</a>
+        </div>
+      </div>
+
+      <!-- SHELL / COUNTING / RADIX / TIM — condensed for space -->
+      <div class="algo-deep-card" id="alg-shell">
+        <div class="algo-deep-head" onclick="toggleCard('alg-shell')">
+          <div class="algo-deep-name">Shell Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n log²n) avg</span>
+              <span class="tag" style="background:rgba(0,255,200,0.08);color:var(--cyan2);border:1px solid rgba(0,255,200,0.15);">O(1) space</span>
+              <span class="tag tag-unstable">Unstable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <p class="ada-desc">A generalisation of Insertion Sort. Instead of comparing adjacent elements, Shell Sort compares elements separated by a "gap" that shrinks each pass. Large gaps allow elements to move long distances quickly; by the final pass (gap=1), the array is nearly sorted so InsertionSort completes in near-linear time. Performance depends heavily on gap sequence choice — Ciura's gap sequence (1, 4, 10, 23, 57, 132, 301, 701…) gives the best known results empirically.</p>
+          <ul class="when-use" style="margin-top:12px;">
+            <li>Embedded systems or environments where recursion is prohibited</li>
+            <li>Medium datasets where O(n log n) sorts aren't available</li>
+            <li>When O(1) space and reasonable speed are both needed</li>
+          </ul>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;margin-top:14px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Shell Sort →</a>
+        </div>
+      </div>
+
+      <div class="algo-deep-card" id="alg-counting">
+        <div class="algo-deep-head" onclick="toggleCard('alg-counting')">
+          <div class="algo-deep-name">Counting Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n+k) — linear!</span>
+              <span class="tag" style="background:rgba(255,184,48,0.1);color:var(--amber);border:1px solid rgba(255,184,48,0.2);">O(k) space</span>
+              <span class="tag tag-stable">Stable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <p class="ada-desc">Breaks the O(n log n) comparison-sort lower bound by not comparing elements at all. Counts occurrences of each value in a frequency table of size k (range of input), then reconstructs the sorted array by iterating the count table. O(n+k) time and space, where k = max value − min value.</p>
+          <p class="ada-desc" style="margin-top:8px;"><strong>The critical constraint:</strong> Only works for non-negative integers (or values mappable to integers) in a known, bounded range. If k >> n (e.g. sorting 100 values in range 0–1,000,000), the O(k) space and time overhead makes it impractical. It shines when k is small relative to n — sorting grades (0–100), ages (0–120), ASCII characters (0–127), etc.</p>
+          <ul class="when-use" style="margin-top:12px;">
+            <li>Grades, ages, character frequencies, small-range integers</li>
+            <li>As subroutine in Radix Sort</li>
+            <li>When n and k are both reasonable in size</li>
+          </ul>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;margin-top:14px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Counting Sort →</a>
+        </div>
+      </div>
+
+      <div class="algo-deep-card" id="alg-radix">
+        <div class="algo-deep-head" onclick="toggleCard('alg-radix')">
+          <div class="algo-deep-name">Radix Sort</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(nk) — near-linear</span>
+              <span class="tag" style="background:rgba(255,184,48,0.1);color:var(--amber);border:1px solid rgba(255,184,48,0.2);">O(n+k) space</span>
+              <span class="tag tag-stable">Stable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <p class="ada-desc">Sorts integers digit-by-digit, from least significant digit (LSD) to most significant (MSD), using Counting Sort as a stable subroutine at each digit position. After d passes (where d = number of digits), the array is fully sorted. O(d·n) total — effectively O(n) for fixed-width integers.</p>
+          <p class="ada-desc" style="margin-top:8px;"><strong>Real-world applications:</strong> Sorting IP addresses, phone numbers, fixed-length codes (ZIP codes, credit card numbers), and is used in database index sorting. In GPU-accelerated computing, Radix Sort outperforms QuickSort because its memory access pattern is more parallelisable.</p>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;margin-top:14px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Radix Sort →</a>
+        </div>
+      </div>
+
+      <div class="algo-deep-card" id="alg-tim">
+        <div class="algo-deep-head" onclick="toggleCard('alg-tim')">
+          <div class="algo-deep-name">Tim Sort 🌟</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="algo-deep-badges">
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n) best</span>
+              <span class="tag" style="background:rgba(57,255,133,0.08);color:var(--green);border:1px solid rgba(57,255,133,0.2);">O(n log n) worst</span>
+              <span class="tag tag-stable">Stable</span>
+            </div>
+            <div class="accordion-chevron">▼</div>
+          </div>
+        </div>
+        <div class="algo-deep-body">
+          <div class="algo-deep-grid">
+            <div class="ada-col">
+              <div class="ada-label">How It Works</div>
+              <p class="ada-desc">Designed by Tim Peters for Python 2.3 (2002), TimSort is the most practically important sorting algorithm today — it's the default in Python (<code>list.sort()</code>, <code>sorted()</code>), Java (<code>Arrays.sort(Object[])</code>), Kotlin, Swift, and Android.</p>
+              <p class="ada-desc" style="margin-top:8px;">It detects naturally occurring <em>runs</em> (already-sorted sequences) in the data. Short runs are extended to minimum size (RUN ≈ 32–64) using InsertionSort. These runs are then merged using a MergeSort variant with sophisticated merge-order optimisation (the <em>galloping mode</em>). On real-world data that contains partial ordering, TimSort can approach O(n) speed.</p>
+              <div class="ada-label" style="margin-top:16px;">Why It's The Real-World Champion</div>
+              <ul class="when-use">
+                <li>Real-world data is rarely fully random — partial order is common</li>
+                <li>Database records, log files, user events often arrive partially sorted</li>
+                <li>TimSort exploits this, MergeSort and QuickSort ignore it</li>
+                <li>Stable, correct, and fast in all cases — the complete package</li>
+              </ul>
+            </div>
+            <div class="ada-col">
+              <div class="ada-label">Simplified Pseudocode</div>
+              <div class="pseudo-mini"><span class="k">procedure</span> timSort(A):
+  RUN ← 32
+  n ← length(A)
+
+  <span class="c">// Phase 1: sort all runs</span>
+  <span class="k">for</span> i ← 0 <span class="k">to</span> n <span class="k">step</span> RUN:
+    insertionSort(A, i,
+      min(i+RUN−1, n−1))
+
+  <span class="c">// Phase 2: merge runs</span>
+  size ← RUN
+  <span class="k">while</span> size < n:
+    <span class="k">for</span> left ← 0 <span class="k">to</span> n <span class="k">step</span> 2×size:
+      mid   ← left + size − 1
+      right ← left + 2×size − 1
+      <span class="k">if</span> mid < right:
+        merge(A, left, mid, right)
+    size ← size × 2</div>
+              <div style="margin-top:10px;font-size:0.68rem;color:var(--muted);">Used in: Python, Java (objects), Kotlin, Swift, Android, V8 (JavaScript)</div>
+            </div>
+          </div>
+          <a href="/visualiser" style="display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--border);padding:8px 16px;border-radius:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,200,0.06)'" onmouseout="this.style.background=''">▶ Watch Tim Sort animate live →</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SECTION 6: WHICH TO USE ══ -->
+    <section class="doc-section" id="which-to-use">
+      <div class="section-label cyan">Decision Guide</div>
+      <h2 class="doc-h2">Which sorting algorithm <em>should you use?</em></h2>
+      <p class="doc-p">Stop memorising everything — learn the decision tree. Every real-world choice comes down to these questions.</p>
+
+      <div class="decision-tree">
+        <div class="dtree-title">🎯 Algorithm Selector — answer these questions in order</div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Is your data already mostly sorted</strong> (≥80% in order)?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-cyan">Insertion Sort or TimSort</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Are you sorting small n</strong> (≤20 elements)?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-cyan">Insertion Sort</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Is your data bounded integers</strong> with a known, small range?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-green">Counting Sort</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Sorting fixed-width integers</strong> or strings (e.g. IDs, phone numbers)?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-green">Radix Sort</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Stability required</strong> (preserve order of equal elements)?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-amber">Merge Sort or TimSort</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Sorting a linked list</strong> (no random access)?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-amber">Merge Sort</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Memory is critical</strong> (O(1) space required, large n)?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-purple">Heap Sort</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>External sort</strong> (data larger than RAM, on disk)?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-amber">Merge Sort (external)</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>General purpose</strong> — random data, in memory, just needs fast?</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-cyan">QuickSort (randomised)</div>
+        </div>
+        <div class="dtree-row">
+          <div class="dtree-cond"><strong>Using a standard library?</strong> (Python, Java, C++, JavaScript)</div>
+          <div class="dtree-arrow">→</div>
+          <div class="dtree-result dr-green">Just use the built-in sort ✓</div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-icon">🔑</div>
+        <div class="callout-text"><strong>The honest truth:</strong> In 99% of real production code, the right answer is "use the language's built-in sort". Python's <code>sorted()</code>, Java's <code>Arrays.sort()</code>, JavaScript's <code>Array.prototype.sort()</code> — these are all tuned, production-hardened hybrids. You need to choose yourself only when (a) you have very specific data characteristics, (b) you have unique constraints (memory, stability, data type), or (c) you're answering an interview question.</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SECTION 7: INTERVIEW ══ -->
+    <section class="doc-section" id="interview">
+      <div class="section-label amber">Interview Prep</div>
+      <h2 class="doc-h2">The 8 sorting algorithm <em>interview questions</em> you will face</h2>
+      <p class="doc-p">These are the questions hiring managers at FAANG-tier companies actually ask. Not exhaustive — targeted. Know these cold.</p>
+
+      <div class="interview-grid">
+        <div class="q-card">
+          <div class="q-number">Q 01</div>
+          <div class="q-text">Why is QuickSort preferred over MergeSort even though their average time complexity is the same?</div>
+          <div class="q-answer"><strong>Answer:</strong> Cache locality. QuickSort is in-place; its memory accesses stay in L1/L2 cache. MergeSort allocates O(n) auxiliary memory and its merge step causes cache misses. On modern hardware, QuickSort is 2–3× faster in practice despite identical Big-O.</div>
+        </div>
+        <div class="q-card">
+          <div class="q-number">Q 02</div>
+          <div class="q-text">What sorting algorithm does Python use and why?</div>
+          <div class="q-answer"><strong>Answer:</strong> TimSort — a hybrid of MergeSort and InsertionSort. Chosen because it's <strong>stable</strong>, achieves O(n) on nearly-sorted data (common in real-world datasets), and provides O(n log n) worst-case. Designed by Tim Peters specifically for Python in 2002.</div>
+        </div>
+        <div class="q-card">
+          <div class="q-number">Q 03</div>
+          <div class="q-text">Can you sort in better than O(n log n)? What's the lower bound for comparison sorts?</div>
+          <div class="q-answer"><strong>Answer:</strong> The information-theoretic lower bound for comparison-based sorts is Ω(n log n) — any algorithm that uses only comparisons requires at least n log n operations. But non-comparison sorts (Counting Sort, Radix Sort) sidestep this by using integer structure, achieving O(n+k) or O(nk) time.</div>
+        </div>
+        <div class="q-card">
+          <div class="q-number">Q 04</div>
+          <div class="q-text">What is an in-place sorting algorithm? Which ones are in-place?</div>
+          <div class="q-answer"><strong>Answer:</strong> In-place means the algorithm sorts using O(1) extra memory (or O(log n) for stack space in recursive algorithms). In-place: <strong>QuickSort</strong> (O(log n) stack), <strong>HeapSort</strong> (O(1)), <strong>InsertionSort</strong>, <strong>BubbleSort</strong>, <strong>SelectionSort</strong>, <strong>ShellSort</strong>. Not in-place: MergeSort O(n), TimSort O(n), CountingSort O(k), RadixSort O(n+k).</div>
+        </div>
+        <div class="q-card">
+          <div class="q-number">Q 05</div>
+          <div class="q-text">When would you use HeapSort over QuickSort?</div>
+          <div class="q-answer"><strong>Answer:</strong> When you need guaranteed O(n log n) worst-case <em>and</em> O(1) space simultaneously. HeapSort is the only common algorithm satisfying both. QuickSort has O(n²) worst case; MergeSort uses O(n) space. HeapSort is also the fallback in C++'s IntroSort when recursion depth exceeds 2·log(n).</div>
+        </div>
+        <div class="q-card">
+          <div class="q-number">Q 06</div>
+          <div class="q-text">You need to sort a list of objects by last name, then by first name. How?</div>
+          <div class="q-answer"><strong>Answer:</strong> Use a <strong>stable</strong> sort. First sort by first name (stable), then sort by last name (stable). Because the sort is stable, equal last names preserve their first-name ordering from step 1. In Python: <code>sorted(people, key=lambda x: (x.last, x.first))</code> — single-pass with tuple key.</div>
+        </div>
+        <div class="q-card">
+          <div class="q-number">Q 07</div>
+          <div class="q-text">How would you sort 1 million integers where each value is between 0 and 1000?</div>
+          <div class="q-answer"><strong>Answer:</strong> <strong>Counting Sort</strong>. Range k = 1001, n = 1,000,000. Time O(n+k) ≈ O(n). This dramatically outperforms QuickSort's O(n log n) ≈ 20n here. Space: O(k) = O(1001) ≈ O(1) effectively. The bounded integer range is the signal — always think Counting/Radix Sort when you see it.</div>
+        </div>
+        <div class="q-card">
+          <div class="q-number">Q 08</div>
+          <div class="q-text">What is the worst case input for QuickSort and how do you avoid it?</div>
+          <div class="q-answer"><strong>Answer:</strong> Already sorted (or reverse-sorted) array with naive first/last-element pivot — produces O(n²) because every partition is maximally unbalanced. Solutions: (1) <strong>Random pivot</strong> — makes O(n²) astronomically unlikely. (2) <strong>Median-of-three</strong> — picks median of first, middle, last. (3) <strong>IntroSort</strong> — switches to HeapSort after 2·log(n) recursive depth.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SECTION 8: REAL WORLD ══ -->
+    <section class="doc-section" id="real-world">
+      <div class="section-label green">Production Usage</div>
+      <h2 class="doc-h2">Sorting algorithms in <em>the real world</em></h2>
+      <p class="doc-p">Theory is one thing. Here's what the systems you use every day actually run under the hood.</p>
+
+      <div class="rw-grid">
+        <div class="rw-card">
+          <div class="rw-icon">🐍</div>
+          <div class="rw-product">Python</div>
+          <div class="rw-algo">TimSort</div>
+          <div class="rw-reason">Stable, fast on real-world partially-ordered data. Both <code>list.sort()</code> and <code>sorted()</code> use it. Designed by Tim Peters, CPython dev, in 2002.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-icon">☕</div>
+          <div class="rw-product">Java / Android</div>
+          <div class="rw-algo">TimSort + Dual-Pivot QuickSort</div>
+          <div class="rw-reason">Objects use TimSort (stability required). Primitives use Dual-Pivot QuickSort (Yaroslavskiy, 2009) — fewer cache misses than single-pivot QS.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-icon">⚡</div>
+          <div class="rw-product">C++ (STL)</div>
+          <div class="rw-algo">IntroSort</div>
+          <div class="rw-reason"><code>std::sort</code> uses IntroSort: starts as QuickSort, falls to HeapSort if depth > 2·log(n), uses InsertionSort for small partitions. Best of all worlds.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-icon">🦅</div>
+          <div class="rw-product">Swift</div>
+          <div class="rw-algo">TimSort</div>
+          <div class="rw-reason">Swift's standard library adopted TimSort for its stability guarantees and excellent performance on partially-sorted collections common in UI frameworks.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-icon">🗄️</div>
+          <div class="rw-product">PostgreSQL</div>
+          <div class="rw-algo">External Merge Sort</div>
+          <div class="rw-reason">Database ORDER BY uses MergeSort variants because data doesn't fit in memory — sorted runs are written to disk and merged. Merge Sort's sequential access pattern suits disk I/O perfectly.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-icon">🔍</div>
+          <div class="rw-product">Google Search</div>
+          <div class="rw-algo">Multiple algorithms</div>
+          <div class="rw-reason">Different stages use different algorithms: indexing uses external merge sort; ranking uses heap-based top-k selection; result merging uses merge-based combination of sorted posting lists.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-icon">🎮</div>
+          <div class="rw-product">GPU / CUDA</div>
+          <div class="rw-algo">Radix Sort</div>
+          <div class="rw-reason">GPU Radix Sort vastly outperforms QuickSort on GPUs because its fixed, predictable memory access pattern allows massive parallelism. Used in NVIDIA's thrust library.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-icon">🌐</div>
+          <div class="rw-product">V8 (JavaScript)</div>
+          <div class="rw-algo">TimSort (since V8 7.0)</div>
+          <div class="rw-reason">JavaScript's <code>Array.prototype.sort()</code> was unstable until V8 7.0 (Chrome 70). Now uses TimSort — the spec mandates stability since ECMAScript 2019.</div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🌟</div>
+        <div class="callout-text"><strong>The pattern:</strong> TimSort has conquered almost every modern general-purpose language runtime because it handles the real world — where data is partially ordered, stability matters, and pathological cases must be avoided. QuickSort dominates for raw number-crunching in C/C++ and GPU-accelerated workloads. Radix Sort rules when data is integers and you control the pipeline.</div>
+      </div>
+    </section>
+
+    <!-- ══ BOTTOM CTA ══ -->
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;position:relative;overflow:hidden;margin-top:24px;">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,255,200,0.06),transparent 60%);pointer-events:none;"></div>
+      <div style="font-family:var(--font-ui);font-weight:900;font-size:1.5rem;letter-spacing:-1px;color:#fff;margin-bottom:10px;position:relative;z-index:1;">Theory is nothing without <em style="color:var(--cyan);">seeing it</em>.</div>
+      <p style="font-size:0.82rem;color:#5a6a7a;margin-bottom:24px;position:relative;z-index:1;">Every algorithm on this page is interactive in the visualiser — watch it run, pause it, step through it frame by frame.</p>
+      <a href="/visualiser" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#000;background:var(--cyan);border:1px solid var(--cyan);padding:14px 32px;border-radius:6px;text-decoration:none;transition:all 0.35s cubic-bezier(0.16,1,0.3,1);position:relative;z-index:1;" onmouseover="this.style.background='#fff';this.style.boxShadow='0 0 40px rgba(0,255,200,0.4)'" onmouseout="this.style.background='var(--cyan)';this.style.boxShadow=''">
+        <span>▶</span> Launch Sort &amp; Visualize Visualiser
+      </a>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->

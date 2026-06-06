@@ -1,0 +1,168 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+
+const tocLink =
+  "block text-[0.75rem] max-[760px]:text-[0.88rem] text-muted no-underline py-[4px] border-b border-transparent transition-colors duration-200 hover:text-ink";
+const docSection = "mb-[48px] scroll-mt-[100px]";
+const docH2 =
+  "font-ui font-extrabold text-[1.3rem] max-[760px]:text-[1.2rem] tracking-[-0.5px] text-white mb-[14px] pb-[10px] border-b border-line2";
+const docP = "text-[0.8rem] max-[760px]:text-[0.92rem] text-[#6a7a8a] leading-[1.85] mb-[14px]";
+const docList = "list-none mb-[14px]";
+const docItem =
+  "flex gap-[8px] text-[0.8rem] max-[760px]:text-[0.92rem] text-[#6a7a8a] py-[4px] leading-[1.7] before:content-['›'] before:text-cyan before:shrink-0";
+const inlineLink = "text-cyan hover:underline";
+---
+
+<BaseLayout
+  title="Privacy Policy — Sort & Visualize"
+  description="Sort & Visualize privacy policy: what data we collect, how cookies and local storage are used, and the third-party services (including advertising) that may run on this site."
+  activePath="/privacy"
+>
+  <PageHero eyebrow="Legal" glow="transparent">
+    <Fragment slot="title"><em class="text-cyan not-italic">Privacy</em> Policy</Fragment>
+    <div class="text-[0.68rem] text-muted tracking-[1px]">Last updated: June 2026</div>
+  </PageHero>
+
+  <div class="max-w-[720px] mx-auto px-[40px] pt-[60px] pb-[100px] max-[980px]:px-[24px] max-[760px]:px-[18px]">
+    <div class="bg-panel border border-line2 rounded-[10px] p-[24px] mb-[48px]">
+      <div class="text-[0.62rem] max-[760px]:text-[0.75rem] tracking-[2px] uppercase text-cyan mb-[14px]">Table of Contents</div>
+      <a href="#overview" class={tocLink}>1. Overview</a>
+      <a href="#data" class={tocLink}>2. Data We Collect</a>
+      <a href="#cookies" class={tocLink}>3. Cookies & Local Storage</a>
+      <a href="#third-party" class={tocLink}>4. Third-Party Services</a>
+      <a href="#children" class={tocLink}>5. Children's Privacy</a>
+      <a href="#changes" class={tocLink}>6. Changes to This Policy</a>
+      <a href="#contact-priv" class={tocLink}>7. Contact</a>
+    </div>
+
+    <section id="overview" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">1.</em> Overview</h2>
+      <div class="bg-[rgba(0,255,200,0.04)] border border-[rgba(0,255,200,0.15)] rounded-[8px] p-[16px_18px] mb-[16px]">
+        <p class="text-[0.8rem] text-ink leading-[1.85] mb-0">
+          The Sort &amp; Visualize application itself runs entirely in your browser — we operate
+          <strong>no user accounts, no database, and no server-side processing</strong> of your
+          information. We do, however, rely on third-party services such as Google AdSense
+          (advertising) and Google Fonts, which may use cookies and collect limited technical data as
+          described below.
+        </p>
+      </div>
+      <p class={docP}>
+        This Privacy Policy explains what data is involved when you use Sort &amp; Visualize, including the role of
+        cookies and third-party providers. We are committed to transparency and to keeping our own data
+        collection to a minimum.
+      </p>
+    </section>
+
+    <section id="data" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">2.</em> Data We Collect</h2>
+      <p class={docP}>
+        We do not directly collect, store, or transmit personal information on our own servers.
+        Specifically, Sort &amp; Visualize itself:
+      </p>
+      <ul class={docList}>
+        <li class={docItem}>Does not ask for your name, email, or contact information to use the tool</li>
+        <li class={docItem}>Does not log your IP address on any server we operate</li>
+        <li class={docItem}>Does not require user accounts or profiles</li>
+        <li class={docItem}>Does not send your sorting data, array inputs, or algorithm selections to any server</li>
+      </ul>
+      <p class={docP}>
+        All sorting computation (algorithms, animations, audio) happens locally in your browser, and
+        your activity within the tool never leaves your device. However, third-party services we embed
+        — in particular our advertising partner (Google AdSense) and Google Fonts — may independently
+        collect limited technical data such as your IP address, device and browser information, and
+        interaction signals. This is covered in sections 3 and 4 below.
+      </p>
+    </section>
+
+    <section id="cookies" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">3.</em> Cookies & Local Storage</h2>
+      <p class={docP}>
+        Cookies are small text files stored by your browser. Sort &amp; Visualize does not set its own cookies for
+        tracking or profiling. However, third-party services running on this site — most notably Google
+        AdSense — may set and read cookies on your device to deliver and measure advertising.
+      </p>
+      <p class={docP}>
+        Specifically, Google and its partners use cookies (including the DoubleClick cookie) to serve
+        ads based on your prior visits to this and other websites. You can opt out of personalised
+        advertising by visiting
+        <a href="https://www.google.com/settings/ads" class={inlineLink}>Google Ads Settings</a>, and you
+        can learn more about how third-party vendors use cookies at
+        <a href="https://www.aboutads.info" class={inlineLink}>www.aboutads.info</a>. Your browser may
+        also cache static assets (HTML, CSS, fonts) for performance — this is standard behaviour and
+        contains no personal data.
+      </p>
+      <p class={docP}>
+        When you first visit Sort &amp; Visualize, a cookie consent banner will appear. You may accept or reject
+        non-essential cookies. Your preference is stored in your browser's localStorage under the key
+        "sortlab-consent". Essential cookies required for the site to function are always active.
+        Advertising cookies (used by Google AdSense) are only activated after you provide consent.
+      </p>
+    </section>
+
+    <section id="third-party" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">4.</em> Third-Party Services</h2>
+      <p class={docP}>
+        <strong class="text-ink">Advertising (Google AdSense).</strong> We use Google AdSense to display
+        advertisements that help keep Sort &amp; Visualize free. Google is a third-party vendor that uses cookies
+        and similar technologies to serve ads based on your visits to this and other sites. Google's use
+        of advertising cookies enables it and its partners to serve ads to you based on your visits. You
+        may opt out of personalised advertising via
+        <a href="https://www.google.com/settings/ads" class={inlineLink}>Google Ads Settings</a>. For
+        details on how Google handles data in its products, see the
+        <a href="https://policies.google.com/technologies/partner-sites" class={inlineLink}>Google Privacy &amp; Terms</a>
+        page.
+      </p>
+      <p class={docP}>
+        <strong class="text-ink">Advertising (Google AdSense).</strong> This site participates in Google
+        AdSense, an advertising program operated by Google LLC. Google AdSense uses cookies (including
+        the DoubleClick cookie) and web beacons to serve advertisements based on your prior visits to
+        this and other websites. These cookies allow Google and its partners to serve ads based on your
+        browsing history. You may opt out of personalised advertising at any time by visiting
+        <a href="https://www.google.com/settings/ads" class={inlineLink}>Google Ads Settings</a> or
+        <a href="https://www.aboutads.info/choices" class={inlineLink}>www.aboutads.info/choices</a>.
+        For more information about how Google uses data, visit
+        <a href="https://policies.google.com/technologies/partner-sites" class={inlineLink}>Google's Privacy & Terms page</a>.
+      </p>
+      <p class={docP}>
+        <strong class="text-ink">Fonts.</strong> Sort &amp; Visualize loads typefaces from Google Fonts
+        (fonts.googleapis.com), so your browser requests these files from Google's servers. Google's
+        privacy policy applies to that interaction.
+      </p>
+      <p class={docP}>
+        Aside from Google AdSense and Google Fonts, we do not knowingly load other analytics platforms
+        or tracking services. We have no control over the data practices of these third-party providers.
+      </p>
+    </section>
+
+    <section id="children" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">5.</em> Children's Privacy</h2>
+      <p class={docP}>
+        Sort &amp; Visualize is intended for a general audience — primarily students, educators, and developers —
+        and is not directed at children under 13. We do not knowingly collect personal information from
+        children. Because advertising networks such as Google AdSense may use cookies, we do not
+        encourage use by children under 13 without the involvement of a parent, guardian, or teacher. If
+        you believe a child has provided personal data through any third-party service on this site,
+        please contact us so it can be addressed.
+      </p>
+    </section>
+
+    <section id="changes" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">6.</em> Changes to This Policy</h2>
+      <p class={docP}>
+        If we ever change our privacy practices, we will update this page and revise the "Last updated"
+        date at the top. We will always maintain a commitment to minimal data collection and full
+        transparency.
+      </p>
+    </section>
+
+    <section id="contact-priv" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">7.</em> Contact</h2>
+      <p class={docP}>
+        If you have any questions about this Privacy Policy, please reach out via our
+        <a href="/contact" class={inlineLink}>Contact page</a>. We will respond to all privacy inquiries
+        promptly.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

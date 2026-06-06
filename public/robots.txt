@@ -1,0 +1,13 @@
+# Sort & Visualize robots.txt
+# Replace https://sortandvisualize.com with your real domain before going live.
+User-agent: *
+Allow: /
+
+# Allow Google's ad crawler (required so AdSense can review pages)
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+Sitemap: https://sortandvisualize.com/sitemap.xml

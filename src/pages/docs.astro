@@ -1,0 +1,93 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import body from "../html/docs.html?raw";
+import "../styles/pages/docs.css";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Sorting Algorithms — The Complete 2026 Guide",
+      "description": "Comprehensive guide to all 10 sorting algorithms: Big O cheatsheet, QuickSort vs MergeSort, fastest sorting algorithm, stability, interview questions, and real-world usage.",
+      "url": "https://sortandvisualize.com/docs",
+      "datePublished": "2026-06-05",
+      "dateModified": "2026-06-05",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Sort & Visualize",
+        "url": "https://sortandvisualize.com/"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Sort & Visualize"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the fastest sorting algorithm?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "QuickSort is generally considered the fastest comparison-based sorting algorithm in practice, with O(n log n) average-case time complexity. Its superior cache locality makes it 2-3x faster than MergeSort on in-memory arrays. For non-comparison sorting, Counting Sort and Radix Sort achieve linear O(n) or O(nk) time for integer data."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "QuickSort vs MergeSort — which is better?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "QuickSort is faster in practice for in-memory arrays due to better cache locality and in-place sorting. MergeSort is better when stability is required, for linked lists, or for external sorting of data that doesn't fit in memory. MergeSort guarantees O(n log n) in all cases; QuickSort can degrade to O(n²) without randomised pivots."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a stable sorting algorithm?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A stable sorting algorithm preserves the original relative order of elements that compare as equal. Merge Sort, Insertion Sort, Bubble Sort, Counting Sort, Radix Sort, and Tim Sort are stable. Quick Sort and Heap Sort are not stable by default."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What sorting algorithm does Python use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Python uses TimSort, a hybrid of Merge Sort and Insertion Sort designed by Tim Peters in 2002. TimSort is also the default sort in Java (for objects), Kotlin, Swift, and Android. It achieves O(n) on nearly-sorted data and O(n log n) in the worst case."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which sorting algorithm should I use in an interview?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For general-purpose sorting, QuickSort or MergeSort are the standard answers. For nearly-sorted data, Insertion Sort. For bounded integers, Counting or Radix Sort. For the real-world default, mention TimSort (Python/Java) or Introsort (C++ std::sort)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the time complexity of Bubble Sort?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bubble Sort has O(n²) average and worst-case time complexity and O(n) best case (already sorted, with the optimized swapped flag). Its space complexity is O(1). It is rarely used in production but is important for educational purposes."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={"Sorting Algorithms Explained — The Complete 2026 Guide | Sort & Visualize"}
+  description={"The definitive guide to sorting algorithms: Big O cheatsheet, QuickSort vs MergeSort vs TimSort showdown, fastest sorting algorithm revealed, stability explained, real interview questions, and interactive visual breakdowns. Free, no login."}
+  keywords={"sorting algorithms, quicksort vs mergesort, fastest sorting algorithm, best sorting algorithm, bubble sort, merge sort, quick sort, heap sort, tim sort, insertion sort, selection sort, radix sort, counting sort, shell sort, big o notation sorting, stable sorting algorithm, sorting algorithm time complexity, sorting algorithm interview questions, sorting algorithm cheat sheet, which sorting algorithm to use, sorting algorithm comparison, data structures sorting, algorithm complexity, O(n log n), in-place sorting, divide and conquer sorting, sorting algorithms explained, learn sorting algorithms, sorting algorithms for beginners"}
+  activePath="/docs"
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <Fragment set:html={body} />
+</BaseLayout>
+
+<script is:inline src="/page-js/docs.js"></script>

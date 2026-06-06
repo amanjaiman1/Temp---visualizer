@@ -1,0 +1,167 @@
+<!-- NAV -->
+  
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="hero-eyebrow">Interactive Algorithm Visualiser</div>
+    <h1 class="hero-title">
+      <span>See Sorting</span>
+      <span class="accent">Come Alive</span>
+    </h1>
+    <p class="hero-sub">
+      Watch 10 classic sorting algorithms unfold in real time. Compare performance, trace pseudocode, and build deep
+      intuition — one frame at a time.
+    </p>
+    <div class="hero-actions">
+      <a href="/visualiser" class="btn-hero-primary">
+        <span>▶</span> Launch Visualiser
+      </a>
+      <a href="#algorithms" class="btn-hero-ghost">
+        <span>⊞</span> Explore Algorithms
+      </a>
+    </div>
+
+    <div class="hero-preview">
+      <div class="preview-frame">
+        <div class="preview-chrome">
+          <div class="chrome-dot" style="background:#ff4060"></div>
+          <div class="chrome-dot" style="background:#ffb830"></div>
+          <div class="chrome-dot" style="background:#39ff85"></div>
+          <div class="chrome-url">sortandvisualize.com / visualiser</div>
+        </div>
+        <div class="preview-bars" id="previewBars"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-block reveal" style="--d:0.1s">
+      <div class="stat-number" data-count="10">0</div>
+      <div class="stat-label">Algorithms</div>
+    </div>
+    <div class="stat-block reveal" style="--d:0.2s">
+      <div class="stat-number" data-count="120">0</div>
+      <div class="stat-label">Max Array Size</div>
+    </div>
+    <div class="stat-block reveal" style="--d:0.3s">
+      <div class="stat-number" data-count="10">0</div>
+      <div class="stat-label">Speed Levels</div>
+    </div>
+    <div class="stat-block reveal" style="--d:0.4s">
+      <div class="stat-number" data-count="5">0</div>
+      <div class="stat-label">Visual States</div>
+    </div>
+  </div>
+
+  <!-- ALGORITHMS -->
+  <div id="algorithms">
+    <div class="section">
+      <div class="section-eyebrow reveal">10 Algorithms</div>
+      <h2 class="section-title reveal">Every major sorting<br>algorithm, <em>visualised</em></h2>
+      <p class="section-desc reveal">From O(n²) classics to hybrid powerhouses — explore them all with step-by-step
+        animation, real-time complexity analysis, and live pseudocode execution.</p>
+
+      <div class="algo-grid stagger reveal" id="algoGrid"></div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features-section">
+    <div class="features-inner">
+      <div class="section-eyebrow reveal">Features</div>
+      <h2 class="section-title reveal">Built for deep <em>understanding</em></h2>
+      <p class="section-desc reveal">Every detail is designed to make complex algorithms approachable and memorable.</p>
+
+      <div class="features-grid stagger reveal">
+        <div class="feature-card" style="--accent-color:var(--cyan)">
+          <div class="feature-icon" style="background:rgba(0,255,200,0.08)">⚡</div>
+          <div class="feature-title">Real-time Animation</div>
+          <div class="feature-desc">Smooth frame-by-frame animation at 10 speed levels. Watch every comparison and swap
+            happen before your eyes with colour-coded visual states.</div>
+        </div>
+        <div class="feature-card" style="--accent-color:var(--purple)">
+          <div class="feature-icon" style="background:rgba(176,111,255,0.08)">{ }</div>
+          <div class="feature-title">Live Pseudocode</div>
+          <div class="feature-desc">The active line of pseudocode highlights as the algorithm runs — directly linking
+            the visual to the logic, step by step.</div>
+        </div>
+        <div class="feature-card" style="--accent-color:var(--amber)">
+          <div class="feature-icon" style="background:rgba(255,184,48,0.08)">📊</div>
+          <div class="feature-title">Live Complexity Stats</div>
+          <div class="feature-desc">Track comparisons, swaps, and elapsed time as the sort runs. See O(n²) vs O(n log n)
+            cost in real data, not just theory.</div>
+        </div>
+        <div class="feature-card" style="--accent-color:var(--green)">
+          <div class="feature-icon" style="background:rgba(57,255,133,0.08)">🎵</div>
+          <div class="feature-title">Audio Feedback</div>
+          <div class="feature-desc">Each bar movement generates a tone proportional to its value. Sorting sounds
+            surprisingly musical — and makes patterns even more perceptible.</div>
+        </div>
+        <div class="feature-card" style="--accent-color:var(--red)">
+          <div class="feature-icon" style="background:rgba(255,64,96,0.08)">⏭</div>
+          <div class="feature-title">Step-by-step Mode</div>
+          <div class="feature-desc">Pause and advance one frame at a time using the step button or arrow keys. Perfect
+            for understanding tricky moments in complex algorithms.</div>
+        </div>
+        <div class="feature-card" style="--accent-color:var(--cyan)">
+          <div class="feature-icon" style="background:rgba(0,255,200,0.08)">⊞</div>
+          <div class="feature-title">Comparison Table</div>
+          <div class="feature-desc">View all 10 algorithms side-by-side: best/average/worst-case time, space complexity,
+            stability, and method — to make informed choices.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section">
+    <div class="section-eyebrow reveal">How It Works</div>
+    <h2 class="section-title reveal">Three steps to <em>intuition</em></h2>
+    <p class="section-desc reveal">No setup. No install. Just open and start exploring.</p>
+
+    <div class="steps-grid stagger reveal">
+      <div class="step">
+        <div class="step-number">01</div>
+        <div class="step-title">Choose an Algorithm</div>
+        <div class="step-desc">Pick from 10 classic sorting algorithms in the left panel. Each shows time complexity,
+          space complexity, and stability at a glance.</div>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <div class="step-title">Configure & Shuffle</div>
+        <div class="step-desc">Set the array size (10–120 elements) and animation speed (×1 to ×10). Generate a fresh
+          random array whenever you want.</div>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <div class="step-title">Watch & Learn</div>
+        <div class="step-desc">Hit Sort and watch the algorithm work. Pause, step, or compare — the pseudocode panel
+          follows along with every operation.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY SORT & VISUALIZE -->
+  <div class="section" style="padding:80px 40px;max-width:800px;margin:0 auto;">
+    <div class="section-eyebrow reveal">Why Sort &amp; Visualize</div>
+    <h2 class="section-title reveal">The best way to learn sorting <em>algorithms</em></h2>
+    <p class="section-desc reveal" style="margin-bottom:20px;">Understanding sorting algorithms is fundamental to computer science education. Whether you're preparing for technical interviews at Google, Amazon, or Meta, studying for university exams, or simply curious about how computers organise data, Sort &amp; Visualize gives you the visual intuition that textbooks cannot.</p>
+    <p class="section-desc reveal" style="margin-bottom:20px;">Our interactive visualiser lets you watch every comparison, swap, and recursive call happen in real time. Combined with live pseudocode highlighting, complexity counters, and audio feedback, you develop a deep, intuitive understanding of algorithm behaviour that goes far beyond memorising Big-O notation.</p>
+    <p class="section-desc reveal">Sort &amp; Visualize is used by students, educators, and self-taught programmers in over 50 countries. It's completely free, requires no account, and works in any modern browser. Start exploring sorting algorithms today.</p>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <h2 class="cta-title reveal">Ready to see sorting <em>click</em>?</h2>
+    <p class="cta-sub reveal">No login, no install. Open the visualiser and start in seconds.</p>
+    <a href="/visualiser" class="btn-hero-primary reveal" style="display:inline-flex">
+      <span>▶</span> Launch Sort &amp; Visualize
+    </a>
+  </div>
+
+  <!-- FOOTER -->

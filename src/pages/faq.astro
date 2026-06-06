@@ -1,0 +1,313 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+
+const categories = [
+  {
+    label: "Sorting Algorithm Basics",
+    items: [
+      {
+        q: "What is a sorting algorithm and why do we need them?",
+        a: `<p>A <strong>sorting algorithm</strong> is a step-by-step procedure that rearranges elements in a list into a defined order, typically ascending or descending. We need them because sorted data enables dramatically faster searching (binary search is O(log n) vs O(n) linear scan), simplifies merging datasets, eliminates duplicates efficiently, and is a prerequisite for many other algorithms. You can <a href="/visualiser">watch 10 different sorting approaches in action</a> on our visualiser.</p>`,
+      },
+      {
+        q: "How many sorting algorithms are there?",
+        a: `<p>There are dozens of documented sorting algorithms, but roughly <strong>10-15 are commonly studied</strong> in computer science curricula. These include Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quick Sort, Heap Sort, Counting Sort, Radix Sort, Bucket Sort, Shell Sort, and Tim Sort. Sort &amp; Visualize covers the <a href="/docs">10 most important ones</a> with full complexity breakdowns and interactive animations.</p>`,
+      },
+      {
+        q: "What is the difference between comparison-based and non-comparison sorting?",
+        a: `<p><strong>Comparison-based sorts</strong> (Quick Sort, Merge Sort, Heap Sort) determine order by comparing pairs of elements and are bounded by O(n log n) in the worst case. <strong>Non-comparison sorts</strong> (Counting Sort, Radix Sort, Bucket Sort) exploit the structure of the data itself, such as integer ranges, to achieve linear O(n) or O(nk) time. The trade-off is that non-comparison sorts only work on specific data types and may use more memory.</p>`,
+      },
+      {
+        q: "What does O(n log n) mean in sorting?",
+        a: `<p><strong>O(n log n)</strong> describes how the number of operations grows relative to the input size n. It means that for each of the n elements, about log n comparisons are needed, which is far better than O(n^2) for large datasets. For example, sorting 1 million elements takes roughly 20 million operations with O(n log n) versus 1 trillion with O(n^2). Check the <a href="/docs">docs page</a> for a full complexity cheat sheet.</p>`,
+      },
+      {
+        q: "What is in-place sorting?",
+        a: `<p><strong>In-place sorting</strong> means the algorithm sorts the data using only a constant amount of extra memory, O(1), rather than creating a copy of the array. Quick Sort, Heap Sort, Insertion Sort, Selection Sort, and Bubble Sort are all in-place. Merge Sort is not in-place because it requires O(n) auxiliary space for the merge step. In-place algorithms are preferred when memory is constrained.</p>`,
+      },
+      {
+        q: "What is the lower bound for comparison-based sorting?",
+        a: `<p>The theoretical lower bound for comparison-based sorting is <strong>O(n log n)</strong>, proven via decision-tree analysis. Any comparison sort must make at least log2(n!) comparisons in the worst case, which simplifies to O(n log n) by Stirling's approximation. This means no comparison-based algorithm can ever do better than this for arbitrary inputs, though specific data patterns may allow early termination.</p>`,
+      },
+      {
+        q: "Can any sorting algorithm beat O(n log n)?",
+        a: `<p>Yes, but only <strong>non-comparison sorts</strong>. Counting Sort runs in O(n + k) where k is the range of values, and Radix Sort runs in O(nk) where k is the number of digits. These break the O(n log n) barrier by not comparing elements directly. However, they require assumptions about the data (bounded integers, fixed-length keys) and typically use more memory. For general-purpose sorting of arbitrary comparable objects, O(n log n) remains the best possible.</p>`,
+      },
+    ],
+  },
+  {
+    label: "Choosing the Right Algorithm",
+    items: [
+      {
+        q: "Which sorting algorithm is best for nearly sorted data?",
+        a: `<p><strong>Insertion Sort</strong> is the best choice for nearly sorted data, achieving O(n) time when only a few elements are out of place. Tim Sort is also excellent because it detects existing sorted "runs" and exploits them. Bubble Sort with the optimised swapped flag also runs in O(n) on nearly sorted input, but Insertion Sort has better constant factors. <a href="/visualiser">Try it on Sort &amp; Visualize</a> with a nearly sorted array to see the difference.</p>`,
+      },
+      {
+        q: "Which sorting algorithm is best for large datasets?",
+        a: `<p><strong>Merge Sort</strong> is often best for very large datasets, especially when data does not fit in memory (external sorting), because it has guaranteed O(n log n) performance and accesses data sequentially. For in-memory sorting of large arrays, Quick Sort with randomised pivots or Introsort is typically fastest. Tim Sort is the practical default in most languages due to its adaptive behaviour on real-world data.</p>`,
+      },
+      {
+        q: "Which sorting algorithm uses the least memory?",
+        a: `<p><strong>Heap Sort</strong> uses the least memory among O(n log n) algorithms, requiring only O(1) extra space while guaranteeing worst-case O(n log n) time. Insertion Sort and Selection Sort also use O(1) extra space but are O(n^2). Quick Sort uses O(log n) stack space for recursion. If minimal memory usage with good performance is your goal, Heap Sort is the answer.</p>`,
+      },
+      {
+        q: "What sorting algorithm does Python use?",
+        a: `<p>Python uses <strong>Tim Sort</strong>, a hybrid algorithm combining Merge Sort and Insertion Sort, designed by Tim Peters in 2002. It achieves O(n) on nearly sorted data and O(n log n) in the worst case, with O(n) space complexity. Tim Sort detects natural runs in the data and merges them efficiently, making it exceptionally fast on real-world data that often contains partial ordering.</p>`,
+      },
+      {
+        q: "What sorting algorithm does JavaScript Array.sort() use?",
+        a: `<p>It depends on the engine. <strong>V8 (Chrome, Node.js) uses Tim Sort</strong> since 2018. SpiderMonkey (Firefox) also uses a variant of Merge Sort. Older V8 versions used Quick Sort. The ECMAScript spec does not mandate a specific algorithm, only that the sort must be stable (as of ES2019). This means behaviour on equal elements is now consistent across browsers.</p>`,
+      },
+      {
+        q: "What sorting algorithm does Java use?",
+        a: `<p>Java uses <strong>Tim Sort for objects</strong> (Arrays.sort for Object[]) and <strong>Dual-Pivot Quick Sort for primitives</strong> (Arrays.sort for int[], double[], etc.). Tim Sort is chosen for objects because it is stable, preserving equal-element ordering. Dual-Pivot Quick Sort is faster for primitives where stability does not matter and the overhead of object references is absent.</p>`,
+      },
+      {
+        q: "What sorting algorithm does C++ std::sort use?",
+        a: `<p>C++ std::sort typically uses <strong>Introsort</strong>, a hybrid of Quick Sort, Heap Sort, and Insertion Sort. It starts with Quick Sort for its excellent average performance, switches to Heap Sort if recursion depth exceeds O(log n) to guarantee worst-case O(n log n), and finishes small sub-arrays with Insertion Sort for low overhead. This combination gives both fast average performance and worst-case guarantees.</p>`,
+      },
+      {
+        q: "Which sorting algorithm should I use for a coding interview?",
+        a: `<p><strong>Merge Sort and Quick Sort</strong> are the two you should know cold for coding interviews. Merge Sort demonstrates divide-and-conquer cleanly and is easy to reason about for correctness. Quick Sort shows understanding of partition schemes and average-case analysis. Also know Counting Sort for bounded integers and Insertion Sort for small or nearly sorted arrays. See the <a href="/docs">full guide</a> for interview-specific tips.</p>`,
+      },
+      {
+        q: "When should I use Radix Sort instead of Quick Sort?",
+        a: `<p>Use <strong>Radix Sort</strong> when sorting integers or fixed-length strings where the key size k is small relative to log n. Radix Sort runs in O(nk) time, which beats Quick Sort's O(n log n) when k < log n. In practice, this means large arrays of 32-bit integers (k=4 bytes) can be sorted faster with Radix Sort. However, Radix Sort uses more memory and cannot handle arbitrary comparison-based data types.</p>`,
+      },
+    ],
+  },
+  {
+    label: "Algorithm Comparisons (Reddit/Quora Favorites)",
+    items: [
+      {
+        q: "Why is Quick Sort faster than Merge Sort if they're both O(n log n)?",
+        a: `<p>Quick Sort is faster in practice because of <strong>superior cache locality</strong>. It sorts in-place, meaning it accesses contiguous memory locations that stay in CPU cache. Merge Sort requires O(n) auxiliary space, causing cache misses during the merge step. Quick Sort also has smaller constant factors in its inner loop. In benchmarks, Quick Sort is typically 2-3x faster than Merge Sort for arrays that fit in memory. <a href="/visualiser">Compare them side-by-side</a> in the visualiser.</p>`,
+      },
+      {
+        q: "Is Bubble Sort ever useful in real life?",
+        a: `<p>Rarely, but <strong>yes in very specific cases</strong>. Bubble Sort is useful when the data is already nearly sorted and you only need to fix a few out-of-place elements (it runs in O(n) with the swapped flag). It is also used in embedded systems with extreme memory constraints where code simplicity matters. Its main value today is educational, helping students understand comparison and swap mechanics before moving to efficient algorithms.</p>`,
+      },
+      {
+        q: "Why do people still teach Bubble Sort?",
+        a: `<p><strong>Bubble Sort is taught because it is the simplest sorting algorithm to understand and implement</strong>, making it an ideal introduction to algorithm analysis. It clearly demonstrates concepts like iteration, comparison, swapping, and early termination. It also provides an obvious example of O(n^2) inefficiency, motivating students to learn better approaches. Think of it as the "Hello World" of sorting algorithms.</p>`,
+      },
+      {
+        q: "Quick Sort vs Merge Sort vs Heap Sort - which one wins?",
+        a: `<p><strong>Quick Sort wins for average-case in-memory performance</strong> due to cache efficiency. Merge Sort wins when you need stability or guaranteed O(n log n) worst-case without worrying about pivot selection. Heap Sort wins when you need O(n log n) guaranteed with O(1) extra space. In practice, most standard libraries use hybrids: Tim Sort (Merge + Insertion) or Introsort (Quick + Heap + Insertion) to get the best of each. See our <a href="/docs">comparison table</a> for full details.</p>`,
+      },
+      {
+        q: "Why is Tim Sort the default in so many languages?",
+        a: `<p><strong>Tim Sort dominates because it is optimised for real-world data</strong>, which often contains partially sorted subsequences (runs). It achieves O(n) on already-sorted data, O(n log n) worst case, and is stable. It combines Merge Sort's reliability with Insertion Sort's efficiency on small arrays. Python, Java, JavaScript (V8), Swift, Kotlin, and Android all use Tim Sort because real data is rarely random.</p>`,
+      },
+      {
+        q: "Is Heap Sort better than Quick Sort?",
+        a: `<p><strong>Heap Sort has better worst-case guarantees</strong> (always O(n log n)) and uses O(1) extra space, but Quick Sort is faster in practice by 2-3x due to better cache performance. Heap Sort's scattered memory access pattern causes many cache misses. However, Heap Sort is useful in real-time systems where worst-case latency matters more than average throughput. Most production code uses Introsort, which starts with Quick Sort and falls back to Heap Sort if needed.</p>`,
+      },
+      {
+        q: "Why isn't Counting Sort used everywhere if it's O(n)?",
+        a: `<p><strong>Counting Sort is O(n + k) where k is the range of values</strong>, so it only works efficiently when k is small relative to n. Sorting an array of 100 elements with values up to 10 million would require 10 million array slots, making it impractical. It also only works on integers (or data that can be mapped to integers) and uses O(k) extra memory. For arbitrary comparable objects with large ranges, comparison-based sorts remain necessary.</p>`,
+      },
+    ],
+  },
+  {
+    label: "Stability & Advanced Concepts",
+    items: [
+      {
+        q: "What does \"stable\" mean for a sorting algorithm?",
+        a: `<p>A <strong>stable sorting algorithm</strong> preserves the relative order of elements that compare as equal. For example, if you sort a list of students by grade and two students share the same grade, a stable sort keeps them in their original order relative to each other. This is critical when sorting by multiple keys sequentially, such as sort by surname then by department.</p>`,
+      },
+      {
+        q: "Why does stability matter in practice?",
+        a: `<p><strong>Stability matters whenever you sort by multiple criteria</strong>. For example, sorting a spreadsheet first by date, then by category: a stable sort preserves the date ordering within each category. Database systems rely on stable sorts for ORDER BY clauses with multiple columns. Unstable sorts would randomise the order of equal elements, producing unpredictable results that break user expectations.</p>`,
+      },
+      {
+        q: "Which sorting algorithms are stable?",
+        a: `<p>The commonly stable algorithms are <strong>Merge Sort, Insertion Sort, Bubble Sort, Counting Sort, Radix Sort, and Tim Sort</strong>. The commonly unstable algorithms are Quick Sort, Heap Sort, and Selection Sort. Stability is an inherent property of the algorithm's design. The <a href="/docs">docs page</a> marks each algorithm's stability in the comparison table.</p>`,
+      },
+      {
+        q: "What is adaptive sorting?",
+        a: `<p>An <strong>adaptive sorting algorithm</strong> takes advantage of existing order in the input to sort faster. For example, Insertion Sort is adaptive because it runs in O(n) on nearly sorted data instead of its O(n^2) worst case. Tim Sort is highly adaptive, detecting sorted "runs" and exploiting them. Non-adaptive algorithms like Heap Sort always take O(n log n) regardless of input order.</p>`,
+      },
+      {
+        q: "What is the difference between iterative and recursive sorting?",
+        a: `<p><strong>Recursive sorts</strong> (Merge Sort, Quick Sort) divide the problem into sub-problems using function calls, consuming O(log n) stack space. <strong>Iterative sorts</strong> (Bubble Sort, Insertion Sort, Selection Sort) use loops with O(1) stack space. Most recursive sorts can be rewritten iteratively (bottom-up Merge Sort, iterative Quick Sort with an explicit stack), which avoids stack overflow on very large inputs.</p>`,
+      },
+      {
+        q: "Can Quick Sort be made stable?",
+        a: `<p><strong>Yes, but it requires O(n) extra space</strong>, which defeats one of Quick Sort's main advantages (in-place sorting). A stable Quick Sort allocates separate arrays for elements less than, equal to, and greater than the pivot, then concatenates them. This is essentially how Python's list comprehension-based quicksort works. In practice, if you need stability, use Merge Sort or Tim Sort instead.</p>`,
+      },
+      {
+        q: "What are hybrid sorting algorithms?",
+        a: `<p><strong>Hybrid sorting algorithms</strong> combine two or more simpler algorithms to exploit each one's strengths. Tim Sort (Merge Sort + Insertion Sort) uses Insertion Sort for small runs and Merge Sort for combining them. Introsort (Quick Sort + Heap Sort + Insertion Sort) starts with Quick Sort, falls back to Heap Sort for worst-case protection, and uses Insertion Sort for small sub-arrays. These hybrids are what production standard libraries actually use. <a href="/visualiser">See Tim Sort in action</a> on the visualiser.</p>`,
+      },
+    ],
+  },
+  {
+    label: "Interview & Career",
+    items: [
+      {
+        q: "Which sorting algorithms do I need to know for FAANG interviews?",
+        a: `<p>You should know <strong>Merge Sort, Quick Sort, and Heap Sort</strong> thoroughly, including implementation, time/space complexity, and trade-offs. Also know Insertion Sort for small arrays, Counting/Radix Sort for integer-specific problems, and Tim Sort as the real-world default. Understanding when to use each and their stability properties is more important than memorising code. The <a href="/docs">docs page</a> covers all of these with interview-focused explanations.</p>`,
+      },
+      {
+        q: "How do I explain Quick Sort in an interview?",
+        a: `<p>Explain it in three steps: <strong>(1) Choose a pivot element, (2) Partition the array so elements smaller than the pivot go left and larger go right, (3) Recursively sort the left and right sub-arrays.</strong> Mention that pivot selection matters (median-of-three or random prevents O(n^2) worst case), it is in-place but unstable, and average time is O(n log n) with O(log n) stack space. <a href="/visualiser">Watch the partition step</a> in the visualiser to build intuition.</p>`,
+      },
+      {
+        q: "What's the follow-up question after \"implement merge sort\"?",
+        a: `<p>Common follow-ups include: <strong>"How would you sort a file that doesn't fit in memory?"</strong> (external merge sort), "Can you do it iteratively?" (bottom-up merge sort), "What is the space complexity and can you reduce it?" (O(n) auxiliary, and no for a standard stable merge), and "How would you count inversions using merge sort?" These test whether you understand the algorithm deeply or just memorised the code.</p>`,
+      },
+      {
+        q: "Do I need to memorize all sorting algorithm complexities?",
+        a: `<p><strong>Yes, for interviews you should know the Big O of the top 7-8 algorithms</strong> without hesitation. The key ones: Bubble/Selection/Insertion are O(n^2), Merge/Heap/Quick are O(n log n) average, Counting is O(n+k), Radix is O(nk). More importantly, understand why: Insertion Sort is O(n^2) because of nested loops, Merge Sort is O(n log n) because it halves the problem log n times. The <a href="/docs">docs cheat sheet</a> has a printable reference.</p>`,
+      },
+      {
+        q: "How do I choose between sorting algorithms in a system design interview?",
+        a: `<p>Consider these factors: <strong>data size</strong> (small arrays favour Insertion Sort), <strong>memory constraints</strong> (Heap Sort for O(1) space), <strong>stability requirements</strong> (Merge Sort or Tim Sort), <strong>data distribution</strong> (Radix Sort for bounded integers, Tim Sort for partially sorted), and <strong>latency guarantees</strong> (Heap Sort for consistent worst-case). Mention that most production systems use language defaults (Tim Sort/Introsort) unless profiling reveals a specific bottleneck.</p>`,
+      },
+    ],
+  },
+  {
+    label: "Using Sort & Visualize",
+    items: [
+      {
+        q: "How do I use the visualiser?",
+        a: `<p>Open the <a href="/visualiser">visualiser page</a>, pick an algorithm from the left panel, then press <strong>Sort</strong>. You can adjust the array size (10-120 elements) and speed (x1 to x10) using the sliders. Use <strong>Pause</strong> to freeze at any frame, <strong>Step</strong> to advance one frame at a time, and <strong>Reset</strong> to start fresh.</p>`,
+      },
+      {
+        q: "What do the bar colours mean?",
+        a: `<p>Each colour represents a different algorithmic state: <strong style="color:#ffb830">Amber</strong> = elements being compared, <strong style="color:#ff4060">Red</strong> = elements being swapped, <strong style="color:#00ffc8">Cyan</strong> = the currently selected element, <strong style="color:#b06fff">Purple</strong> = the pivot (Quick Sort), <strong style="color:#39ff85">Green</strong> = confirmed as sorted. A legend is shown at the bottom of the visualiser.</p>`,
+      },
+      {
+        q: "What are the keyboard shortcuts?",
+        a: `<p><strong>Space</strong> starts the sort or toggles pause. <strong>R</strong> resets the array. <strong>Right arrow</strong> steps forward one frame when paused. <strong>Esc</strong> closes the comparison modal.</p>`,
+      },
+      {
+        q: "How do I compare multiple algorithms?",
+        a: `<p>Click the <strong>Compare All</strong> button in the top-right of the visualiser. This opens a table showing all 10 algorithms side by side with best, average, and worst-case time complexity, space complexity, stability, and sorting method.</p>`,
+      },
+      {
+        q: "Can I turn off the sound?",
+        a: `<p>Yes, click the speaker button in the controls bar to toggle audio on or off. The sound maps each bar's value to a pitch, so taller bars play higher tones. It is surprisingly musical!</p>`,
+      },
+      {
+        q: "Do I need an account to use Sort & Visualize?",
+        a: `<p>No. Sort &amp; Visualize requires absolutely <strong>no account, login, or sign-up</strong>. Just open the site and start visualising. We believe learning tools should have no barrier to entry.</p>`,
+      },
+      {
+        q: "Does Sort & Visualize collect any data?",
+        a: `<p>Sort &amp; Visualize runs entirely in your browser. <strong>All sorting happens locally on your device</strong>. We collect no personal data and store nothing on any server. For full details, see our <a href="/privacy">Privacy Policy</a>.</p>`,
+      },
+      {
+        q: "Is Sort & Visualize free?",
+        a: `<p>Yes, <strong>completely and permanently free</strong>. There is no paid tier and no premium features. Every algorithm and feature is available to everyone. We believe educational tools should be universally accessible.</p>`,
+      },
+    ],
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    { "@type": "Question", name: "What is a sorting algorithm and why do we need them?", acceptedAnswer: { "@type": "Answer", text: "A sorting algorithm is a step-by-step procedure that rearranges elements in a list into a defined order. We need them because sorted data enables faster searching, simplifies merging datasets, eliminates duplicates efficiently, and is a prerequisite for many other algorithms." } },
+    { "@type": "Question", name: "How many sorting algorithms are there?", acceptedAnswer: { "@type": "Answer", text: "There are dozens of documented sorting algorithms, but roughly 10-15 are commonly studied in computer science. These include Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quick Sort, Heap Sort, Counting Sort, Radix Sort, Bucket Sort, Shell Sort, and Tim Sort." } },
+    { "@type": "Question", name: "What is the difference between comparison-based and non-comparison sorting?", acceptedAnswer: { "@type": "Answer", text: "Comparison-based sorts (Quick Sort, Merge Sort, Heap Sort) determine order by comparing pairs of elements and are bounded by O(n log n). Non-comparison sorts (Counting Sort, Radix Sort, Bucket Sort) exploit data structure to achieve linear O(n) time but only work on specific data types." } },
+    { "@type": "Question", name: "What does O(n log n) mean in sorting?", acceptedAnswer: { "@type": "Answer", text: "O(n log n) describes how operations grow relative to input size n. It means for each of the n elements, about log n comparisons are needed. For 1 million elements, that is roughly 20 million operations versus 1 trillion with O(n squared)." } },
+    { "@type": "Question", name: "What is in-place sorting?", acceptedAnswer: { "@type": "Answer", text: "In-place sorting means the algorithm uses only O(1) extra memory rather than creating a copy of the array. Quick Sort, Heap Sort, Insertion Sort, Selection Sort, and Bubble Sort are all in-place. Merge Sort requires O(n) auxiliary space." } },
+    { "@type": "Question", name: "What is the lower bound for comparison-based sorting?", acceptedAnswer: { "@type": "Answer", text: "The theoretical lower bound is O(n log n), proven via decision-tree analysis. Any comparison sort must make at least log2(n!) comparisons in the worst case, which simplifies to O(n log n) by Stirling's approximation." } },
+    { "@type": "Question", name: "Can any sorting algorithm beat O(n log n)?", acceptedAnswer: { "@type": "Answer", text: "Yes, non-comparison sorts like Counting Sort O(n+k) and Radix Sort O(nk) break the barrier by not comparing elements directly. However, they require assumptions about the data such as bounded integers or fixed-length keys." } },
+    { "@type": "Question", name: "Which sorting algorithm is best for nearly sorted data?", acceptedAnswer: { "@type": "Answer", text: "Insertion Sort is the best choice for nearly sorted data, achieving O(n) time when only a few elements are out of place. Tim Sort is also excellent because it detects existing sorted runs and exploits them." } },
+    { "@type": "Question", name: "Which sorting algorithm is best for large datasets?", acceptedAnswer: { "@type": "Answer", text: "Merge Sort is often best for very large datasets, especially external sorting, because it has guaranteed O(n log n) performance and sequential access. For in-memory arrays, Quick Sort with randomised pivots or Introsort is typically fastest." } },
+    { "@type": "Question", name: "Which sorting algorithm uses the least memory?", acceptedAnswer: { "@type": "Answer", text: "Heap Sort uses the least memory among O(n log n) algorithms, requiring only O(1) extra space while guaranteeing worst-case O(n log n) time." } },
+    { "@type": "Question", name: "What sorting algorithm does Python use?", acceptedAnswer: { "@type": "Answer", text: "Python uses Tim Sort, a hybrid of Merge Sort and Insertion Sort designed by Tim Peters in 2002. It achieves O(n) on nearly sorted data and O(n log n) in the worst case." } },
+    { "@type": "Question", name: "What sorting algorithm does JavaScript Array.sort() use?", acceptedAnswer: { "@type": "Answer", text: "V8 (Chrome, Node.js) uses Tim Sort since 2018. SpiderMonkey (Firefox) uses a variant of Merge Sort. The ECMAScript spec requires stable sorting as of ES2019 but does not mandate a specific algorithm." } },
+    { "@type": "Question", name: "What sorting algorithm does Java use?", acceptedAnswer: { "@type": "Answer", text: "Java uses Tim Sort for objects (Arrays.sort for Object[]) and Dual-Pivot Quick Sort for primitives (Arrays.sort for int[], double[], etc.). Tim Sort is chosen for objects because it is stable." } },
+    { "@type": "Question", name: "What sorting algorithm does C++ std::sort use?", acceptedAnswer: { "@type": "Answer", text: "C++ std::sort typically uses Introsort, a hybrid of Quick Sort, Heap Sort, and Insertion Sort. It starts with Quick Sort, switches to Heap Sort if recursion depth exceeds O(log n), and finishes small sub-arrays with Insertion Sort." } },
+    { "@type": "Question", name: "Which sorting algorithm should I use for a coding interview?", acceptedAnswer: { "@type": "Answer", text: "Merge Sort and Quick Sort are the two you should know cold. Also know Counting Sort for bounded integers and Insertion Sort for small or nearly sorted arrays." } },
+    { "@type": "Question", name: "When should I use Radix Sort instead of Quick Sort?", acceptedAnswer: { "@type": "Answer", text: "Use Radix Sort when sorting integers or fixed-length strings where the key size k is small relative to log n. It runs in O(nk) time, which beats Quick Sort's O(n log n) when k is less than log n." } },
+    { "@type": "Question", name: "Why is Quick Sort faster than Merge Sort if they're both O(n log n)?", acceptedAnswer: { "@type": "Answer", text: "Quick Sort has superior cache locality because it sorts in-place, accessing contiguous memory that stays in CPU cache. Merge Sort requires O(n) auxiliary space causing cache misses. Quick Sort is typically 2-3x faster for in-memory arrays." } },
+    { "@type": "Question", name: "Is Bubble Sort ever useful in real life?", acceptedAnswer: { "@type": "Answer", text: "Rarely, but yes for nearly sorted data where only a few elements are out of place (O(n) with swapped flag), in embedded systems with extreme memory constraints, and for educational purposes demonstrating comparison and swap mechanics." } },
+    { "@type": "Question", name: "Why do people still teach Bubble Sort?", acceptedAnswer: { "@type": "Answer", text: "Bubble Sort is the simplest sorting algorithm to understand and implement, making it an ideal introduction to algorithm analysis. It clearly demonstrates iteration, comparison, swapping, and early termination, motivating students to learn better approaches." } },
+    { "@type": "Question", name: "Quick Sort vs Merge Sort vs Heap Sort - which one wins?", acceptedAnswer: { "@type": "Answer", text: "Quick Sort wins for average-case in-memory performance. Merge Sort wins for stability and guaranteed O(n log n) worst-case. Heap Sort wins for O(n log n) guaranteed with O(1) extra space. Most libraries use hybrids like Tim Sort or Introsort." } },
+    { "@type": "Question", name: "Why is Tim Sort the default in so many languages?", acceptedAnswer: { "@type": "Answer", text: "Tim Sort is optimised for real-world data which often contains partially sorted subsequences. It achieves O(n) on sorted data, O(n log n) worst case, is stable, and combines Merge Sort reliability with Insertion Sort efficiency on small arrays." } },
+    { "@type": "Question", name: "Is Heap Sort better than Quick Sort?", acceptedAnswer: { "@type": "Answer", text: "Heap Sort has better worst-case guarantees (always O(n log n), O(1) space) but Quick Sort is 2-3x faster in practice due to better cache performance. Heap Sort is useful in real-time systems where worst-case latency matters more than average throughput." } },
+    { "@type": "Question", name: "Why isn't Counting Sort used everywhere if it's O(n)?", acceptedAnswer: { "@type": "Answer", text: "Counting Sort is O(n+k) where k is the range of values, so it only works efficiently when k is small relative to n. It only works on integers and uses O(k) extra memory, making it impractical for large ranges or arbitrary comparable objects." } },
+    { "@type": "Question", name: "What does stable mean for a sorting algorithm?", acceptedAnswer: { "@type": "Answer", text: "A stable sorting algorithm preserves the relative order of elements that compare as equal. This is critical when sorting by multiple keys sequentially, such as sorting by surname then by department." } },
+    { "@type": "Question", name: "Why does stability matter in practice?", acceptedAnswer: { "@type": "Answer", text: "Stability matters when sorting by multiple criteria. A stable sort preserves previous ordering within equal groups. Database systems rely on stable sorts for ORDER BY clauses with multiple columns." } },
+    { "@type": "Question", name: "Which sorting algorithms are stable?", acceptedAnswer: { "@type": "Answer", text: "The commonly stable algorithms are Merge Sort, Insertion Sort, Bubble Sort, Counting Sort, Radix Sort, and Tim Sort. Quick Sort, Heap Sort, and Selection Sort are unstable." } },
+    { "@type": "Question", name: "What is adaptive sorting?", acceptedAnswer: { "@type": "Answer", text: "An adaptive sorting algorithm takes advantage of existing order in the input to sort faster. Insertion Sort runs in O(n) on nearly sorted data. Tim Sort detects sorted runs and exploits them. Heap Sort is non-adaptive, always taking O(n log n)." } },
+    { "@type": "Question", name: "What is the difference between iterative and recursive sorting?", acceptedAnswer: { "@type": "Answer", text: "Recursive sorts (Merge Sort, Quick Sort) divide problems using function calls, consuming O(log n) stack space. Iterative sorts (Bubble Sort, Insertion Sort) use loops with O(1) stack space. Most recursive sorts can be rewritten iteratively." } },
+    { "@type": "Question", name: "Can Quick Sort be made stable?", acceptedAnswer: { "@type": "Answer", text: "Yes, but it requires O(n) extra space, defeating its main in-place advantage. A stable Quick Sort uses separate arrays for elements less than, equal to, and greater than the pivot. In practice, use Merge Sort or Tim Sort if you need stability." } },
+    { "@type": "Question", name: "What are hybrid sorting algorithms?", acceptedAnswer: { "@type": "Answer", text: "Hybrid sorting algorithms combine two or more simpler algorithms to exploit each one's strengths. Tim Sort combines Merge Sort and Insertion Sort. Introsort combines Quick Sort, Heap Sort, and Insertion Sort. These are what production standard libraries actually use." } },
+    { "@type": "Question", name: "Which sorting algorithms do I need to know for FAANG interviews?", acceptedAnswer: { "@type": "Answer", text: "Know Merge Sort, Quick Sort, and Heap Sort thoroughly. Also know Insertion Sort for small arrays, Counting/Radix Sort for integer problems, and Tim Sort as the real-world default. Understanding trade-offs matters more than memorising code." } },
+    { "@type": "Question", name: "How do I explain Quick Sort in an interview?", acceptedAnswer: { "@type": "Answer", text: "Explain in three steps: choose a pivot, partition the array so smaller elements go left and larger go right, recursively sort both halves. Mention pivot selection strategies, in-place but unstable, O(n log n) average, O(log n) stack space." } },
+    { "@type": "Question", name: "What's the follow-up question after implement merge sort?", acceptedAnswer: { "@type": "Answer", text: "Common follow-ups: How would you sort a file that doesn't fit in memory (external merge sort)? Can you do it iteratively (bottom-up)? What is the space complexity? How would you count inversions using merge sort?" } },
+    { "@type": "Question", name: "Do I need to memorize all sorting algorithm complexities?", acceptedAnswer: { "@type": "Answer", text: "Yes for interviews. Bubble/Selection/Insertion are O(n squared), Merge/Heap/Quick are O(n log n) average, Counting is O(n+k), Radix is O(nk). More importantly, understand why each has its complexity." } },
+    { "@type": "Question", name: "How do I choose between sorting algorithms in a system design interview?", acceptedAnswer: { "@type": "Answer", text: "Consider data size, memory constraints, stability requirements, data distribution, and latency guarantees. Most production systems use language defaults (Tim Sort/Introsort) unless profiling reveals a specific bottleneck." } },
+    { "@type": "Question", name: "How do I use the visualiser?", acceptedAnswer: { "@type": "Answer", text: "Open the visualiser page, pick an algorithm from the left panel, then press Sort. Adjust array size and speed with sliders. Use Pause, Step, and Reset to control playback." } },
+    { "@type": "Question", name: "What do the bar colours mean?", acceptedAnswer: { "@type": "Answer", text: "Each colour represents an algorithmic state: amber means comparing, red means swapping, cyan is the selected element, purple is the pivot in Quick Sort, and green means confirmed sorted." } },
+    { "@type": "Question", name: "What are the keyboard shortcuts?", acceptedAnswer: { "@type": "Answer", text: "Space starts or pauses the sort. R resets the array. Right arrow steps forward one frame when paused. Escape closes the comparison modal." } },
+    { "@type": "Question", name: "How do I compare multiple algorithms?", acceptedAnswer: { "@type": "Answer", text: "Click the Compare All button to open a table showing all 10 algorithms side by side with time complexity, space complexity, stability, and sorting method." } },
+    { "@type": "Question", name: "Can I turn off the sound?", acceptedAnswer: { "@type": "Answer", text: "Yes, click the speaker button in the controls bar to toggle audio. The sound maps bar values to pitch, so taller bars play higher tones." } },
+    { "@type": "Question", name: "Do I need an account to use Sort & Visualize?", acceptedAnswer: { "@type": "Answer", text: "No. Sort & Visualize requires no account, login, or sign-up. Just open the site and start visualising." } },
+    { "@type": "Question", name: "Does Sort & Visualize collect any data?", acceptedAnswer: { "@type": "Answer", text: "Sort & Visualize runs entirely in your browser. All sorting happens locally on your device. We collect no personal data and store nothing on any server." } },
+    { "@type": "Question", name: "Is Sort & Visualize free?", acceptedAnswer: { "@type": "Answer", text: "Yes, completely and permanently free. There is no paid tier and no premium features. Every algorithm and feature is available to everyone." } },
+  ],
+};
+
+const catLabel =
+  "flex items-center gap-[8px] text-[0.6rem] max-[760px]:text-[0.75rem] tracking-[3px] uppercase text-purple mb-[20px] before:content-[''] before:block before:w-[20px] before:h-[1px] before:bg-purple";
+const faqAnswer =
+  "overflow-hidden max-h-0 px-[20px] transition-[max-height,padding] duration-[450ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] group-[.open]:max-h-[400px] group-[.open]:pb-[18px] [&_p]:text-[0.78rem] max-[760px]:[&_p]:text-[0.88rem] [&_p]:text-[#6a7a8a] [&_p]:leading-[1.8] [&_a]:text-cyan [&_a]:no-underline [&_a:hover]:underline";
+---
+
+<BaseLayout
+  title="Sorting Algorithm FAQ — 35+ Questions Answered | Sort & Visualize"
+  description="Every sorting algorithm question from Reddit and Quora answered: Quick Sort vs Merge Sort, best algorithm for interviews, Tim Sort explained, stability, Big O, and more. With interactive visualisations."
+  keywords="sorting algorithm faq, quicksort vs mergesort reddit, best sorting algorithm, which sorting algorithm to use, tim sort explained, sorting algorithm interview questions, bubble sort useful, stable sort meaning, sorting algorithm comparison, radix sort vs quicksort"
+  activePath="/faq"
+  jsonLd={jsonLd}
+>
+  <PageHero eyebrow="Frequently Asked Questions" glow="rgba(176,111,255,0.05)" glowW="700px" glowH="350px">
+    <Fragment slot="title">Got <em class="text-cyan not-italic">questions?</em></Fragment>
+    <p class="text-[0.9rem] max-[760px]:text-[1rem] text-[#5a6a7a] max-w-[480px] mx-auto leading-[1.8]">
+      Everything you need to know about Sort &amp; Visualize and sorting algorithms.
+    </p>
+  </PageHero>
+
+  <div class="max-w-[760px] mx-auto px-[40px] pt-[70px] pb-[100px] max-[980px]:px-[24px] max-[760px]:px-[18px]">
+    {
+      categories.map((cat) => (
+        <div class="mb-[48px]">
+          <div class={catLabel}>{cat.label}</div>
+          {cat.items.map((item) => (
+            <div class="faq-item group border border-line2 rounded-[8px] mb-[8px] overflow-hidden transition-[border-color] duration-[250ms] hover:border-[rgba(0,255,200,0.15)]">
+              <div class="faq-q flex items-center justify-between gap-[16px] cursor-pointer select-none px-[20px] py-[18px] max-[760px]:py-[20px] font-ui font-bold text-[0.9rem] max-[760px]:text-[1rem] text-white transition-[background] duration-[250ms] hover:bg-[rgba(0,255,200,0.03)] group-[.open]:text-cyan">
+                <span>{item.q}</span>
+                <span class="shrink-0 text-[0.8rem] text-muted transition-[transform,color] duration-[350ms] group-[.open]:rotate-180 group-[.open]:text-cyan">
+                  ▼
+                </span>
+              </div>
+              <div class={faqAnswer} set:html={item.a} />
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <script>
+    document.querySelectorAll<HTMLElement>(".faq-item").forEach((item) => {
+      const q = item.querySelector(".faq-q");
+      q?.addEventListener("click", () => {
+        const wasOpen = item.classList.contains("open");
+        document
+          .querySelectorAll(".faq-item")
+          .forEach((i) => i.classList.remove("open"));
+        if (!wasOpen) item.classList.add("open");
+      });
+    });
+  </script>
+</BaseLayout>

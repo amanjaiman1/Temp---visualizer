@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Sort & Visualize — Design tokens exposed to Tailwind v4
+   These generate utilities such as bg-bg, text-cyan, font-ui,
+   border-line, animate-fade-up, etc.
+   ============================================================ */
+@theme {
+  /* Surfaces */
+  --color-bg: #060810;
+  --color-bg2: #0b0f1a;
+  --color-bg3: #111828;
+  --color-panel: #0d1220;
+
+  /* Borders (cyan-tinted) */
+  --color-line: rgba(0, 255, 200, 0.12);
+  --color-line2: rgba(0, 255, 200, 0.06);
+
+  /* Accents */
+  --color-cyan: #00ffc8;
+  --color-cyan2: #00d4a8;
+  --color-amber: #ffb830;
+  --color-red: #ff4060;
+  --color-green: #39ff85;
+  --color-purple: #b06fff;
+
+  /* Foreground */
+  --color-ink: #c8d8e8;
+  --color-muted: #4a5a72;
+
+  /* Typography */
+  --font-mono: "Space Mono", monospace;
+  --font-ui: "Syne", sans-serif;
+
+  /* Reusable animations */
+  --animate-logo-pulse: logoPulse 3s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-up: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-slide-down: fadeSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-slide-up: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ============================================================
+   Legacy custom properties — kept so existing inline styles and
+   the scoped CSS on the docs / visualiser pages resolve exactly
+   as they did in the original static site.
+   ============================================================ */
+:root {
+  --bg: #060810;
+  --bg2: #0b0f1a;
+  --bg3: #111828;
+  --panel: #0d1220;
+  --border: rgba(0, 255, 200, 0.12);
+  --border2: rgba(0, 255, 200, 0.06);
+  --cyan: #00ffc8;
+  --cyan2: #00d4a8;
+  --amber: #ffb830;
+  --red: #ff4060;
+  --green: #39ff85;
+  --purple: #b06fff;
+  --text: #c8d8e8;
+  --muted: #4a5a72;
+  --font-mono: "Space Mono", monospace;
+  --font-ui: "Syne", sans-serif;
+}
+
+/* ============================================================
+   Base layer — hard reset + page shell to match the original.
+   ============================================================ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* CRT scanline overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Keep media inside the viewport on small screens */
+  img,
+  canvas,
+  svg,
+  video,
+  iframe {
+    max-width: 100%;
+  }
+}
+
+/* ============================================================
+   Shared keyframes (referenced by Tailwind animate-* tokens and
+   by component / page scoped styles).
+   ============================================================ */
+@keyframes logoPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(0, 255, 200, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 200, 0.6);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,161 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+
+const tocLink =
+  "block text-[0.75rem] max-[760px]:text-[0.88rem] text-muted no-underline py-[4px] transition-colors duration-200 hover:text-ink";
+const docSection = "mb-[48px] scroll-mt-[100px]";
+const docH2 =
+  "font-ui font-extrabold text-[1.3rem] max-[760px]:text-[1.2rem] tracking-[-0.5px] text-white mb-[14px] pb-[10px] border-b border-line2";
+const docP = "text-[0.8rem] max-[760px]:text-[0.92rem] text-[#6a7a8a] leading-[1.85] mb-[14px]";
+const docList = "list-none mb-[14px]";
+const docItem =
+  "flex gap-[8px] text-[0.8rem] max-[760px]:text-[0.92rem] text-[#6a7a8a] py-[4px] leading-[1.7] before:content-['›'] before:text-cyan before:shrink-0";
+const inlineLink = "text-cyan no-underline hover:underline";
+---
+
+<BaseLayout
+  title="Terms of Service — Sort & Visualize"
+  description="The terms governing use of Sort & Visualize, a free educational sorting algorithm visualiser: acceptable use, intellectual property, disclaimers, and limitation of liability."
+  activePath="/terms"
+>
+  <PageHero eyebrow="Legal" glow="rgba(255,184,48,0.04)" glowW="700px" glowH="350px">
+    <Fragment slot="title">Terms of <em class="text-cyan not-italic">Service</em></Fragment>
+    <div class="text-[0.68rem] text-muted tracking-[1px]">Last updated: June 2026</div>
+  </PageHero>
+
+  <div class="max-w-[720px] mx-auto px-[40px] pt-[60px] pb-[100px] max-[980px]:px-[24px] max-[760px]:px-[18px]">
+    <div class="bg-panel border border-line2 rounded-[10px] p-[24px] mb-[48px]">
+      <div class="text-[0.62rem] max-[760px]:text-[0.75rem] tracking-[2px] uppercase text-cyan mb-[14px]">Table of Contents</div>
+      <a href="#acceptance" class={tocLink}>1. Acceptance of Terms</a>
+      <a href="#use" class={tocLink}>2. Use of the Service</a>
+      <a href="#ip" class={tocLink}>3. Intellectual Property</a>
+      <a href="#disclaimer" class={tocLink}>4. Disclaimer of Warranties</a>
+      <a href="#liability" class={tocLink}>5. Limitation of Liability</a>
+      <a href="#links" class={tocLink}>6. Third-Party Links</a>
+      <a href="#modifications" class={tocLink}>7. Modifications to the Service</a>
+      <a href="#governing" class={tocLink}>8. Governing Law</a>
+      <a href="#contact-terms" class={tocLink}>9. Contact</a>
+    </div>
+
+    <section id="acceptance" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">1.</em> Acceptance of Terms</h2>
+      <p class={docP}>
+        By accessing or using Sort &amp; Visualize ("the Service"), you agree to be bound by these Terms of Service.
+        If you do not agree to these terms, please do not use the Service. Your continued use of
+        Sort &amp; Visualize constitutes your acceptance of any changes to these terms.
+      </p>
+      <div class="bg-[rgba(0,255,200,0.04)] border border-[rgba(0,255,200,0.15)] rounded-[8px] p-[16px_18px] mb-[16px]">
+        <p class="text-[0.8rem] text-ink leading-[1.7] mb-0">
+          Sort &amp; Visualize is a free, open educational tool. These terms are intentionally simple because the
+          Service itself is simple — no accounts, no payments, no personal data.
+        </p>
+      </div>
+    </section>
+
+    <section id="use" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">2.</em> Use of the Service</h2>
+      <p class={docP}>Sort &amp; Visualize is provided for educational and informational purposes. You are welcome to:</p>
+      <ul class={docList}>
+        <li class={docItem}>Use the visualiser freely for personal learning and study</li>
+        <li class={docItem}>Share the tool with students, colleagues, or anyone who might benefit</li>
+        <li class={docItem}>Use it in classroom settings, workshops, or educational institutions</li>
+        <li class={docItem}>Embed or link to Sort &amp; Visualize from other educational resources</li>
+      </ul>
+      <p class={docP}>You agree not to:</p>
+      <ul class={docList}>
+        <li class={docItem}>Attempt to reverse-engineer, scrape, or copy the Service in a misleading way</li>
+        <li class={docItem}>Use the Service for any unlawful purpose</li>
+        <li class={docItem}>Attempt to gain unauthorised access to any part of the Service</li>
+        <li class={docItem}>Introduce malware or harmful code via any input mechanism</li>
+      </ul>
+    </section>
+
+    <section id="ip" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">3.</em> Intellectual Property</h2>
+      <p class={docP}>
+        The Sort &amp; Visualize name, logo, design, and original source code are the intellectual property of
+        Sort &amp; Visualize. The underlying sorting algorithms are well-established computer science concepts in the
+        public domain — we make no claim of ownership over algorithmic logic itself.
+      </p>
+      <p class={docP}>
+        The visual design, user interface, animations, and written content (descriptions, pseudocode
+        commentary, documentation) are original works. You may not reproduce or redistribute these
+        without permission.
+      </p>
+      <p class={docP}>
+        Typefaces used (Space Mono, Syne) are available under open-source licences via Google Fonts.
+      </p>
+    </section>
+
+    <section id="disclaimer" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">4.</em> Disclaimer of Warranties</h2>
+      <p class={docP}>
+        Sort &amp; Visualize is provided "as is" and "as available" without warranties of any kind, either express
+        or implied. We do not warrant that:
+      </p>
+      <ul class={docList}>
+        <li class={docItem}>The Service will be uninterrupted, error-free, or completely accurate</li>
+        <li class={docItem}>Defects will be corrected immediately</li>
+        <li class={docItem}>The Service is free of viruses or other harmful components</li>
+        <li class={docItem}>The algorithm visualisations are suitable for any specific academic or professional purpose</li>
+      </ul>
+      <p class={docP}>
+        While we strive for accuracy in all pseudocode, complexity analysis, and visual representations,
+        the Service is intended as a learning aid and should not be used as a sole reference for
+        production engineering decisions.
+      </p>
+    </section>
+
+    <section id="liability" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">5.</em> Limitation of Liability</h2>
+      <p class={docP}>
+        To the fullest extent permitted by applicable law, Sort &amp; Visualize and its creators shall not be liable
+        for any indirect, incidental, special, consequential, or punitive damages arising from your use
+        of or inability to use the Service — including but not limited to loss of data, loss of revenue,
+        or loss of goodwill.
+      </p>
+      <p class={docP}>
+        Our total liability for any claim arising out of or relating to these Terms or the Service shall
+        not exceed zero, reflecting that Sort &amp; Visualize is provided entirely free of charge.
+      </p>
+    </section>
+
+    <section id="links" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">6.</em> Third-Party Links</h2>
+      <p class={docP}>
+        Sort &amp; Visualize may contain links to external websites or resources. We have no control over the
+        content or practices of these third-party sites and accept no responsibility for them. Links are
+        provided for convenience and do not constitute endorsement.
+      </p>
+    </section>
+
+    <section id="modifications" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">7.</em> Modifications to the Service</h2>
+      <p class={docP}>
+        We reserve the right to modify, suspend, or discontinue Sort &amp; Visualize at any time, with or without
+        notice. We may also update these Terms of Service at any time. The "Last updated" date at the top
+        of this page will reflect any changes. Continued use after changes constitutes acceptance.
+      </p>
+    </section>
+
+    <section id="governing" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">8.</em> Governing Law</h2>
+      <p class={docP}>
+        These Terms shall be governed by and construed in accordance with applicable law. Any disputes
+        arising from these Terms or your use of the Service shall be resolved in accordance with the laws
+        of the jurisdiction in which the Service is operated, without regard to conflict of law
+        principles.
+      </p>
+    </section>
+
+    <section id="contact-terms" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">9.</em> Contact</h2>
+      <p class={docP}>
+        If you have any questions, concerns, or requests related to these Terms of Service, please
+        contact us via the <a href="/contact" class={inlineLink}>Contact page</a>. We aim to respond to
+        all inquiries within a reasonable timeframe.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

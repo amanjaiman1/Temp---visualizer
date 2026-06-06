@@ -1,0 +1,170 @@
+<!-- ═══════════════════ COMPARISON MODAL ═══════════════════ -->
+<div class="modal-overlay" id="cmpModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Algorithm <span>Comparison</span> Table</div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <table class="cmp-table" id="cmpTable">
+      <thead>
+        <tr>
+          <th>Algorithm</th>
+          <th>Best</th>
+          <th>Average</th>
+          <th>Worst</th>
+          <th>Space</th>
+          <th>Stable</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="app">
+  <!-- ══════════════ HEADER ══════════════ -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div>
+        <div class="logo-text"><em>Sort</em>&amp;Visualize</div>
+        <em class="logo-sub">ALGORITHM VISUALISER</em>
+      </div>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat-item"><strong id="statComparisons">0</strong>COMPARISONS</div>
+      <div class="stat-item"><strong id="statSwaps">0</strong>SWAPS</div>
+      <div class="stat-item"><strong id="statTime">0ms</strong>ELAPSED</div>
+    </div>
+
+    <div class="header-controls">
+      <a href="/" class="btn btn-ghost" style="text-decoration:none">← Home</a>
+      <button class="btn btn-ghost" onclick="openModal()">⊞ Compare All</button>
+    </div>
+  </header>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <main>
+    <!-- LEFT: Algo picker -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-dot"></div>
+        <div class="panel-title">Algorithms</div>
+      </div>
+      <div class="algo-list" id="algoList"></div>
+    </div>
+
+    <!-- CENTER: Visualiser -->
+    <div class="visualiser" id="visualiser">
+      <div class="viz-top-bar">
+        <div>
+          <div class="algo-display-name" id="algoDisplayName">Bubble<span>Sort</span></div>
+        </div>
+        <div class="complexity-pills" id="complexityPills"></div>
+      </div>
+
+      <div class="bar-canvas-wrap" id="barCanvas">
+        <div class="axis-line"></div>
+      </div>
+
+      <div class="explain-bar" id="explainBar">
+        <div class="explain-icon" id="explainIcon">💡</div>
+        <div class="explain-text" id="explainText">Pick an algorithm, then press ▶ Sort — this box explains every step in plain English.</div>
+      </div>
+
+      <div class="controls-bar">
+        <button class="btn btn-primary" id="btnSort" onclick="startSort()">▶ Sort</button>
+        <button class="btn btn-ghost" id="btnPause" onclick="togglePause()" disabled>⏸ Pause</button>
+        <button class="btn btn-ghost" id="btnStep" onclick="stepForward()" disabled>⏭ Step</button>
+        <button class="btn btn-danger" id="btnReset" onclick="resetArray()">↺ Reset</button>
+        <button class="btn btn-ghost" onclick="generateArray()">⚄ Shuffle</button>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Array Size <span id="sizeVal">60</span></div>
+          <input type="range" class="slider" id="sizeSlider" min="10" max="120" value="60" oninput="onSizeChange(this.value)">
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Speed <span id="speedVal">×3</span></div>
+          <input type="range" class="slider" id="speedSlider" min="1" max="10" value="3" oninput="onSpeedChange(this.value)">
+        </div>
+
+        <button class="sound-btn" id="soundBtn" onclick="toggleSound()" title="Toggle sound">🔊</button>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-item">
+          <div class="status-dot idle" id="statusDot"></div>
+          <span id="statusText">IDLE</span>
+        </div>
+        <div class="status-item">ARRAY · <strong id="statusN">60</strong> ELEMENTS</div>
+        <div class="status-item">ALGO · <strong id="statusAlgo">Bubble Sort</strong></div>
+
+        <div class="legend">
+          <div class="legend-item"><div class="legend-swatch" style="background:var(--amber)"></div><div class="legend-label">COMPARING</div></div>
+          <div class="legend-item"><div class="legend-swatch" style="background:var(--red)"></div><div class="legend-label">SWAPPING</div></div>
+          <div class="legend-item"><div class="legend-swatch" style="background:var(--cyan)"></div><div class="legend-label">SELECTED</div></div>
+          <div class="legend-item"><div class="legend-swatch" style="background:var(--purple)"></div><div class="legend-label">PIVOT</div></div>
+          <div class="legend-item"><div class="legend-swatch" style="background:var(--green)"></div><div class="legend-label">SORTED</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Code + Info -->
+    <div class="panel right-panel">
+      <div class="panel-header">
+        <div class="panel-dot"></div>
+        <div class="panel-title">Pseudocode</div>
+      </div>
+
+      <div class="pseudo-wrap">
+        <div class="pseudo-block">
+          <div class="pseudo-header">
+            <div class="panel-dot" style="width:5px;height:5px;background:var(--amber)"></div>
+            <div class="pseudo-header-title" id="pseudoTitle">bubble_sort</div>
+            <div class="pseudo-header-lang">pseudocode</div>
+          </div>
+          <div class="pseudo-lines" id="pseudoLines"></div>
+        </div>
+      </div>
+
+      <div class="info-wrap">
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="panel-dot" style="background:var(--purple)"></div>
+            <div class="info-card-title">Description</div>
+          </div>
+          <div class="info-card-body">
+            <div class="info-desc" id="algoDesc">—</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="panel-dot" style="background:var(--amber)"></div>
+            <div class="info-card-title">Complexity</div>
+          </div>
+          <div class="info-card-body">
+            <div class="complexity-grid" id="complexityGrid"></div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="panel-dot" style="background:var(--green)"></div>
+            <div class="info-card-title">Best Use Cases</div>
+          </div>
+          <div class="info-card-body">
+            <ul class="use-case-list" id="useCaseList"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+</div>

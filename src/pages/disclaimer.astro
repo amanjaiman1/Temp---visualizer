@@ -1,0 +1,173 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+
+const tocLink =
+  "block text-[0.75rem] max-[760px]:text-[0.88rem] text-muted no-underline py-[4px] border-b border-transparent transition-colors duration-200 hover:text-ink";
+const docSection = "mb-[48px] scroll-mt-[100px]";
+const docH2 =
+  "font-ui font-extrabold text-[1.3rem] max-[760px]:text-[1.2rem] tracking-[-0.5px] text-white mb-[14px] pb-[10px] border-b border-line2";
+const docP = "text-[0.8rem] max-[760px]:text-[0.92rem] text-[#6a7a8a] leading-[1.85] mb-[14px]";
+const docList = "list-none mb-[14px]";
+const docItem =
+  "flex gap-[8px] text-[0.8rem] max-[760px]:text-[0.92rem] text-[#6a7a8a] py-[4px] leading-[1.7] before:content-['›'] before:text-cyan before:shrink-0";
+const inlineLink = "text-cyan no-underline hover:underline";
+---
+
+<BaseLayout
+  title="Disclaimer — Sort & Visualize"
+  description="Sort & Visualize disclaimer: educational purpose, algorithm accuracy, advertising disclosure, affiliate links, fair use, and limitation of liability."
+  keywords="disclaimer, sort and visualize disclaimer, educational tool disclaimer, algorithm visualiser disclaimer"
+  activePath="/disclaimer"
+>
+  <PageHero eyebrow="Legal" glow="rgba(255,64,96,0.04)" glowW="700px" glowH="350px">
+    <Fragment slot="title"><em class="text-cyan not-italic">Disclaimer</em></Fragment>
+    <div class="text-[0.68rem] text-muted tracking-[1px]">Last updated: July 2025</div>
+  </PageHero>
+
+  <div class="max-w-[720px] mx-auto px-[40px] pt-[60px] pb-[100px] max-[980px]:px-[24px] max-[760px]:px-[18px]">
+    <div class="bg-panel border border-line2 rounded-[10px] p-[24px] mb-[48px]">
+      <div class="text-[0.62rem] max-[760px]:text-[0.75rem] tracking-[2px] uppercase text-cyan mb-[14px]">Table of Contents</div>
+      <a href="#general" class={tocLink}>1. General Disclaimer</a>
+      <a href="#no-advice" class={tocLink}>2. No Professional Advice</a>
+      <a href="#accuracy" class={tocLink}>3. Algorithm Accuracy</a>
+      <a href="#external-links" class={tocLink}>4. External Links</a>
+      <a href="#advertising" class={tocLink}>5. Advertising Disclaimer</a>
+      <a href="#affiliate" class={tocLink}>6. Affiliate Disclaimer</a>
+      <a href="#fair-use" class={tocLink}>7. Fair Use</a>
+      <a href="#changes" class={tocLink}>8. Changes to This Disclaimer</a>
+      <a href="#contact-disc" class={tocLink}>9. Contact</a>
+    </div>
+
+    <section id="general" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">1.</em> General Disclaimer</h2>
+      <p class={docP}>
+        Sort &amp; Visualize is provided strictly for educational and informational purposes. The content on this
+        website, including all algorithm visualisations, explanations, pseudocode, and complexity
+        analyses, is intended to help students, educators, and developers understand sorting algorithms
+        through interactive visual learning.
+      </p>
+      <p class={docP}>
+        While we strive to provide accurate and up-to-date information, we make no representations or
+        warranties of any kind, express or implied, about the completeness, accuracy, reliability,
+        suitability, or availability of the information, products, services, or related graphics
+        contained on this website.
+      </p>
+    </section>
+
+    <section id="no-advice" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">2.</em> No Professional Advice</h2>
+      <p class={docP}>
+        The information provided by Sort &amp; Visualize is not a substitute for professional computer science
+        education, formal academic instruction, or expert consultation. The tool is designed to
+        supplement learning, not replace structured coursework, textbooks, or professional guidance.
+      </p>
+      <p class={docP}>
+        You should not rely solely on Sort &amp; Visualize for academic assessments, professional software
+        engineering decisions, or any situation where algorithmic correctness is critical. Always
+        consult authoritative sources and verified implementations for production use.
+      </p>
+    </section>
+
+    <section id="accuracy" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">3.</em> Algorithm Accuracy</h2>
+      <p class={docP}>
+        We strive for accuracy in all algorithm implementations and visualisations presented on
+        Sort &amp; Visualize. However, the animations are simplified representations designed for educational
+        clarity. They may not capture every nuance of real-world implementations, compiler
+        optimisations, or hardware-specific behaviours.
+      </p>
+      <ul class={docList}>
+        <li class={docItem}>Visualisations use simplified models that prioritise clarity over exhaustive detail</li>
+        <li class={docItem}>Pseudocode is written for readability and may differ from production implementations</li>
+        <li class={docItem}>Complexity metrics shown are theoretical and may vary in practice due to constant factors</li>
+        <li class={docItem}>Animation timings do not reflect actual CPU execution speeds</li>
+      </ul>
+      <p class={docP}>
+        If you notice any inaccuracy in our algorithm implementations or explanations, please
+        <a href="/contact" class={inlineLink}>contact us</a> so we can investigate and correct it.
+      </p>
+    </section>
+
+    <section id="external-links" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">4.</em> External Links</h2>
+      <p class={docP}>
+        Sort &amp; Visualize may contain links to external websites or resources that are not operated or
+        controlled by us. We have no control over the content, privacy policies, or practices of any
+        third-party websites and are not responsible for their content or availability.
+      </p>
+      <p class={docP}>
+        The inclusion of any link does not imply endorsement or recommendation by Sort &amp; Visualize. You access
+        external sites at your own risk and should review their terms and privacy policies independently.
+      </p>
+    </section>
+
+    <section id="advertising" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">5.</em> Advertising Disclaimer</h2>
+      <p class={docP}>
+        This site displays advertisements via Google AdSense, an advertising program operated by
+        Google LLC. These advertisements help fund the continued development and maintenance of
+        Sort &amp; Visualize as a free educational resource.
+      </p>
+      <p class={docP}>
+        Ad content is not endorsed by Sort &amp; Visualize. The advertisements you see are served by Google based
+        on your browsing history, interests, and other factors determined by Google's advertising
+        algorithms. We do not control which specific ads are displayed, and the appearance of an
+        advertisement does not constitute an endorsement of the advertised product, service, or company.
+      </p>
+      <p class={docP}>
+        For information about how Google uses your data for advertising purposes, please visit
+        <a href="https://policies.google.com/technologies/partner-sites" class={inlineLink}>Google's Privacy & Terms page</a>.
+        You can opt out of personalised advertising via
+        <a href="https://www.google.com/settings/ads" class={inlineLink}>Google Ads Settings</a>.
+      </p>
+    </section>
+
+    <section id="affiliate" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">6.</em> Affiliate Disclaimer</h2>
+      <p class={docP}>
+        Sort &amp; Visualize currently does not participate in any affiliate marketing programs and does not
+        contain affiliate links. However, we reserve the right to include affiliate links in the
+        future, such as links to recommended textbooks, courses, or developer tools.
+      </p>
+      <p class={docP}>
+        Should we introduce affiliate links, this disclaimer will be updated to clearly identify them,
+        and we will only recommend products or services that we genuinely believe provide value to our
+        audience of learners and developers.
+      </p>
+    </section>
+
+    <section id="fair-use" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">7.</em> Fair Use</h2>
+      <p class={docP}>
+        Sorting algorithms themselves are mathematical concepts in the public domain and are not
+        subject to copyright. Our specific implementation, visual design, user interface, animations,
+        audio feedback system, and written content (including pseudocode formatting and educational
+        explanations) are original works created by the Sort &amp; Visualize team.
+      </p>
+      <p class={docP}>
+        You are welcome to reference Sort &amp; Visualize in educational materials, link to our pages, and use
+        our tool for learning. However, reproducing substantial portions of our source code, design,
+        or written content without attribution or permission is not permitted.
+      </p>
+    </section>
+
+    <section id="changes" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">8.</em> Changes to This Disclaimer</h2>
+      <p class={docP}>
+        We reserve the right to update or modify this disclaimer at any time without prior notice.
+        Changes will be reflected on this page with a revised "Last updated" date. We encourage you to
+        review this page periodically to stay informed of any updates.
+      </p>
+    </section>
+
+    <section id="contact-disc" class={docSection}>
+      <h2 class={docH2}><em class="text-cyan not-italic">9.</em> Contact</h2>
+      <p class={docP}>
+        If you have any questions or concerns about this disclaimer, please reach out via our
+        <a href="/contact" class={inlineLink}>Contact page</a>. We welcome feedback and will address
+        your inquiries promptly.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

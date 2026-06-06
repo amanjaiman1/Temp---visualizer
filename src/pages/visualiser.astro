@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import body from "../html/visualiser.html?raw";
+import "../styles/pages/visualiser.css";
+---
+
+<BaseLayout
+  title={"Sorting Visualiser — Watch 10 Algorithms Sort in Real Time | Sort & Visualize"}
+  description={"Interactive sorting visualiser: run Bubble, Selection, Insertion, Merge, Quick, Heap, Shell, Counting, Radix and Tim Sort with live pseudocode, complexity pills, comparison/swap counters and audio. Adjust array size and speed."}
+  keywords={"sorting visualiser, sort animation, bubble sort, quick sort, merge sort, heap sort, radix sort, tim sort, pseudocode, time complexity, interactive algorithm tool"}
+  activePath="/visualiser"
+>
+  <Fragment set:html={body} />
+</BaseLayout>
+
+<script is:inline src="/page-js/visualiser.js"></script>

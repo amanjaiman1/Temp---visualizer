@@ -1,0 +1,154 @@
+---
+---
+
+<div id="cookie-consent" class="fixed bottom-0 left-0 right-0 z-[9998] hidden">
+  <!-- Main Banner -->
+  <div id="cookie-banner" class="bg-panel border-t border-line2 px-[24px] py-[20px] max-[760px]:px-[16px] max-[760px]:py-[16px]">
+    <div class="max-w-[1000px] mx-auto flex items-center gap-[20px] max-[760px]:flex-col max-[760px]:gap-[14px]">
+      <p class="text-[0.75rem] max-[760px]:text-[0.85rem] text-muted leading-[1.7] flex-1 m-0">
+        We use cookies to serve personalised ads via Google AdSense and to improve your experience.
+        By continuing to use this site, you consent to our use of cookies.
+        <a href="/privacy" class="text-cyan hover:underline no-underline">Learn more</a>.
+      </p>
+      <div class="flex gap-[10px] shrink-0 max-[760px]:w-full max-[760px]:flex-col">
+        <button
+          id="cookie-accept-all"
+          class="px-[20px] py-[8px] bg-cyan text-[#060810] font-ui font-bold text-[0.72rem] max-[760px]:text-[0.82rem] tracking-[1px] uppercase rounded-[4px] border-none cursor-pointer transition-opacity duration-200 hover:opacity-90 max-[760px]:w-full max-[760px]:py-[12px]"
+        >
+          Accept All
+        </button>
+        <button
+          id="cookie-manage"
+          class="px-[20px] py-[8px] bg-transparent text-muted font-ui font-bold text-[0.72rem] max-[760px]:text-[0.82rem] tracking-[1px] uppercase rounded-[4px] border border-line2 cursor-pointer transition-colors duration-200 hover:text-ink hover:border-ink max-[760px]:w-full max-[760px]:py-[12px]"
+        >
+          Manage Preferences
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preferences Panel -->
+  <div id="cookie-preferences" class="hidden bg-panel border-t border-line2 px-[24px] py-[24px] max-[760px]:px-[16px] max-[760px]:py-[18px]">
+    <div class="max-w-[1000px] mx-auto">
+      <h3 class="font-ui font-bold text-[0.85rem] max-[760px]:text-[0.95rem] text-white mb-[16px]">Cookie Preferences</h3>
+      <div class="flex flex-col gap-[12px] mb-[20px]">
+        <!-- Necessary -->
+        <div class="flex items-center justify-between gap-[12px] py-[8px] border-b border-line2">
+          <div>
+            <span class="text-[0.75rem] max-[760px]:text-[0.85rem] text-ink font-bold">Necessary</span>
+            <span class="text-[0.68rem] max-[760px]:text-[0.78rem] text-muted ml-[8px]">(always on)</span>
+          </div>
+          <div class="w-[36px] h-[20px] bg-cyan rounded-full relative opacity-60 cursor-not-allowed">
+            <div class="absolute top-[2px] right-[2px] w-[16px] h-[16px] bg-[#060810] rounded-full"></div>
+          </div>
+        </div>
+        <!-- Advertising -->
+        <div class="flex items-center justify-between gap-[12px] py-[8px] border-b border-line2">
+          <div>
+            <span class="text-[0.75rem] max-[760px]:text-[0.85rem] text-ink font-bold">Advertising</span>
+            <span class="text-[0.68rem] max-[760px]:text-[0.78rem] text-muted ml-[8px]">Google AdSense cookies</span>
+          </div>
+          <label class="relative inline-block w-[36px] h-[20px] cursor-pointer">
+            <input type="checkbox" id="pref-advertising" class="peer sr-only" checked />
+            <div class="w-full h-full bg-[#1a1e2e] peer-checked:bg-cyan rounded-full transition-colors duration-200"></div>
+            <div class="absolute top-[2px] left-[2px] w-[16px] h-[16px] bg-[#060810] rounded-full transition-transform duration-200 peer-checked:translate-x-[16px]"></div>
+          </label>
+        </div>
+        <!-- Analytics -->
+        <div class="flex items-center justify-between gap-[12px] py-[8px] border-b border-line2">
+          <div>
+            <span class="text-[0.75rem] max-[760px]:text-[0.85rem] text-ink font-bold">Analytics</span>
+            <span class="text-[0.68rem] max-[760px]:text-[0.78rem] text-muted ml-[8px]">Usage statistics</span>
+          </div>
+          <label class="relative inline-block w-[36px] h-[20px] cursor-pointer">
+            <input type="checkbox" id="pref-analytics" class="peer sr-only" checked />
+            <div class="w-full h-full bg-[#1a1e2e] peer-checked:bg-cyan rounded-full transition-colors duration-200"></div>
+            <div class="absolute top-[2px] left-[2px] w-[16px] h-[16px] bg-[#060810] rounded-full transition-transform duration-200 peer-checked:translate-x-[16px]"></div>
+          </label>
+        </div>
+      </div>
+      <div class="flex gap-[10px] max-[760px]:flex-col">
+        <button
+          id="cookie-save-prefs"
+          class="px-[20px] py-[8px] bg-cyan text-[#060810] font-ui font-bold text-[0.72rem] max-[760px]:text-[0.82rem] tracking-[1px] uppercase rounded-[4px] border-none cursor-pointer transition-opacity duration-200 hover:opacity-90 max-[760px]:w-full max-[760px]:py-[12px]"
+        >
+          Accept Selected
+        </button>
+        <button
+          id="cookie-reject-all"
+          class="px-[20px] py-[8px] bg-transparent text-muted font-ui font-bold text-[0.72rem] max-[760px]:text-[0.82rem] tracking-[1px] uppercase rounded-[4px] border border-line2 cursor-pointer transition-colors duration-200 hover:text-ink hover:border-ink max-[760px]:w-full max-[760px]:py-[12px]"
+        >
+          Reject All
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Settings trigger for footer area -->
+<div id="cookie-settings-trigger" class="hidden text-center py-[8px] border-t border-line2 bg-bg">
+  <button
+    id="cookie-settings-btn"
+    class="text-[0.62rem] max-[760px]:text-[0.75rem] text-muted hover:text-cyan bg-transparent border-none cursor-pointer transition-colors duration-200 tracking-[1px]"
+  >
+    Cookie Settings
+  </button>
+</div>
+
+<script>
+  (function () {
+    const consent = localStorage.getItem("sortlab-consent");
+    const banner = document.getElementById("cookie-consent");
+    const mainBanner = document.getElementById("cookie-banner");
+    const prefsPanel = document.getElementById("cookie-preferences");
+    const settingsTrigger = document.getElementById("cookie-settings-trigger");
+
+    if (!banner || !mainBanner || !prefsPanel || !settingsTrigger) return;
+
+    // Show cookie settings link in footer area always (for returning users)
+    settingsTrigger.classList.remove("hidden");
+
+    if (!consent) {
+      banner.classList.remove("hidden");
+    }
+
+    // Accept All
+    document.getElementById("cookie-accept-all")?.addEventListener("click", () => {
+      localStorage.setItem("sortlab-consent", "accepted");
+      localStorage.setItem("sortlab-consent-advertising", "true");
+      localStorage.setItem("sortlab-consent-analytics", "true");
+      banner.classList.add("hidden");
+    });
+
+    // Manage Preferences
+    document.getElementById("cookie-manage")?.addEventListener("click", () => {
+      mainBanner.classList.add("hidden");
+      prefsPanel.classList.remove("hidden");
+    });
+
+    // Save Preferences
+    document.getElementById("cookie-save-prefs")?.addEventListener("click", () => {
+      const adCheckbox = document.getElementById("pref-advertising") as HTMLInputElement;
+      const analyticsCheckbox = document.getElementById("pref-analytics") as HTMLInputElement;
+      localStorage.setItem("sortlab-consent", "accepted");
+      localStorage.setItem("sortlab-consent-advertising", String(adCheckbox?.checked ?? false));
+      localStorage.setItem("sortlab-consent-analytics", String(analyticsCheckbox?.checked ?? false));
+      banner.classList.add("hidden");
+    });
+
+    // Reject All
+    document.getElementById("cookie-reject-all")?.addEventListener("click", () => {
+      localStorage.setItem("sortlab-consent", "rejected");
+      localStorage.setItem("sortlab-consent-advertising", "false");
+      localStorage.setItem("sortlab-consent-analytics", "false");
+      banner.classList.add("hidden");
+    });
+
+    // Cookie Settings button (re-open banner)
+    document.getElementById("cookie-settings-btn")?.addEventListener("click", () => {
+      mainBanner.classList.remove("hidden");
+      prefsPanel.classList.add("hidden");
+      banner.classList.remove("hidden");
+    });
+  })();
+</script>

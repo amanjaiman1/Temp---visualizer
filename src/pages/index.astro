@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import body from "../html/index.html?raw";
+import "../styles/pages/index.css";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://sortandvisualize.com/#website",
+      "url": "https://sortandvisualize.com/",
+      "name": "Sort & Visualize",
+      "description": "Interactive visualiser for classic sorting algorithms.",
+      "publisher": {
+        "@id": "https://sortandvisualize.com/#org"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://sortandvisualize.com/#org",
+      "name": "Sort & Visualize",
+      "url": "https://sortandvisualize.com/"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Sort & Visualize Algorithm Visualiser",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://sortandvisualize.com/visualiser",
+      "description": "Visualise 10 sorting algorithms in real time with live pseudocode, complexity stats and audio feedback.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={"Sort & Visualize — Interactive Sorting Algorithm Visualiser"}
+  description={"Watch 10 classic sorting algorithms come alive in real time. Compare Bubble, Merge, Quick, Heap and Tim Sort with live pseudocode, complexity stats and audio feedback. Free, no sign-up."}
+  keywords={"sorting algorithm visualiser, bubble sort, quick sort, merge sort, heap sort, tim sort, insertion sort, selection sort, algorithm animation, computer science, data structures, learn sorting"}
+  activePath="/"
+  jsonLd={jsonLd}
+>
+  <Fragment set:html={body} />
+</BaseLayout>
+
+<script is:inline src="/page-js/index.js"></script>

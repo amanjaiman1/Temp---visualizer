@@ -1,0 +1,41 @@
+---
+const colLink =
+  "block text-[0.72rem] max-[760px]:text-[0.85rem] text-muted no-underline mb-[8px] transition-colors duration-200 hover:text-ink";
+---
+
+<footer class="border-t border-line2 bg-bg p-[40px] max-[980px]:p-[36px_24px] max-[760px]:p-[32px_18px]">
+  <div class="footer-inner max-w-[1200px] mx-auto grid grid-cols-[1fr_auto] gap-[40px] items-start max-[760px]:grid-cols-1 max-[760px]:gap-[28px]">
+    <div class="footer-brand">
+      <div class="font-ui font-black text-[1.3rem] tracking-[-1px] text-white mb-[8px]">
+        <em class="text-cyan not-italic">Sort</em>&amp;Visualize
+      </div>
+      <p class="text-[0.7rem] max-[760px]:text-[0.82rem] text-muted leading-[1.6] max-w-[280px]">
+        An interactive visualiser for sorting algorithms. Built to make computer
+        science concepts approachable and intuitive.
+      </p>
+    </div>
+    <div class="footer-nav flex gap-[40px] max-[760px]:flex-wrap max-[760px]:gap-[28px] max-[460px]:gap-[22px]">
+      <div>
+        <h4 class="text-[0.62rem] max-[760px]:text-[0.75rem] tracking-[2px] uppercase text-cyan mb-[14px]">Tool</h4>
+        <a href="/visualiser" class={colLink}>Visualiser</a>
+        <a href="/docs" class={colLink}>Docs</a>
+      </div>
+      <div>
+        <h4 class="text-[0.62rem] max-[760px]:text-[0.75rem] tracking-[2px] uppercase text-cyan mb-[14px]">Company</h4>
+        <a href="/about" class={colLink}>About</a>
+        <a href="/contact" class={colLink}>Contact</a>
+      </div>
+      <div>
+        <h4 class="text-[0.62rem] max-[760px]:text-[0.75rem] tracking-[2px] uppercase text-cyan mb-[14px]">Legal</h4>
+        <a href="/privacy" class={colLink}>Privacy Policy</a>
+        <a href="/terms" class={colLink}>Terms of Service</a>
+        <a href="/faq" class={colLink}>FAQ</a>
+        <a href="/disclaimer" class={colLink}>Disclaimer</a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-[1200px] mx-auto mt-[30px] pt-[20px] border-t border-line2 flex justify-between items-center text-[0.62rem] max-[760px]:text-[0.75rem] text-muted max-[760px]:flex-col max-[760px]:gap-[8px] max-[760px]:text-center">
+    <span><em class="text-cyan not-italic">Sort</em>&amp;Visualize — Interactive Algorithm Visualiser</span>
+    <span>Built with ♥ for learners everywhere</span>
+  </div>
+</footer>

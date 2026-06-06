@@ -1,0 +1,57 @@
+---
+interface Props {
+  eyebrow: string;
+  /** Radial glow colour; pass "transparent" to disable the glow. */
+  glow?: string;
+  glowW?: string;
+  glowH?: string;
+}
+const {
+  eyebrow,
+  glow = "rgba(0,255,200,0.05)",
+  glowW = "800px",
+  glowH = "400px",
+} = Astro.props;
+---
+
+<div
+  class="page-hero relative overflow-hidden border-b border-line2 text-center px-[40px] pt-[160px] pb-[80px] max-[980px]:px-[24px] max-[980px]:pt-[128px] max-[980px]:pb-[56px] max-[760px]:px-[18px] max-[760px]:pt-[112px] max-[760px]:pb-[48px]"
+  style={`--glow:${glow};--glow-w:${glowW};--glow-h:${glowH}`}
+>
+  <div
+    class="relative z-[1] inline-block mb-[20px] px-[18px] py-[6px] rounded-[3px] border border-[rgba(0,255,200,0.2)] bg-[rgba(0,255,200,0.05)] text-cyan text-[0.62rem] max-[760px]:text-[0.75rem] tracking-[4px] uppercase animate-fade-in"
+  >
+    {eyebrow}
+  </div>
+  <h1
+    class="relative z-[1] font-ui font-black text-white leading-[1] tracking-[-3px] text-[clamp(2.5rem,6vw,5rem)] mb-[16px] animate-fade-up [animation-delay:0.15s]"
+  >
+    <slot name="title" />
+  </h1>
+  <div class="relative z-[1] animate-fade-up [animation-delay:0.3s]">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .page-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(0, 255, 200, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 200, 0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .page-hero::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: var(--glow-w, 800px);
+    height: var(--glow-h, 400px);
+    background: radial-gradient(ellipse, var(--glow, transparent) 0%, transparent 70%);
+    pointer-events: none;
+  }
+</style>
