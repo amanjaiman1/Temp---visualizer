@@ -925,10 +925,27 @@ function stepForward() {
   if (frameIdx >= frames.length) finish();
 }
 
+function stepBackward() {
+  if (!isPaused || frameIdx <= 0) return;
+  frameIdx--;
+  if (frameIdx > 0) {
+    const f = frames[frameIdx - 1];
+    applyFrame(f);
+  } else {
+    // Back to initial state before sorting started
+    renderBars(array, {});
+    comparisons = 0; swaps = 0;
+    document.getElementById('statComparisons').textContent = '0';
+    document.getElementById('statSwaps').textContent = '0';
+    hideTeachPopup();
+  }
+}
+
 function setButtonStates(running) {
   document.getElementById('btnSort').disabled = running;
   document.getElementById('btnPause').disabled = !running;
   document.getElementById('btnStep').disabled = !running;
+  document.getElementById('btnStepBack').disabled = !running;
   document.getElementById('btnReset').disabled = false;
   document.querySelectorAll('.algo-item').forEach(el => {
     el.style.opacity = running ? '0.4' : '1';
@@ -1009,6 +1026,7 @@ document.addEventListener('keydown', e => {
   if (e.key === ' ') { e.preventDefault(); isRunning ? togglePause() : startSort(); }
   if (e.key === 'r' || e.key === 'R') resetArray();
   if (e.key === 'ArrowRight' && isPaused) stepForward();
+  if (e.key === 'ArrowLeft' && isPaused) stepBackward();
   if (e.key === 'Escape') closeModal();
 });
 

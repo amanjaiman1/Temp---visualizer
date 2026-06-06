@@ -993,14 +993,15 @@ footer span { color: var(--cyan); }
 
 @media (max-width: 680px) {
   .teach-popup {
-    /* Position well above the boxes so they're fully visible */
+    /* Position well above the boxes (~100px up) so they're fully visible */
     bottom: auto;
-    top: -100px;
+    top: -120px;
     transform: translateX(-50%) translateY(-10px);
-    padding: 8px 12px;
-    max-width: calc(100% - 20px);
-    gap: 8px;
-    background: linear-gradient(135deg, rgba(16,12,30,0.94), rgba(8,16,24,0.94));
+    padding: 14px 14px;
+    min-height: 70px;
+    max-width: calc(100% - 16px);
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(16,12,30,0.95), rgba(8,16,24,0.95));
     backdrop-filter: blur(6px);
     border-radius: 10px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 16px rgba(176,111,255,0.2);
@@ -1016,9 +1017,9 @@ footer span { color: var(--cyan); }
     60%  { transform: translateX(-50%) translateY(0) scale(1.02); }
     100% { transform: translateX(-50%) translateY(0) scale(1); }
   }
-  .teach-popup-icon { width: 24px; height: 24px; font-size: 1rem; }
-  .teach-popup-text { font-size: 0.76rem; line-height: 1.4; }
-  .teach-popup-text .teach-extra { font-size: 0.7rem; margin-top: 2px; }
+  .teach-popup-icon { width: 28px; height: 28px; font-size: 1.1rem; }
+  .teach-popup-text { font-size: 0.82rem; line-height: 1.5; }
+  .teach-popup-text .teach-extra { font-size: 0.72rem; margin-top: 3px; }
 
   /* On mobile, hide popup unless Teach Mode is active */
   .teach-popup.show:not(.teach-active) {
