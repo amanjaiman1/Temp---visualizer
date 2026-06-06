@@ -308,7 +308,12 @@ function init() {
   onSpeedChange(document.getElementById('speedSlider').value);
   setupDimension();
   selectAlgo('bubble');
-  generateArray();
+
+  // Default array size: 8 on mobile, 10 on desktop
+  const defaultSize = window.innerWidth <= 680 ? 8 : 10;
+  const sizeSlider = document.getElementById('sizeSlider');
+  if (sizeSlider) { sizeSlider.value = defaultSize; }
+  onSizeChange(defaultSize);
 }
 
 // Use the DOM/CSS bars exclusively (straight upright boxes with 3D depth
