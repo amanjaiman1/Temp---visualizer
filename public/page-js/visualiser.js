@@ -315,15 +315,10 @@ function init() {
   generateArray();
 }
 
-// Always use the Three.js 3D view when WebGL is available; otherwise fall
-// back automatically to the DOM/CSS boxes. There is no 2D/3D toggle.
+// Use the DOM/CSS bars exclusively (straight upright boxes with 3D depth
+// via CSS box-shadow/gradient). The Three.js WebGL renderer is disabled.
 function setupDimension() {
-  if (window.Viz3D && window.Viz3D.ready) {
-    use3D = true;
-    window.Viz3D.setEnabled(true);
-  } else {
-    use3D = false;
-  }
+  use3D = false;
 }
 
 function buildAlgoList() {
@@ -458,14 +453,8 @@ function resetStats() {
    BAR RENDERING
 ═══════════════════════════════════════════════════════ */
 function renderBars(arr, stateMap) {
-  // remember the last render so we can repaint after a 2D/3D toggle
+  // remember the last render so we can repaint on resize
   lastArr = arr; lastStates = stateMap;
-
-  // In 3D mode, hand off to the Three.js renderer and skip the DOM bars.
-  if (use3D && window.Viz3D && window.Viz3D.ready) {
-    window.Viz3D.render(arr, stateMap);
-    return;
-  }
 
   const canvas = document.getElementById('barCanvas');
   const n = arr.length;
@@ -490,13 +479,12 @@ function renderBars(arr, stateMap) {
   }
 
   const maxVal = Math.max(...arr, 1);
-  const canvasH = canvas.clientHeight - 2;
 
   wraps.forEach((wrap, i) => {
     const bar = wrap.querySelector('.bar');
     const val = wrap.querySelector('.bar-val');
-    const pct = arr[i] / maxVal;
-    bar.style.height = Math.max(2, Math.floor(pct * canvasH)) + 'px';
+    const pct = (arr[i] / maxVal) * 100;
+    bar.style.height = Math.max(1, pct) + '%';
     bar.className = 'bar ' + (stateMap[i] || 'default');
     if (val) val.textContent = arr[i];
   });

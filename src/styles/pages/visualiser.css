@@ -270,10 +270,10 @@ main {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  padding: 30px 24px 0;
+  padding: 30px 24px 16px;
   gap: 3px;
   position: relative;
-  min-height: 0;
+  min-height: 320px;
 }
 
 .bar-wrap {
@@ -288,54 +288,83 @@ main {
 
 .bar {
   width: 100%;
-  border-radius: 3px 3px 0 0;
+  border-radius: 4px 4px 0 0;
   transition:
-    height 0.16s cubic-bezier(0.34,1.56,0.64,1),
-    color 0.18s ease,
-    box-shadow 0.18s ease;
+    height 0.18s cubic-bezier(0.34,1.56,0.64,1),
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.22s cubic-bezier(0.16,1,0.3,1);
   position: relative;
   min-width: 2px;
-  will-change: height;
+  will-change: height, transform;
+  /* 3D depth via box-shadow (no actual 3D transforms/tilt) */
+  box-shadow:
+    inset -2px 0 0 rgba(0,0,0,0.25),
+    inset 0 2px 0 rgba(255,255,255,0.08),
+    2px 4px 8px rgba(0,0,0,0.35);
 }
 
 /* value label sitting at the bottom of each box */
 .bar-val {
-  margin-top: 4px;
+  margin-top: 6px;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  color: #cfe0e8;
+  color: #b0c8d8;
   line-height: 1;
   flex-shrink: 0;
   user-select: none;
+  text-align: center;
+  min-height: 14px;
 }
 
-/* state colours drive the front gradient (boxes stay upright — no tilt) */
-.bar.default  { color: #2a4a72; background: linear-gradient(to top, #1e3050, #2a4a72); }
-.bar.comparing{
-  color: var(--amber);
-  background: linear-gradient(to top, #cc8800, var(--amber));
-  box-shadow: 0 0 16px rgba(255,184,48,0.6), 0 -4px 12px rgba(255,184,48,0.3);
+/* state colours — straight upright boxes with 3D depth look from shadows */
+.bar.default  {
+  background: linear-gradient(to right, #2a4a72, #1e3a5c);
+}
+.bar.comparing {
+  background: linear-gradient(to right, var(--amber), #cc8800);
+  box-shadow:
+    inset -2px 0 0 rgba(0,0,0,0.2),
+    inset 0 2px 0 rgba(255,255,255,0.12),
+    0 0 18px rgba(255,184,48,0.6),
+    0 4px 14px rgba(255,184,48,0.3);
+  transform: translateY(-4px);
 }
 .bar.swapping {
-  color: var(--red);
-  background: linear-gradient(to top, #cc1030, var(--red));
-  box-shadow: 0 0 22px rgba(255,64,96,0.8), 0 -6px 16px rgba(255,64,96,0.4);
+  background: linear-gradient(to right, var(--red), #cc1030);
+  box-shadow:
+    inset -2px 0 0 rgba(0,0,0,0.2),
+    inset 0 2px 0 rgba(255,255,255,0.12),
+    0 0 24px rgba(255,64,96,0.7),
+    0 6px 18px rgba(255,64,96,0.4);
+  transform: translateY(-8px);
 }
-.bar.sorted   {
-  color: var(--green);
-  background: linear-gradient(to top, #1a7a40, var(--green));
-  box-shadow: 0 0 14px rgba(57,255,133,0.5), 0 -3px 10px rgba(57,255,133,0.2);
+.bar.sorted {
+  background: linear-gradient(to right, var(--green), #1a7a40);
+  box-shadow:
+    inset -2px 0 0 rgba(0,0,0,0.2),
+    inset 0 2px 0 rgba(255,255,255,0.1),
+    0 0 14px rgba(57,255,133,0.45),
+    0 3px 10px rgba(57,255,133,0.2);
 }
-.bar.pivot    {
-  color: var(--purple);
-  background: linear-gradient(to top, #6030bb, var(--purple));
-  box-shadow: 0 0 18px rgba(176,111,255,0.7), 0 -5px 14px rgba(176,111,255,0.3);
+.bar.pivot {
+  background: linear-gradient(to right, var(--purple), #6030bb);
+  box-shadow:
+    inset -2px 0 0 rgba(0,0,0,0.2),
+    inset 0 2px 0 rgba(255,255,255,0.1),
+    0 0 20px rgba(176,111,255,0.65),
+    0 5px 14px rgba(176,111,255,0.3);
+  transform: translateY(-6px);
 }
 .bar.selected {
-  color: var(--cyan);
-  background: linear-gradient(to top, #006688, var(--cyan));
-  box-shadow: 0 0 18px rgba(0,255,200,0.7), 0 -5px 14px rgba(0,255,200,0.3);
+  background: linear-gradient(to right, var(--cyan), #006688);
+  box-shadow:
+    inset -2px 0 0 rgba(0,0,0,0.2),
+    inset 0 2px 0 rgba(255,255,255,0.1),
+    0 0 20px rgba(0,255,200,0.65),
+    0 5px 14px rgba(0,255,200,0.3);
+  transform: translateY(-6px);
 }
 
 
@@ -838,7 +867,7 @@ footer span { color: var(--cyan); }
 
   
   .visualiser { min-height: 0; }
-  .bar-canvas-wrap { flex: 0 0 auto; height: 48vh; min-height: 280px; padding: 16px 14px 0; }
+  .bar-canvas-wrap { flex: 0 0 auto; height: 48vh; min-height: 280px; padding: 16px 14px 12px; }
   .viz-top-bar { flex-wrap: wrap; gap: 8px; }
   .complexity-pills { flex-wrap: wrap; gap: 6px; }
   .controls-bar { gap: 10px; padding: 12px 14px; }
@@ -908,36 +937,11 @@ footer span { color: var(--cyan); }
 
 /* ── value label sizing on small screens ── */
 @media (max-width: 680px) {
-  .bar-val { font-size: 0.55rem; }
+  .bar-val { font-size: 0.5rem; }
+  .bar-canvas-wrap { gap: 2px; }
 }
 
 
-
-/* ═══════════════════════════════════════════════════════
-   THREE.JS 3D VIEW
-═══════════════════════════════════════════════════════ */
-.viz3d-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  z-index: 1;
-}
-
-/* When the 3D renderer is active, flatten the CSS-3D scene and hand the
-   stage over to the WebGL canvas. */
-#barCanvas.mode-3d {
-  transform: none !important;
-  animation: none !important;
-  perspective: none;
-  transform-style: flat;
-  padding: 0;
-  gap: 0;
-  overflow: hidden;
-}
-#barCanvas.mode-3d .axis-line { display: none; }
-#barCanvas.mode-3d .bar-wrap { display: none !important; }
 
 /* ═══════════════════════════════════════════════════════
    TEACH MODE button + enriched narration text
