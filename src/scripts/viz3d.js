@@ -9,12 +9,11 @@
      window.Viz3D.setEnabled(bool)      -> show/hide the 3D canvas
      window.Viz3D.isEnabled()           -> bool
 
-   The scene draws every array element as a real 3D box sitting
-   on a floor. The camera is fixed and looks straight at the row
-   (no sway, no mouse-parallax) so the boxes always stand upright.
-   When two values are swapped, the two boxes physically travel to
-   each other's slot — making it obvious that they changed places.
-   A value label sits at the bottom of every box.
+   Each array element is a real 3D box standing on a floor. The
+   camera is FIXED (no sway, no mouse-parallax) at a gentle, static
+   3/4 angle so the boxes always stand upright yet read as separate
+   blocks. When two values are swapped the two boxes physically
+   travel to each other's slot, and a value label sits under each box.
 ═══════════════════════════════════════════════════════ */
 import * as THREE from 'three';
 
@@ -26,13 +25,15 @@ const COLORS = {
   pivot:     0xb06fff,
   selected:  0x00ffc8,
 };
-// active states gently lift straight up off the floor (no tilt toward viewer)
-const LIFT     = { comparing: 2.5, swapping: 4, pivot: 3.5, selected: 3.5, sorted: 0, default: 0 };
-const EMISSIVE = { comparing: 0.55, swapping: 0.85, pivot: 0.7, selected: 0.7, sorted: 0.35, default: 0.0 };
+// active states lift straight up off the floor + pop slightly toward viewer
+const LIFT     = { comparing: 3, swapping: 5, pivot: 5, selected: 5, sorted: 0, default: 0 };
+const POP      = { comparing: 3, swapping: 5, pivot: 7, selected: 7, sorted: 0, default: 0 };
+const EMISSIVE = { comparing: 0.55, swapping: 0.85, pivot: 0.7, selected: 0.7, sorted: 0.35, default: 0.04 };
 
 const WORLD_W = 100;   // world units the whole row spans
 const WORLD_H = 56;    // world height of the tallest possible bar
 const FOV = 45;
+const AZ = 0.16;       // fixed (static) azimuth so the row reads as 3D
 
 const S = {
   ready: false,
@@ -79,29 +80,29 @@ function initViz3D() {
   }
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x060810, 160, 380);
+  scene.fog = new THREE.Fog(0x060810, 150, 360);
   S.scene = scene;
 
   S.camera = new THREE.PerspectiveCamera(FOV, 1.6, 0.1, 1000);
 
   // ── lighting ──
-  scene.add(new THREE.HemisphereLight(0x9fb8ff, 0x0a0c14, 0.75));
+  scene.add(new THREE.HemisphereLight(0x9fb8ff, 0x0a0c14, 0.85));
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.15);
-  key.position.set(-30, 110, 90);
+  const key = new THREE.DirectionalLight(0xffffff, 1.2);
+  key.position.set(-40, 100, 80);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
   key.shadow.camera.near = 10;
   key.shadow.camera.far = 360;
   key.shadow.camera.left = -90;
   key.shadow.camera.right = 90;
-  key.shadow.camera.top = 110;
+  key.shadow.camera.top = 100;
   key.shadow.camera.bottom = -40;
   scene.add(key);
 
-  const fill = new THREE.PointLight(0x00ffc8, 0.4, 460);
-  fill.position.set(0, 50, 120);
-  scene.add(fill);
+  const rim = new THREE.PointLight(0x00ffc8, 0.5, 440);
+  rim.position.set(60, 50, 70);
+  scene.add(rim);
 
   // ── floor + grid for depth perception ──
   const floor = new THREE.Mesh(
@@ -117,7 +118,7 @@ function initViz3D() {
   scene.add(floor);
 
   const grid = new THREE.GridHelper(700, 90, 0x1c2a4a, 0x101626);
-  if (grid.material) { grid.material.transparent = true; grid.material.opacity = 0.35; }
+  if (grid.material) { grid.material.transparent = true; grid.material.opacity = 0.4; }
   scene.add(grid);
 
   S.group = new THREE.Group();
@@ -171,19 +172,14 @@ function onResize() {
   S.camera.updateProjectionMatrix();
 }
 
-// Position the camera so the whole row (WORLD_W × WORLD_H) fits the viewport.
-// The camera is FIXED and looks straight at the row — no sway, no parallax.
+// Distance so the whole row (WORLD_W × WORLD_H) fits the viewport.
 function fitCamera() {
   const aspect = S.camera.aspect || 1.6;
   const tan = Math.tan((FOV * Math.PI / 180) / 2);
-  const distH = (WORLD_H / 2 + 14) / tan;
+  const distH = (WORLD_H / 2 + 10) / tan;
   const distW = (WORLD_W / 2) / (tan * aspect);
-  S.baseDist = Math.max(distH, distW) * 1.12 + 14;
-  S.lookAtY = WORLD_H * 0.34;
-  // a small, constant elevation gives the row a 3D feel while keeping the
-  // boxes perfectly upright (they are never tilted/rotated).
-  S.camera.position.set(0, S.lookAtY + 10, S.baseDist);
-  S.camera.lookAt(0, S.lookAtY, 0);
+  S.baseDist = Math.max(distH, distW) * 1.3 + 20;
+  S.lookAtY = WORLD_H * 0.38;
 }
 
 /* ── value labels: a canvas-texture sprite under each box ── */
@@ -191,18 +187,17 @@ function drawLabel(b, value) {
   const ctx = b.lctx;
   const cw = b.lcanvas.width, ch = b.lcanvas.height;
   ctx.clearRect(0, 0, cw, ch);
-  // rounded translucent pill behind the number for readability
   const txt = String(value);
-  ctx.font = 'bold 44px "Inter", system-ui, sans-serif';
+  ctx.font = 'bold 52px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   const tw = ctx.measureText(txt).width;
-  const pad = 26;
+  const pad = 24;
   const rw = Math.min(cw - 4, tw + pad * 2);
-  const rh = 64;
+  const rh = 72;
   const rx = (cw - rw) / 2, ry = (ch - rh) / 2;
-  const r = 16;
-  ctx.fillStyle = 'rgba(6,10,20,0.78)';
+  const r = 18;
+  ctx.fillStyle = 'rgba(6,10,20,0.82)';
   ctx.beginPath();
   ctx.moveTo(rx + r, ry);
   ctx.arcTo(rx + rw, ry, rx + rw, ry + rh, r);
@@ -211,7 +206,7 @@ function drawLabel(b, value) {
   ctx.arcTo(rx, ry, rx + rw, ry, r);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = 'rgba(0,255,200,0.35)';
+  ctx.strokeStyle = 'rgba(0,255,200,0.4)';
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.fillStyle = '#eaf6ff';
@@ -221,7 +216,7 @@ function drawLabel(b, value) {
 
 function makeLabel() {
   const lcanvas = document.createElement('canvas');
-  lcanvas.width = 256; lcanvas.height = 96;
+  lcanvas.width = 256; lcanvas.height = 128;
   const lctx = lcanvas.getContext('2d');
   const ltex = new THREE.CanvasTexture(lcanvas);
   ltex.minFilter = THREE.LinearFilter;
@@ -244,20 +239,20 @@ function rebuild(n) {
   S.bars = [];
 
   S.slot = WORLD_W / n;
-  const barW = S.slot * 0.74;
+  const barW = S.slot * 0.7;
   const barD = Math.min(barW, 9);
   S.barD = barD;
   const geo = new THREE.BoxGeometry(barW, 1, barD);
 
-  // label width scales with the slot; clamp so big arrays stay legible-ish
-  const labelW = Math.max(3.4, Math.min(S.slot * 0.95, 9));
-  const labelH = labelW * (96 / 256) * 2.4;
+  // labels scale to the slot so neighbours don't overlap; readable for small n
+  const labelW = Math.min(S.slot * 0.96, 11);
+  const labelH = labelW * (128 / 256);
 
   for (let i = 0; i < n; i++) {
     const mat = new THREE.MeshStandardMaterial({
       color: COLORS.default,
       emissive: COLORS.default,
-      emissiveIntensity: 0,
+      emissiveIntensity: 0.04,
       roughness: 0.35,
       metalness: 0.25,
     });
@@ -268,7 +263,7 @@ function rebuild(n) {
 
     const label = makeLabel();
     label.sprite.scale.set(labelW, labelH, 1);
-    label.sprite.position.set(x, -labelH * 0.55 - 1.5, barD / 2 + 0.5);
+    label.sprite.position.set(x, -labelH * 0.6 - 1, barD / 2 + 0.5);
 
     S.group.add(mesh);
     S.group.add(label.sprite);
@@ -278,7 +273,8 @@ function rebuild(n) {
       value: null,
       h: 1, targetH: 1,
       lift: 0, targetLift: 0,
-      emi: 0, targetEmi: 0,
+      pop: 0, targetPop: 0,
+      emi: 0.04, targetEmi: 0.04,
       x, xTarget: x, swapDir: 0,
       col: new THREE.Color(COLORS.default),
       targetCol: new THREE.Color(COLORS.default),
@@ -297,7 +293,7 @@ function render3D(arr, states) {
   let maxVal = 1;
   for (let i = 0; i < n; i++) if (arr[i] > maxVal) maxVal = arr[i];
 
-  // detect a pure two-element swap (transposition) versus the previous render
+  // detect a pure two-element swap (transposition) vs the previous render
   let swapPair = null;
   if (S.prevArr && S.prevArr.length === n) {
     const diff = [];
@@ -316,7 +312,8 @@ function render3D(arr, states) {
     const role = (states && states[i]) || 'default';
     b.targetH    = Math.max(1.2, (arr[i] / maxVal) * WORLD_H);
     b.targetLift = LIFT[role] || 0;
-    b.targetEmi  = EMISSIVE[role] || 0;
+    b.targetPop  = POP[role] || 0;
+    b.targetEmi  = EMISSIVE[role] != null ? EMISSIVE[role] : 0.04;
     b.targetCol.setHex(COLORS[role] || COLORS.default);
     if (b.value !== arr[i]) { b.value = arr[i]; drawLabel(b, arr[i]); }
   }
@@ -325,8 +322,7 @@ function render3D(arr, states) {
   if (swapPair) {
     const [a, c] = swapPair;
     const ba = S.bars[a], bc = S.bars[c];
-    // snap heights so each box keeps its size while it slides across
-    ba.h = ba.targetH; bc.h = bc.targetH;
+    ba.h = ba.targetH; bc.h = bc.targetH; // keep size while sliding across
     ba.x = slotX(c); ba.xTarget = slotX(a); ba.swapDir = 1;
     bc.x = slotX(a); bc.xTarget = slotX(c); bc.swapDir = -1;
   }
@@ -341,6 +337,7 @@ function celebrate3D() {
     b.targetCol.setHex(COLORS.sorted);
     b.targetEmi = 0.4;
     b.targetLift = 0;
+    b.targetPop = 0;
     b.xTarget = b.x; b.swapDir = 0;
   }
 }
@@ -360,21 +357,22 @@ function loop() {
       liftTarget = (t - S.celebrateStart > 2.4) ? 0 : Math.max(0, wave) * 5;
     }
 
-    b.h    += (b.targetH  - b.h)    * k;
-    b.lift += (liftTarget - b.lift) * k;
-    b.emi  += (b.targetEmi - b.emi) * (k * 1.4);
+    b.h    += (b.targetH   - b.h)    * k;
+    b.lift += (liftTarget  - b.lift) * k;
+    b.pop  += (b.targetPop - b.pop)  * k;
+    b.emi  += (b.targetEmi - b.emi)  * (k * 1.4);
     b.col.lerp(b.targetCol, k * 1.2);
 
-    // horizontal travel for swaps
-    b.x += (b.xTarget - b.x) * 0.22;
+    // horizontal travel for swaps (boxes glide into each other's slot)
+    b.x += (b.xTarget - b.x) * 0.2;
     const dx = b.xTarget - b.x;
     const arc = Math.min(1, Math.abs(dx) / Math.max(0.001, S.slot));
-    const zSep = (b.swapDir || 0) * arc * (S.slot * 0.5 + 5);
+    const zSep = (b.swapDir || 0) * arc * (S.slot * 0.5 + 6);
 
     b.mesh.scale.y = b.h;
     b.mesh.position.x = b.x;
-    b.mesh.position.y = b.h / 2 + b.lift + arc * 7;
-    b.mesh.position.z = zSep;
+    b.mesh.position.y = b.h / 2 + b.lift + arc * 6;
+    b.mesh.position.z = b.pop + zSep;
     b.mat.color.copy(b.col);
     b.mat.emissive.copy(b.col);
     b.mat.emissiveIntensity = b.emi;
@@ -384,6 +382,12 @@ function loop() {
       b.label.sprite.position.z = S.barD / 2 + 0.5 + Math.abs(zSep);
     }
   }
+
+  // FIXED camera — a gentle, static 3/4 view. No sway, no parallax, and the
+  // boxes themselves are never tilted (they always stand upright).
+  const d = S.baseDist;
+  S.camera.position.set(Math.sin(AZ) * d, S.lookAtY + d * 0.36, Math.cos(AZ) * d);
+  S.camera.lookAt(0, S.lookAtY, 0);
 
   S.renderer.render(S.scene, S.camera);
 }
