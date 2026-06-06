@@ -259,7 +259,21 @@ let comparisons = 0;
 let swaps = 0;
 let startTime = 0;
 
-const speedMap = [500,250,120,60,30,15,8,4,2,1]; // ms per frame
+// Speed levels: slider position (1-10) maps to a labelled multiplier.
+// Lower multipliers (0.5×, 0.75×) play SLOWER so learners can follow each step;
+// the `delay` is the milliseconds spent on every animation frame.
+const speedLevels = [
+  { label: '0.5×',  delay: 760 },
+  { label: '0.75×', delay: 480 },
+  { label: '1×',    delay: 300 },
+  { label: '1.5×',  delay: 190 },
+  { label: '2×',    delay: 120 },
+  { label: '3×',    delay: 70  },
+  { label: '4×',    delay: 40  },
+  { label: '6×',    delay: 20  },
+  { label: '8×',    delay: 9   },
+  { label: '10×',   delay: 3   },
+];
 
 let audioCtx = null;
 function getAudio() {
@@ -287,6 +301,7 @@ function beep(freq, dur=0.06) {
 function init() {
   buildAlgoList();
   buildComparisonTable();
+  onSpeedChange(document.getElementById('speedSlider').value);
   selectAlgo('bubble');
   generateArray();
 }
@@ -383,7 +398,11 @@ function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
    ARRAY GENERATION
 ═══════════════════════════════════════════════════════ */
 function getSize() { return parseInt(document.getElementById('sizeSlider').value); }
-function getDelay() { return speedMap[parseInt(document.getElementById('speedSlider').value)-1]; }
+function getSpeedLevel() {
+  const idx = parseInt(document.getElementById('speedSlider').value) - 1;
+  return speedLevels[Math.max(0, Math.min(speedLevels.length - 1, idx))];
+}
+function getDelay() { return getSpeedLevel().delay; }
 
 function generateArray() {
   if (isRunning) return;
@@ -429,7 +448,6 @@ function renderBars(arr, stateMap) {
       wrap.className = 'bar-wrap';
       const bar = document.createElement('div');
       bar.className = 'bar';
-      bar.style.animationDelay = (i * 0.004) + 's';
       wrap.appendChild(bar);
       canvas.appendChild(wrap);
     }
@@ -904,8 +922,8 @@ function onSizeChange(v) {
 }
 
 function onSpeedChange(v) {
-  const labels = ['×1','×1','×2','×3','×4','×5','×6','×7','×8','×9','×10'];
-  document.getElementById('speedVal').textContent = '×' + v;
+  const level = speedLevels[Math.max(0, Math.min(speedLevels.length - 1, parseInt(v) - 1))];
+  document.getElementById('speedVal').textContent = level.label;
 }
 
 function toggleSound() {
