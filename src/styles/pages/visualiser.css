@@ -960,3 +960,157 @@ footer span { color: var(--cyan); }
   .bar-canvas-wrap { animation: none; }
   .bar.swapping { animation: none; }
 }
+
+
+
+/* ═══════════════════════════════════════════════════════
+   THREE.JS 3D VIEW
+═══════════════════════════════════════════════════════ */
+.viz3d-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 1;
+}
+
+/* When the 3D renderer is active, flatten the CSS-3D scene and hand the
+   stage over to the WebGL canvas. */
+#barCanvas.mode-3d {
+  transform: none !important;
+  animation: none !important;
+  perspective: none;
+  transform-style: flat;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+#barCanvas.mode-3d .axis-line { display: none; }
+#barCanvas.mode-3d .bar-wrap { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════
+   TEACH MODE button + enriched narration text
+═══════════════════════════════════════════════════════ */
+.btn-teach {
+  background: linear-gradient(120deg, rgba(176,111,255,0.18), rgba(0,255,200,0.18));
+  border-color: var(--purple);
+  color: #fff;
+  font-weight: 700;
+}
+.btn-teach:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px rgba(176,111,255,0.45);
+  transform: translateY(-1px);
+}
+.btn-teach.active {
+  background: linear-gradient(120deg, var(--purple), var(--cyan));
+  color: #08111a;
+  box-shadow: 0 0 18px rgba(0,255,200,0.4);
+}
+
+.teach-extra {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════
+   GUIDED TOUR (product-tour spotlight)
+═══════════════════════════════════════════════════════ */
+.tour-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9995;
+  display: none;
+  background: transparent;
+  cursor: pointer;
+}
+.tour-backdrop.solid { background: rgba(2,4,10,0.82); }
+
+.tour-spot {
+  position: fixed;
+  z-index: 9996;
+  display: none;
+  border-radius: 10px;
+  pointer-events: none;
+  border: 2px solid var(--cyan);
+  box-shadow:
+    0 0 0 4000px rgba(2,4,10,0.76),
+    0 0 22px rgba(0,255,200,0.55),
+    inset 0 0 14px rgba(0,255,200,0.25);
+  transition: left 0.3s cubic-bezier(0.16,1,0.3,1),
+              top 0.3s cubic-bezier(0.16,1,0.3,1),
+              width 0.3s cubic-bezier(0.16,1,0.3,1),
+              height 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+
+.tour-card {
+  position: fixed;
+  z-index: 9999;
+  display: none;
+  width: 340px;
+  max-width: calc(100vw - 24px);
+  background: var(--panel);
+  border: 1px solid var(--cyan);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.6), 0 0 30px rgba(0,255,200,0.18);
+  font-family: var(--font-ui);
+}
+.tour-step {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 6px;
+}
+.tour-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.tour-body {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.tour-body b { color: var(--cyan); font-weight: 700; }
+.tour-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.tour-nav { display: flex; gap: 8px; }
+.tour-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tour-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.tour-skip { color: var(--muted); border-color: transparent; }
+.tour-skip:hover { color: var(--red); }
+.tour-next {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  color: #04121a;
+  font-weight: 700;
+}
+.tour-next:hover { background: #fff; color: #04121a; box-shadow: 0 0 16px rgba(0,255,200,0.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-spot { transition: none; }
+}

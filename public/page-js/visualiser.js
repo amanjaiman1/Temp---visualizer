@@ -259,10 +259,18 @@ let comparisons = 0;
 let swaps = 0;
 let startTime = 0;
 
+// 3D (Three.js) view state
+let use3D = false;
+let lastArr = [];
+let lastStates = {};
+// Teach Mode state
+let teachMode = false;
+
 // Speed levels: slider position (1-10) maps to a labelled multiplier.
 // Lower multipliers (0.5×, 0.75×) play SLOWER so learners can follow each step;
 // the `delay` is the milliseconds spent on every animation frame.
 const speedLevels = [
+  { label: '0.25×', delay: 1150 },
   { label: '0.5×',  delay: 760 },
   { label: '0.75×', delay: 480 },
   { label: '1×',    delay: 300 },
@@ -302,8 +310,32 @@ function init() {
   buildAlgoList();
   buildComparisonTable();
   onSpeedChange(document.getElementById('speedSlider').value);
+  setupDimension();
   selectAlgo('bubble');
   generateArray();
+}
+
+// Enable the Three.js view by default when WebGL is available; otherwise
+// fall back to the classic DOM/CSS bars and hide the 3D/2D toggle.
+function setupDimension() {
+  const btn = document.getElementById('btnDim');
+  if (window.Viz3D && window.Viz3D.ready) {
+    use3D = true;
+    window.Viz3D.setEnabled(true);
+    if (btn) btn.innerHTML = '🧊 3D';
+  } else {
+    use3D = false;
+    if (btn) btn.style.display = 'none';
+  }
+}
+
+function toggleDimension() {
+  if (!window.Viz3D || !window.Viz3D.ready) return;
+  use3D = !use3D;
+  window.Viz3D.setEnabled(use3D);
+  const btn = document.getElementById('btnDim');
+  if (btn) btn.innerHTML = use3D ? '🧊 3D' : '▦ 2D';
+  renderBars(lastArr.length ? lastArr : array, lastStates || {});
 }
 
 function buildAlgoList() {
@@ -419,6 +451,8 @@ function resetArray() {
   if (animTimer) { clearTimeout(animTimer); animTimer = null; }
   isRunning = false; isPaused = false; isSorted = false;
   frames = []; frameIdx = 0;
+  teachMode = false;
+  document.getElementById('btnTeach')?.classList.remove('active');
   setButtonStates(false);
   generateArray();
 }
@@ -435,6 +469,15 @@ function resetStats() {
    BAR RENDERING
 ═══════════════════════════════════════════════════════ */
 function renderBars(arr, stateMap) {
+  // remember the last render so we can repaint after a 2D/3D toggle
+  lastArr = arr; lastStates = stateMap;
+
+  // In 3D mode, hand off to the Three.js renderer and skip the DOM bars.
+  if (use3D && window.Viz3D && window.Viz3D.ready) {
+    window.Viz3D.render(arr, stateMap);
+    return;
+  }
+
   const canvas = document.getElementById('barCanvas');
   const n = arr.length;
 
@@ -841,19 +884,30 @@ function finish() {
   array.forEach((_,i) => allSorted[i] = 'sorted');
   renderBars(array, allSorted);
 
-  // Wave animation: re-apply sorted state with staggered delay
-  const bars = document.querySelectorAll('.bar');
-  bars.forEach((bar, i) => {
-    bar.className = 'bar default';
-    setTimeout(() => {
-      bar.className = 'bar sorted';
-    }, i * (800 / Math.max(bars.length, 1)));
-  });
+  if (use3D && window.Viz3D && window.Viz3D.ready) {
+    // ripple celebration handled by the Three.js renderer
+    window.Viz3D.celebrate();
+  } else {
+    // Wave animation: re-apply sorted state with staggered delay (DOM bars)
+    const bars = document.querySelectorAll('.bar');
+    bars.forEach((bar, i) => {
+      bar.className = 'bar default';
+      setTimeout(() => {
+        bar.className = 'bar sorted';
+      }, i * (800 / Math.max(bars.length, 1)));
+    });
+  }
 
   setStatus('done','SORTED ✓');
   setButtonStates(false);
   document.getElementById('btnSort').textContent = '↺ New Sort';
-  setExplain('🎉', 'Done! Every bar is now arranged from shortest to tallest — the list is fully sorted.');
+  if (teachMode) {
+    setExplain('🎉', 'All done! Every bar is now lined up from shortest to tallest. It took <b class="ev">' +
+      comparisons + '</b> comparisons and <b class="ev">' + swaps + '</b> moves to sort just ' +
+      array.length + ' bars — imagine doing that by hand! <span class="teach-extra">Tip: try another algorithm to see how the number of steps changes.</span>');
+  } else {
+    setExplain('🎉', 'Done! Every bar is now arranged from shortest to tallest — the list is fully sorted.');
+  }
   // celebration beep sequence
   if (soundOn) {
     [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,0.12),i*80));
@@ -969,6 +1023,12 @@ document.getElementById('cmpModal').addEventListener('click', e => {
 
 // Keyboard shortcuts
 document.addEventListener('keydown', e => {
+  if (typeof tourActive !== 'undefined' && tourActive) {
+    if (e.key === 'Escape') endTour(false);
+    if (e.key === 'ArrowRight') { if (tourIdx < tourSteps.length - 1) showTourStep(tourIdx + 1); else endTour(true); }
+    if (e.key === 'ArrowLeft' && tourIdx > 0) showTourStep(tourIdx - 1);
+    return;
+  }
   if (e.key === ' ') { e.preventDefault(); isRunning ? togglePause() : startSort(); }
   if (e.key === 'r' || e.key === 'R') resetArray();
   if (e.key === 'ArrowRight' && isPaused) stepForward();
@@ -1097,5 +1157,221 @@ function narrateFrame(f) {
 
 function updateExplain(f) {
   const msg = narrateFrame(f);
-  setExplain(msg.icon, msg.text);
+  if (teachMode) {
+    const extra = teachExtra(f);
+    setExplain(msg.icon, msg.text + (extra ? ' <span class="teach-extra">' + extra + '</span>' : ''));
+  } else {
+    setExplain(msg.icon, msg.text);
+  }
+}
+
+// Extra plain-English context shown only in Teach Mode, with running totals
+// so a complete beginner understands *why* each step happens.
+function teachExtra(f) {
+  const r = rolesOf(f.states);
+  if (r.swapping.length >= 2)
+    return 'Swapping = the two bars trade places so the smaller value moves toward the left. Total swaps so far: ' + f.swp + '.';
+  if (r.swapping.length === 1)
+    return 'The bar is being moved into its new slot. Total moves so far: ' + f.swp + '.';
+  if (r.pivot.length >= 1)
+    return 'The pivot is the yardstick: smaller bars go to its left, larger to its right.';
+  if (r.comparing.length >= 2)
+    return 'Comparing means we only LOOK — nothing moves yet. We are checking which bar is bigger. Comparisons so far: ' + f.cmp + '.';
+  if (r.comparing.length === 1)
+    return 'We are inspecting this single bar. Comparisons so far: ' + f.cmp + '.';
+  if (r.selected.length >= 1)
+    return 'The highlighted bar is the one we are currently working with.';
+  if (r.sorted.length >= 1)
+    return 'Green bars are locked in their final, correct positions — they will not move again.';
+  return '';
+}
+
+
+
+/* ═══════════════════════════════════════════════════════
+   TEACH MODE — slows to 0.25×, sets 10 bars, runs a guided
+   on-screen tour of the tools, then auto-plays the sort with
+   comprehensive plain-English narration of every step.
+═══════════════════════════════════════════════════════ */
+function startTeachMode() {
+  // stop any run in progress
+  if (animTimer) { clearTimeout(animTimer); animTimer = null; }
+  isRunning = false; isPaused = false; isSorted = false;
+  frames = []; frameIdx = 0;
+  setButtonStates(false);
+
+  teachMode = true;
+  document.getElementById('btnTeach')?.classList.add('active');
+
+  // 10 bars
+  const sizeSlider = document.getElementById('sizeSlider');
+  if (sizeSlider) { sizeSlider.value = 10; onSizeChange(10); }
+
+  // 0.25× speed (slider position 1)
+  const speedSlider = document.getElementById('speedSlider');
+  if (speedSlider) { speedSlider.value = 1; onSpeedChange(1); }
+
+  // prefer the 3D view when it is available
+  if (window.Viz3D && window.Viz3D.ready && !use3D) toggleDimension();
+
+  startTour();
+}
+
+/* ── Guided tour (product-tour style spotlight) ── */
+const tourSteps = [
+  { sel: null, title: '🎓 Welcome to Teach Mode',
+    body: 'I\'ve slowed everything to <b>0.25× speed</b> and shrunk the list to just <b>10 bars</b> so you can follow every single move. Here\'s a 30-second tour of the screen.' },
+  { sel: '#algoList', title: '1 · Pick an algorithm',
+    body: 'These are 10 different <b>recipes</b> for sorting. They all reach the same result but work very differently. <b>Bubble Sort</b> is chosen for you — it\'s the easiest to grasp.' },
+  { sel: '#barCanvas', title: '2 · The bars',
+    body: 'Each 3D block is one number — <b>taller means bigger</b>. Sorting just means rearranging them shortest-to-tallest, left to right. They\'ll glow as they\'re compared and moved.' },
+  { sel: '.legend', title: '3 · What the colours mean',
+    body: '<b>Amber</b> = being compared, <b>red</b> = being swapped, <b>cyan / purple</b> = a special bar being worked on, <b>green</b> = finished and locked in its correct spot.' },
+  { sel: '#btnSort', title: '4 · Start & watch',
+    body: 'This button starts the animation. I\'ll press it for you when the tour ends.' },
+  { sel: '#btnPause', title: '5 · Pause & step',
+    body: 'You can <b>Pause</b> at any moment, then use <b>Step</b> to advance one tiny operation at a time — ideal for studying a single move.' },
+  { sel: '#speedGroup', title: '6 · Speed',
+    body: 'It\'s set to <b>0.25×</b> (nice and slow) for you. Later, drag it right to speed things up once you\'re comfortable.' },
+  { sel: '#sizeGroup', title: '7 · List size',
+    body: 'Set to <b>10 bars</b> for teaching. Fewer bars are easier to follow; more bars look impressive but move fast.' },
+  { sel: '#explainBar', title: '8 · The narrator',
+    body: 'This is the heart of Teach Mode: it explains <b>every step in plain English</b> as it happens, with running totals of comparisons and swaps.' },
+  { sel: '.pseudo-block', title: '9 · The recipe (pseudocode)',
+    body: 'The algorithm written as simple numbered steps. The <b>highlighted line</b> shows exactly which instruction is running right now.' },
+  { sel: '.header-stats', title: '10 · The score',
+    body: 'These counters track how many <b>comparisons</b> and <b>swaps</b> the computer makes, plus the elapsed time.' },
+  { sel: null, title: '✅ You\'re ready!',
+    body: 'That\'s the whole screen. Press the button below and watch Bubble Sort work — I\'ll narrate every move at 0.25× speed. Enjoy!' },
+];
+
+let tourIdx = 0;
+let tourActive = false;
+let tourEls = null;
+
+function buildTourEls() {
+  if (tourEls) return tourEls;
+  const backdrop = document.createElement('div');
+  backdrop.className = 'tour-backdrop';
+  const spot = document.createElement('div');
+  spot.className = 'tour-spot';
+  const card = document.createElement('div');
+  card.className = 'tour-card';
+  card.innerHTML =
+    '<div class="tour-step" id="tourStepCount"></div>' +
+    '<div class="tour-title" id="tourTitle"></div>' +
+    '<div class="tour-body" id="tourBody"></div>' +
+    '<div class="tour-actions">' +
+      '<button class="tour-btn tour-skip" id="tourSkip">Skip tour</button>' +
+      '<div class="tour-nav">' +
+        '<button class="tour-btn tour-back" id="tourBack">← Back</button>' +
+        '<button class="tour-btn tour-next" id="tourNext">Next →</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(backdrop);
+  document.body.appendChild(spot);
+  document.body.appendChild(card);
+
+  backdrop.addEventListener('click', () => endTour(false));
+  card.querySelector('#tourSkip').addEventListener('click', () => endTour(false));
+  card.querySelector('#tourBack').addEventListener('click', () => { if (tourIdx > 0) showTourStep(tourIdx - 1); });
+  card.querySelector('#tourNext').addEventListener('click', () => {
+    if (tourIdx < tourSteps.length - 1) showTourStep(tourIdx + 1);
+    else endTour(true);
+  });
+
+  tourEls = { backdrop, spot, card };
+  return tourEls;
+}
+
+function startTour() {
+  buildTourEls();
+  tourActive = true;
+  tourIdx = 0;
+  tourEls.backdrop.style.display = 'block';
+  tourEls.spot.style.display = 'block';
+  tourEls.card.style.display = 'block';
+  document.body.classList.add('tour-on');
+  showTourStep(0);
+  window.addEventListener('resize', positionTour);
+  window.addEventListener('scroll', positionTour, true);
+}
+
+function showTourStep(i) {
+  tourIdx = i;
+  const step = tourSteps[i];
+  document.getElementById('tourStepCount').textContent = 'Step ' + (i + 1) + ' of ' + tourSteps.length;
+  document.getElementById('tourTitle').innerHTML = step.title;
+  document.getElementById('tourBody').innerHTML = step.body;
+  document.getElementById('tourBack').style.visibility = i === 0 ? 'hidden' : 'visible';
+  document.getElementById('tourNext').textContent = (i === tourSteps.length - 1) ? "Let's Sort! ▶" : 'Next →';
+  positionTour();
+}
+
+function isElVisible(el) {
+  if (!el) return false;
+  const r = el.getBoundingClientRect();
+  return r.width > 1 && r.height > 1 && el.offsetParent !== null;
+}
+
+function positionTour() {
+  if (!tourActive || !tourEls) return;
+  const step = tourSteps[tourIdx];
+  const { spot, card, backdrop } = tourEls;
+  const el = step.sel ? document.querySelector(step.sel) : null;
+
+  if (!el || !isElVisible(el)) {
+    // centred message, fully dim the page (no spotlight)
+    backdrop.classList.add('solid');
+    spot.style.display = 'none';
+    card.style.left = '50%';
+    card.style.top = '50%';
+    card.style.transform = 'translate(-50%, -50%)';
+    return;
+  }
+
+  backdrop.classList.remove('solid');
+  spot.style.display = 'block';
+  card.style.transform = 'none';
+
+  const r = el.getBoundingClientRect();
+  const pad = 8;
+  spot.style.left = Math.max(2, r.left - pad) + 'px';
+  spot.style.top = Math.max(2, r.top - pad) + 'px';
+  spot.style.width = (r.width + pad * 2) + 'px';
+  spot.style.height = (r.height + pad * 2) + 'px';
+
+  // try to scroll the target into view if it is off-screen
+  if (r.top < 0 || r.bottom > window.innerHeight) {
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  const cardW = Math.min(340, window.innerWidth - 24);
+  const cardH = card.offsetHeight || 190;
+  const vw = window.innerWidth, vh = window.innerHeight;
+
+  let left = Math.min(Math.max(12, r.left + r.width / 2 - cardW / 2), vw - cardW - 12);
+  let top;
+  if (r.bottom + 18 + cardH < vh) top = r.bottom + 18;
+  else if (r.top - 18 - cardH > 0) top = r.top - 18 - cardH;
+  else top = Math.max(12, vh - cardH - 12);
+
+  card.style.left = left + 'px';
+  card.style.top = top + 'px';
+}
+
+function endTour(startSorting) {
+  tourActive = false;
+  document.body.classList.remove('tour-on');
+  if (tourEls) {
+    tourEls.backdrop.style.display = 'none';
+    tourEls.spot.style.display = 'none';
+    tourEls.card.style.display = 'none';
+  }
+  window.removeEventListener('resize', positionTour);
+  window.removeEventListener('scroll', positionTour, true);
+
+  if (startSorting && !isRunning && !isSorted) {
+    startSort();
+  }
 }

@@ -13,4 +13,9 @@ import "../styles/pages/visualiser.css";
   <Fragment set:html={body} />
 </BaseLayout>
 
+<!-- Three.js 3D renderer (bundled by Vite); exposes window.Viz3D -->
+<script>
+  import "../scripts/viz3d.js";
+</script>
+
 <script is:inline src="/page-js/visualiser.js"></script>
