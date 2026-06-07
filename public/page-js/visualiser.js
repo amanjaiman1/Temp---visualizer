@@ -259,8 +259,6 @@ let comparisons = 0;
 let swaps = 0;
 let startTime = 0;
 
-// 3D (Three.js) view state
-let use3D = false;
 let lastArr = [];
 let lastStates = {};
 // Teach Mode state
@@ -306,7 +304,6 @@ function init() {
   buildAlgoList();
   buildComparisonTable();
   onSpeedChange(document.getElementById('speedSlider').value);
-  setupDimension();
   selectAlgo('bubble');
 
   // Default array size: 8 on mobile, 10 on desktop
@@ -314,12 +311,6 @@ function init() {
   const sizeSlider = document.getElementById('sizeSlider');
   if (sizeSlider) { sizeSlider.value = defaultSize; }
   onSizeChange(defaultSize);
-}
-
-// Use the DOM/CSS bars exclusively (straight upright boxes with 3D depth
-// via CSS box-shadow/gradient). The Three.js WebGL renderer is disabled.
-function setupDimension() {
-  use3D = false;
 }
 
 function buildAlgoList() {
@@ -935,19 +926,14 @@ function finish() {
   array.forEach((_,i) => allSorted[i] = 'sorted');
   renderBars(array, allSorted);
 
-  if (use3D && window.Viz3D && window.Viz3D.ready) {
-    // ripple celebration handled by the Three.js renderer
-    window.Viz3D.celebrate();
-  } else {
-    // Wave animation: re-apply sorted state with staggered delay (DOM bars)
-    const bars = document.querySelectorAll('.bar');
-    bars.forEach((bar, i) => {
-      bar.className = 'bar default';
-      setTimeout(() => {
-        bar.className = 'bar sorted';
-      }, i * (800 / Math.max(bars.length, 1)));
-    });
-  }
+  // Wave animation: re-apply sorted state with staggered delay
+  const bars = document.querySelectorAll('.bar');
+  bars.forEach((bar, i) => {
+    bar.className = 'bar default';
+    setTimeout(() => {
+      bar.className = 'bar sorted';
+    }, i * (800 / Math.max(bars.length, 1)));
+  });
 
   setStatus('done','SORTED ✓');
   setButtonStates(false);
