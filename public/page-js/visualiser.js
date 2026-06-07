@@ -518,7 +518,9 @@ function renderBars(arr, stateMap) {
   const { startX, slot, barWidth } = geom(canvas, n);
   const stageH = canvas.clientHeight || 320;
   const usableH = stageH * BAR_AREA;
-  const lift = usableH;   // lift active boxes up by half the stage (reference)
+  // Lift active boxes up into the empty top half. Cap so even the tallest
+  // box stays fully visible inside the container while it floats/glides.
+  const lift = Math.max(40, stageH - usableH - 40);
 
   arr.forEach((value, i) => {
     const refEls = barEls.get(value);

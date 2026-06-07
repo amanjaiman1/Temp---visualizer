@@ -930,15 +930,20 @@ footer span { color: var(--cyan); }
    single iteration in plain English while the sort plays.
 ═══════════════════════════════════════════════════════ */
 .teach-popup {
+  /* Desktop: pinned to the TOP-RIGHT of the array container so it never
+     covers the boxes/animation. (Overridden to top-centre on mobile below.) */
   position: absolute;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%) translateY(10px);
+  top: 16px;
+  right: 16px;
+  left: auto;
+  bottom: auto;
+  transform: translateY(-8px);
   z-index: 40;
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  max-width: min(440px, calc(100% - 32px));
+  width: 320px;
+  max-width: calc(100% - 32px);
   padding: 12px 16px;
   background: linear-gradient(135deg, rgba(16,12,30,0.96), rgba(8,16,24,0.96));
   border: 1px solid var(--purple);
@@ -950,13 +955,13 @@ footer span { color: var(--cyan); }
 }
 .teach-popup.show {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 .teach-popup.pulse { animation: teachPop 0.3s cubic-bezier(0.34,1.56,0.64,1); }
 @keyframes teachPop {
-  0%   { transform: translateX(-50%) translateY(0) scale(0.96); }
-  60%  { transform: translateX(-50%) translateY(0) scale(1.02); }
-  100% { transform: translateX(-50%) translateY(0) scale(1); }
+  0%   { transform: translateY(0) scale(0.97); }
+  60%  { transform: translateY(0) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
 }
 .teach-popup-icon {
   font-size: 1.2rem;
@@ -993,9 +998,12 @@ footer span { color: var(--cyan); }
 
 @media (max-width: 680px) {
   .teach-popup {
-    /* Position well above the boxes (~100px up) so they're fully visible */
+    /* Mobile: centred and positioned well above the boxes (~120px up) */
+    left: 50%;
+    right: auto;
     bottom: auto;
     top: -120px;
+    width: auto;
     transform: translateX(-50%) translateY(-10px);
     padding: 14px 14px;
     min-height: 70px;
