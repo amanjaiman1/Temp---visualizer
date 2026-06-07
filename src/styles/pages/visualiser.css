@@ -282,11 +282,11 @@ main {
   align-items: center;
   justify-content: flex-end;
   will-change: transform, left;
-  /* the glide (transform) + horizontal repositioning (left) animate together;
-     spring-like easing gives the lift/drop a lively feel */
+  /* lift/drop (transform) + horizontal glide (left) animate together with a
+     springy overshoot, mirroring the reference's framer-motion spring */
   transition:
-    transform 0.42s cubic-bezier(0.34, 1.3, 0.5, 1),
-    left 0.42s cubic-bezier(0.34, 1.3, 0.5, 1);
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.5, 1),
+    left 0.5s cubic-bezier(0.34, 1.56, 0.5, 1);
 }
 /* a lifted box floats above its neighbours */
 .bar-wrap.lifted { z-index: 20; }

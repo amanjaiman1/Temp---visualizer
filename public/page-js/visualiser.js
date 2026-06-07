@@ -423,7 +423,19 @@ function getDelay() { return getSpeedLevel().delay; }
 function generateArray() {
   if (isRunning) return;
   const n = getSize();
-  array = Array.from({length:n}, () => Math.floor(Math.random() * 90) + 10);
+  // Unique values (like the reference) so each box has a stable identity for
+  // the FLIP glide animation. Pick n distinct heights spread across a range,
+  // then shuffle them into random order.
+  const span = 92;                       // value range 8..100
+  const pool = [];
+  for (let k = 0; k < n; k++) {
+    pool.push(8 + Math.round((k * span) / Math.max(1, n - 1)));
+  }
+  for (let k = pool.length - 1; k > 0; k--) {
+    const r = Math.floor(Math.random() * (k + 1));
+    [pool[k], pool[r]] = [pool[r], pool[k]];
+  }
+  array = pool;
   isSorted = false;
   resetStats();
   renderBars(array, {});
@@ -451,22 +463,50 @@ function resetStats() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   BAR RENDERING — boxes lift into the air, glide to their
-   new (swapped) positions, then drop back down. Inspired by
-   the Framer-Motion "Reorder" FLIP effect in the reference app.
-═══════════════════════════════════════════════════════ */
-let prevRenderArr = null;   // previous array, to detect a swap
+   BAR RENDERING — faithful re-creation of the reference app's
+   Framer-Motion "Reorder" effect.
 
-// Bars only fill the BOTTOM HALF of the stage, leaving the top half as
-// headroom so a lifted box has empty air to rise into and glide across.
+   Each box is a PERSISTENT element keyed by its VALUE. On every
+   frame we set each box's `left` to its slot for the CURRENT array
+   order — because the element keeps its identity, the browser
+   CSS-transitions the `left` change, so a box that moved to a new
+   index physically GLIDES there (FLIP). Active boxes lift straight
+   up (translateY) via a spring-like easing; when two boxes swap
+   they're both lifted, so they glide across in the air, then drop.
+
+   Bars fill only the BOTTOM HALF of the stage so there is empty
+   headroom above for boxes to rise into (exactly like the reference,
+   which uses height = (item / MAX) * containerHeight / 2 and a lift
+   of y = -containerHeight / 2).
+═══════════════════════════════════════════════════════ */
 const BAR_AREA = 0.5;       // bars use 50% of stage height (like the reference)
+const barEls = new Map();   // value -> { wrap, bar, val }
 
 function geom(canvas, n) {
   const padL = 24, padR = 24;
   const canvasW = (canvas.clientWidth || 600) - padL - padR;
   const gap = n > 30 ? 3 : (n > 15 ? 5 : 8);
   const barWidth = Math.max(4, (canvasW - (n - 1) * gap) / n);
-  return { padL, gap, barWidth, slot: barWidth + gap };
+  const totalW = n * barWidth + (n - 1) * gap;
+  const startX = padL + Math.max(0, (canvasW - totalW) / 2); // centre the row
+  return { startX, gap, barWidth, slot: barWidth + gap };
+}
+
+function buildBarEls(canvas, arr) {
+  canvas.querySelectorAll('.bar-wrap').forEach(el => el.remove());
+  barEls.clear();
+  arr.forEach((value) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'bar-wrap';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    const val = document.createElement('div');
+    val.className = 'bar-val';
+    wrap.appendChild(bar);
+    wrap.appendChild(val);
+    canvas.appendChild(wrap);
+    barEls.set(value, { wrap, bar, val });
+  });
 }
 
 function renderBars(arr, stateMap) {
@@ -475,85 +515,46 @@ function renderBars(arr, stateMap) {
   const canvas = document.getElementById('barCanvas');
   const n = arr.length;
 
-  // Build or reuse bar elements
-  let wraps = canvas.querySelectorAll('.bar-wrap');
-  if (wraps.length !== n) {
-    canvas.querySelectorAll('.bar-wrap').forEach(el => el.remove());
-    for (let i = 0; i < n; i++) {
-      const wrap = document.createElement('div');
-      wrap.className = 'bar-wrap';
-      const bar = document.createElement('div');
-      bar.className = 'bar';
-      const val = document.createElement('div');
-      val.className = 'bar-val';
-      wrap.appendChild(bar);
-      wrap.appendChild(val);
-      canvas.appendChild(wrap);
-    }
-    wraps = canvas.querySelectorAll('.bar-wrap');
+  // (Re)build persistent, value-keyed boxes when the set of values changes
+  // (new array / different size). Values are unique per generated array.
+  let needsBuild = barEls.size !== n;
+  if (!needsBuild) {
+    for (const v of arr) { if (!barEls.has(v)) { needsBuild = true; break; } }
   }
+  if (needsBuild) buildBarEls(canvas, arr);
 
   const maxVal = Math.max(...arr, 1);
-  const { padL, slot, barWidth } = geom(canvas, n);
+  const { startX, slot, barWidth } = geom(canvas, n);
   const stageH = canvas.clientHeight || 320;
   const usableH = stageH * BAR_AREA;
-  const lift = usableH + 28;   // lift the active pair up above the bars
+  const lift = usableH;   // lift active boxes up by half the stage (reference)
 
-  // Detect a pure two-element swap vs the previous render → cross-over glide
-  let swapA = -1, swapB = -1;
-  if (prevRenderArr && prevRenderArr.length === n) {
-    const diffs = [];
-    for (let i = 0; i < n; i++) {
-      if (arr[i] !== prevRenderArr[i]) { diffs.push(i); if (diffs.length > 2) break; }
-    }
-    if (diffs.length === 2) {
-      const [a, b] = diffs;
-      if (arr[a] === prevRenderArr[b] && arr[b] === prevRenderArr[a]) { swapA = a; swapB = b; }
-    }
-  }
+  arr.forEach((value, i) => {
+    const refEls = barEls.get(value);
+    if (!refEls) return;
+    const { wrap, bar, val } = refEls;
 
-  wraps.forEach((wrap, i) => {
-    const bar = wrap.querySelector('.bar');
-    const val = wrap.querySelector('.bar-val');
-
-    // horizontal slot position
-    wrap.style.left = (padL + i * slot) + 'px';
+    // place the box at its slot for the CURRENT order → CSS glides it there
+    wrap.style.left = (startX + i * slot) + 'px';
     wrap.style.width = barWidth + 'px';
 
-    const h = Math.max(6, (arr[i] / maxVal) * usableH);
+    const h = Math.max(6, (value / maxVal) * usableH);
     bar.style.height = h + 'px';
     bar.className = 'bar ' + (stateMap[i] || 'default');
-    if (val) val.textContent = arr[i];
+    if (val) val.textContent = value;
 
     const role = stateMap[i];
-    const isActive = role === 'comparing' || role === 'swapping' || role === 'pivot' || role === 'selected';
+    const isActive = role === 'comparing' || role === 'swapping' ||
+                     role === 'pivot' || role === 'selected';
 
-    if ((i === swapA || i === swapB)) {
-      // ── CROSS-OVER GLIDE ──
-      // This node now holds the value that used to sit in the other slot,
-      // so make it visually travel FROM that other slot, while staying lifted.
-      const other = (i === swapA) ? swapB : swapA;
-      const fromX = (other - i) * slot;   // start at the other slot
-      wrap.classList.add('lifted');
-      wrap.style.transition = 'none';
-      wrap.style.transform = 'translate(' + fromX + 'px, -' + lift + 'px)';
-      void wrap.offsetWidth;              // reflow to lock the start state
-      wrap.style.transition = '';         // back to CSS-defined transition
-      wrap.style.transform = 'translate(0px, -' + lift + 'px)';
-    } else if (isActive) {
-      // active pair lifts straight up into the air
-      wrap.style.transition = '';
+    if (isActive) {
       wrap.style.transform = 'translateY(-' + lift + 'px)';
       wrap.classList.add('lifted');
     } else {
-      // everything else sits on the ground
-      wrap.style.transition = '';
       wrap.style.transform = 'translateY(0px)';
       wrap.classList.remove('lifted');
     }
   });
-
-  prevRenderArr = arr.slice();
 }
 
 /* ═══════════════════════════════════════════════════════
