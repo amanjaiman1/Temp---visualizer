@@ -451,8 +451,10 @@ function resetStats() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   BAR RENDERING
+   BAR RENDERING — with lift-slide-drop swap animation
 ═══════════════════════════════════════════════════════ */
+let prevRenderArr = null; // track previous array to detect swaps
+
 function renderBars(arr, stateMap) {
   // remember the last render so we can repaint on resize
   lastArr = arr; lastStates = stateMap;
@@ -468,6 +470,8 @@ function renderBars(arr, stateMap) {
     for (let i = 0; i < n; i++) {
       const wrap = document.createElement('div');
       wrap.className = 'bar-wrap';
+      wrap.style.position = 'absolute';
+      wrap.style.bottom = '0';
       const bar = document.createElement('div');
       bar.className = 'bar';
       const val = document.createElement('div');
@@ -477,18 +481,76 @@ function renderBars(arr, stateMap) {
       canvas.appendChild(wrap);
     }
     wraps = canvas.querySelectorAll('.bar-wrap');
+    prevRenderArr = null;
   }
 
   const maxVal = Math.max(...arr, 1);
+  const canvasW = canvas.clientWidth - 48; // minus padding
+  const gap = 3;
+  const totalGaps = (n - 1) * gap;
+  const barWidth = Math.max(2, (canvasW - totalGaps) / n);
+
+  // Detect swap: find two indices where values exchanged
+  let swapA = -1, swapB = -1;
+  if (prevRenderArr && prevRenderArr.length === n) {
+    const diffs = [];
+    for (let i = 0; i < n; i++) {
+      if (arr[i] !== prevRenderArr[i]) { diffs.push(i); if (diffs.length > 2) break; }
+    }
+    if (diffs.length === 2) {
+      const [a, b] = diffs;
+      if (arr[a] === prevRenderArr[b] && arr[b] === prevRenderArr[a]) {
+        swapA = a; swapB = b;
+      }
+    }
+  }
 
   wraps.forEach((wrap, i) => {
     const bar = wrap.querySelector('.bar');
     const val = wrap.querySelector('.bar-val');
     const pct = (arr[i] / maxVal) * 100;
+
+    // Position each bar absolutely
+    const left = 24 + i * (barWidth + gap);
+    wrap.style.width = barWidth + 'px';
+    wrap.style.height = '100%';
+    wrap.style.left = left + 'px';
+
     bar.style.height = Math.max(1, pct) + '%';
     bar.className = 'bar ' + (stateMap[i] || 'default');
     if (val) val.textContent = arr[i];
+
+    // Swap animation: lift + slide
+    if ((i === swapA || i === swapB) && stateMap[i] === 'swapping') {
+      const otherIdx = (i === swapA) ? swapB : swapA;
+      const slideDistance = (otherIdx - i) * (barWidth + gap);
+
+      // Disable transition briefly, set starting position (the OTHER slot), then animate to current
+      wrap.style.transition = 'none';
+      wrap.style.transform = 'translateX(' + slideDistance + 'px) translateY(0px)';
+
+      // Force reflow then animate
+      void wrap.offsetWidth;
+      wrap.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+      wrap.style.transform = 'translateX(0px) translateY(-30px)';
+
+      // Drop back down after slide
+      setTimeout(() => {
+        wrap.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+        wrap.style.transform = 'translateX(0px) translateY(0px)';
+      }, 360);
+    } else if (stateMap[i] === 'comparing') {
+      // Lift up when comparing
+      wrap.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+      wrap.style.transform = 'translateY(-20px)';
+    } else {
+      // Default: no transform
+      wrap.style.transition = 'transform 0.2s ease';
+      wrap.style.transform = 'translateY(0px)';
+    }
   });
+
+  prevRenderArr = arr.slice();
 }
 
 /* ═══════════════════════════════════════════════════════
