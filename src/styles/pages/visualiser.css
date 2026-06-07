@@ -999,11 +999,12 @@ footer span { color: var(--cyan); }
 
 @media (max-width: 680px) {
   .teach-popup {
-    /* Mobile: centred and positioned well above the boxes (~120px up) */
+    /* Mobile: centred near the TOP of the array container (boxes sit in the
+       bottom half, so this never covers them and never goes off-screen). */
     left: 50%;
     right: auto;
     bottom: auto;
-    top: -120px;
+    top: 8px;
     width: auto;
     transform: translateX(-50%) translateY(-10px);
     padding: 14px 14px;
