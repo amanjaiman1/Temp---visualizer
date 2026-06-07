@@ -451,12 +451,25 @@ function resetStats() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   BAR RENDERING — with lift-slide-drop swap animation
+   BAR RENDERING — boxes lift into the air, glide to their
+   new (swapped) positions, then drop back down. Inspired by
+   the Framer-Motion "Reorder" FLIP effect in the reference app.
 ═══════════════════════════════════════════════════════ */
-let prevRenderArr = null; // track previous array to detect swaps
+let prevRenderArr = null;   // previous array, to detect a swap
+
+// Bars only fill the BOTTOM HALF of the stage, leaving the top half as
+// headroom so a lifted box has empty air to rise into and glide across.
+const BAR_AREA = 0.5;       // bars use 50% of stage height (like the reference)
+
+function geom(canvas, n) {
+  const padL = 24, padR = 24;
+  const canvasW = (canvas.clientWidth || 600) - padL - padR;
+  const gap = n > 30 ? 3 : (n > 15 ? 5 : 8);
+  const barWidth = Math.max(4, (canvasW - (n - 1) * gap) / n);
+  return { padL, gap, barWidth, slot: barWidth + gap };
+}
 
 function renderBars(arr, stateMap) {
-  // remember the last render so we can repaint on resize
   lastArr = arr; lastStates = stateMap;
 
   const canvas = document.getElementById('barCanvas');
@@ -465,13 +478,10 @@ function renderBars(arr, stateMap) {
   // Build or reuse bar elements
   let wraps = canvas.querySelectorAll('.bar-wrap');
   if (wraps.length !== n) {
-    // Remove old, create new
     canvas.querySelectorAll('.bar-wrap').forEach(el => el.remove());
     for (let i = 0; i < n; i++) {
       const wrap = document.createElement('div');
       wrap.className = 'bar-wrap';
-      wrap.style.position = 'absolute';
-      wrap.style.bottom = '0';
       const bar = document.createElement('div');
       bar.className = 'bar';
       const val = document.createElement('div');
@@ -481,16 +491,15 @@ function renderBars(arr, stateMap) {
       canvas.appendChild(wrap);
     }
     wraps = canvas.querySelectorAll('.bar-wrap');
-    prevRenderArr = null;
   }
 
   const maxVal = Math.max(...arr, 1);
-  const canvasW = canvas.clientWidth - 48; // minus padding
-  const gap = 3;
-  const totalGaps = (n - 1) * gap;
-  const barWidth = Math.max(2, (canvasW - totalGaps) / n);
+  const { padL, slot, barWidth } = geom(canvas, n);
+  const stageH = canvas.clientHeight || 320;
+  const usableH = stageH * BAR_AREA;
+  const lift = usableH + 28;   // lift the active pair up above the bars
 
-  // Detect swap: find two indices where values exchanged
+  // Detect a pure two-element swap vs the previous render → cross-over glide
   let swapA = -1, swapB = -1;
   if (prevRenderArr && prevRenderArr.length === n) {
     const diffs = [];
@@ -499,54 +508,48 @@ function renderBars(arr, stateMap) {
     }
     if (diffs.length === 2) {
       const [a, b] = diffs;
-      if (arr[a] === prevRenderArr[b] && arr[b] === prevRenderArr[a]) {
-        swapA = a; swapB = b;
-      }
+      if (arr[a] === prevRenderArr[b] && arr[b] === prevRenderArr[a]) { swapA = a; swapB = b; }
     }
   }
 
   wraps.forEach((wrap, i) => {
     const bar = wrap.querySelector('.bar');
     const val = wrap.querySelector('.bar-val');
-    const pct = (arr[i] / maxVal) * 100;
 
-    // Position each bar absolutely
-    const left = 24 + i * (barWidth + gap);
+    // horizontal slot position
+    wrap.style.left = (padL + i * slot) + 'px';
     wrap.style.width = barWidth + 'px';
-    wrap.style.height = '100%';
-    wrap.style.left = left + 'px';
 
-    bar.style.height = Math.max(1, pct) + '%';
+    const h = Math.max(6, (arr[i] / maxVal) * usableH);
+    bar.style.height = h + 'px';
     bar.className = 'bar ' + (stateMap[i] || 'default');
     if (val) val.textContent = arr[i];
 
-    // Swap animation: lift + slide
-    if ((i === swapA || i === swapB) && stateMap[i] === 'swapping') {
-      const otherIdx = (i === swapA) ? swapB : swapA;
-      const slideDistance = (otherIdx - i) * (barWidth + gap);
+    const role = stateMap[i];
+    const isActive = role === 'comparing' || role === 'swapping' || role === 'pivot' || role === 'selected';
 
-      // Disable transition briefly, set starting position (the OTHER slot), then animate to current
+    if ((i === swapA || i === swapB)) {
+      // ── CROSS-OVER GLIDE ──
+      // This node now holds the value that used to sit in the other slot,
+      // so make it visually travel FROM that other slot, while staying lifted.
+      const other = (i === swapA) ? swapB : swapA;
+      const fromX = (other - i) * slot;   // start at the other slot
+      wrap.classList.add('lifted');
       wrap.style.transition = 'none';
-      wrap.style.transform = 'translateX(' + slideDistance + 'px) translateY(0px)';
-
-      // Force reflow then animate
-      void wrap.offsetWidth;
-      wrap.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
-      wrap.style.transform = 'translateX(0px) translateY(-30px)';
-
-      // Drop back down after slide
-      setTimeout(() => {
-        wrap.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
-        wrap.style.transform = 'translateX(0px) translateY(0px)';
-      }, 360);
-    } else if (stateMap[i] === 'comparing') {
-      // Lift up when comparing
-      wrap.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
-      wrap.style.transform = 'translateY(-20px)';
+      wrap.style.transform = 'translate(' + fromX + 'px, -' + lift + 'px)';
+      void wrap.offsetWidth;              // reflow to lock the start state
+      wrap.style.transition = '';         // back to CSS-defined transition
+      wrap.style.transform = 'translate(0px, -' + lift + 'px)';
+    } else if (isActive) {
+      // active pair lifts straight up into the air
+      wrap.style.transition = '';
+      wrap.style.transform = 'translateY(-' + lift + 'px)';
+      wrap.classList.add('lifted');
     } else {
-      // Default: no transform
-      wrap.style.transition = 'transform 0.2s ease';
+      // everything else sits on the ground
+      wrap.style.transition = '';
       wrap.style.transform = 'translateY(0px)';
+      wrap.classList.remove('lifted');
     }
   });
 
@@ -897,7 +900,10 @@ function play() {
   if (frameIdx >= frames.length) { finish(); return; }
   const f = frames[frameIdx++];
   applyFrame(f);
-  animTimer = setTimeout(play, getDelay());
+  // Give swap frames enough time for the lift-slide-drop animation to finish
+  const isSwapFrame = f.states && Object.values(f.states).some(v => v === 'swapping');
+  const delay = isSwapFrame ? Math.max(getDelay(), 760) : getDelay();
+  animTimer = setTimeout(play, delay);
 }
 
 function applyFrame(f) {

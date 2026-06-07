@@ -276,19 +276,26 @@ main {
 
 .bar-wrap {
   position: absolute;
-  bottom: 16px;
+  bottom: 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  will-change: transform;
+  will-change: transform, left;
+  /* the glide (transform) + horizontal repositioning (left) animate together;
+     spring-like easing gives the lift/drop a lively feel */
+  transition:
+    transform 0.42s cubic-bezier(0.34, 1.3, 0.5, 1),
+    left 0.42s cubic-bezier(0.34, 1.3, 0.5, 1);
 }
+/* a lifted box floats above its neighbours */
+.bar-wrap.lifted { z-index: 20; }
 
 .bar {
   width: 100%;
   border-radius: 4px 4px 0 0;
   transition:
-    height 0.18s cubic-bezier(0.34,1.56,0.64,1),
+    height 0.22s cubic-bezier(0.34,1.2,0.64,1),
     background 0.18s ease,
     box-shadow 0.18s ease;
   position: relative;
@@ -300,18 +307,20 @@ main {
     2px 4px 8px rgba(0,0,0,0.35);
 }
 
-/* value label sitting at the bottom of each box */
+/* value label sitting just under each box */
 .bar-val {
-  margin-top: 6px;
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: 0.62rem;
   font-weight: 700;
   color: #b0c8d8;
   line-height: 1;
-  flex-shrink: 0;
   user-select: none;
   text-align: center;
-  min-height: 14px;
+  pointer-events: none;
 }
 
 /* state colours — straight upright boxes with 3D depth look from shadows */
