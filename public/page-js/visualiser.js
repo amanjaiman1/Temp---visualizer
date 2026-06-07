@@ -264,8 +264,8 @@ let lastStates = {};
 // Teach Mode state
 let teachMode = false;
 
-// Speed levels: slider position (1-10) maps to a labelled multiplier.
-// Lower multipliers (0.5×, 0.75×) play SLOWER so learners can follow each step;
+// Speed levels: slider position (1-N) maps to a labelled multiplier.
+// Lower multipliers play SLOWER so learners can follow each step;
 // the `delay` is the milliseconds spent on every animation frame.
 const speedLevels = [
   { label: '0.05×', delay: 2400 },
@@ -275,6 +275,9 @@ const speedLevels = [
   { label: '0.3×',  delay: 550 },
   { label: '0.4×',  delay: 380 },
   { label: '0.5×',  delay: 260 },
+  { label: '1×',    delay: 140 },
+  { label: '2×',    delay: 70 },
+  { label: '3×',    delay: 35 },
 ];
 
 let audioCtx = null;
@@ -894,9 +897,11 @@ function play() {
   if (frameIdx >= frames.length) { finish(); return; }
   const f = frames[frameIdx++];
   applyFrame(f);
-  // Give swap frames enough time for the lift-slide-drop animation to finish
+  // Swap frames need a little extra breathing room for the lift/glide/drop,
+  // but at fast speeds (1×–3×) keep it snappy so the speed actually applies.
   const isSwapFrame = f.states && Object.values(f.states).some(v => v === 'swapping');
-  const delay = isSwapFrame ? Math.max(getDelay(), 760) : getDelay();
+  const base = getDelay();
+  const delay = isSwapFrame ? Math.max(base, Math.min(760, base + 220)) : base;
   animTimer = setTimeout(play, delay);
 }
 
@@ -1035,6 +1040,11 @@ function onSizeChange(v) {
 function onSpeedChange(v) {
   const level = speedLevels[Math.max(0, Math.min(speedLevels.length - 1, parseInt(v) - 1))];
   document.getElementById('speedVal').textContent = level.label;
+  // Scale the lift/glide/drop animation with the speed so it never lags behind
+  // the frame rate at fast speeds. Cap between 0.12s and 0.5s.
+  const dur = Math.max(0.12, Math.min(0.5, level.delay / 1000 * 0.7));
+  const canvas = document.getElementById('barCanvas');
+  if (canvas) canvas.style.setProperty('--bar-anim', dur + 's');
 }
 
 function toggleSound() {

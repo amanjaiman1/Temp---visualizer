@@ -89,11 +89,13 @@
 
         <div class="ctrl-group" id="speedGroup">
           <div class="ctrl-label">Speed <span id="speedVal">0.2×</span></div>
-          <input type="range" class="slider" id="speedSlider" min="1" max="7" value="4" list="speedTicks" oninput="onSpeedChange(this.value)">
+          <input type="range" class="slider" id="speedSlider" min="1" max="10" value="4" list="speedTicks" oninput="onSpeedChange(this.value)">
           <datalist id="speedTicks">
             <option value="1" label="0.05×"></option>
             <option value="4" label="0.2×"></option>
             <option value="7" label="0.5×"></option>
+            <option value="8" label="1×"></option>
+            <option value="10" label="3×"></option>
           </datalist>
         </div>
 
