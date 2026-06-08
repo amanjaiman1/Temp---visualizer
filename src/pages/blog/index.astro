@@ -1,0 +1,139 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import { articles, CATEGORY_ORDER } from "../../data/articles";
+
+// Group articles by category, preserving the canonical category order.
+const grouped = CATEGORY_ORDER.map((category) => ({
+  category,
+  items: articles.filter((a) => a.category === category),
+})).filter((g) => g.items.length > 0);
+
+const featuredSlugs = [
+  "quicksort-vs-mergesort",
+  "time-complexity-of-sorting-algorithms",
+  "which-sorting-algorithm-is-fastest",
+];
+const featured = featuredSlugs
+  .map((s) => articles.find((a) => a.slug === s))
+  .filter((a): a is (typeof articles)[number] => Boolean(a));
+
+const label =
+  "flex items-center gap-[8px] text-[0.6rem] max-[760px]:text-[0.75rem] tracking-[3px] uppercase text-cyan mb-[10px] before:content-[''] before:block before:w-[20px] before:h-[1px] before:bg-cyan";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Sort & Visualize Blog",
+  url: "https://sortandvisualize.com/blog",
+  description:
+    "In-depth guides on sorting algorithms — complexity, comparisons, language implementations, and interview prep.",
+  publisher: {
+    "@type": "Organization",
+    name: "Sort & Visualize",
+    url: "https://sortandvisualize.com/",
+  },
+  blogPost: articles.map((a) => ({
+    "@type": "BlogPosting",
+    headline: a.title,
+    description: a.description,
+    url: `https://sortandvisualize.com/blog/${a.slug}`,
+    datePublished: a.updated,
+    dateModified: a.updated,
+  })),
+};
+---
+
+<BaseLayout
+  title="Sorting Algorithms Blog — Guides, Comparisons & Interview Prep"
+  description="50+ in-depth guides on sorting algorithms: time complexity, Quick Sort vs Merge Sort, language implementations, and coding interview prep. Learn with our visualizer."
+  keywords="sorting algorithms blog, sorting algorithm guides, quicksort vs mergesort, sorting time complexity, sorting interview questions, sorting algorithm visualizer"
+  activePath="/blog"
+  jsonLd={jsonLd}
+>
+  <PageHero eyebrow="The Sorting Algorithms Blog">
+    <Fragment slot="title">Master <em class="text-cyan not-italic">sorting</em>, one guide at a time</Fragment>
+    <p class="text-[0.9rem] text-[#5a6a7a] max-w-[560px] mx-auto leading-[1.8]">
+      {articles.length} in-depth articles answering the most-asked questions about sorting
+      algorithms — from complexity and comparisons to language internals and interview prep.
+    </p>
+  </PageHero>
+
+  <div class="max-w-[1100px] mx-auto px-[40px] pt-[64px] pb-[100px] max-[980px]:px-[24px] max-[760px]:px-[18px]">
+    <!-- Featured -->
+    <section class="mb-[64px] animate-fade-up [animation-delay:0.1s]">
+      <div class={label}>Start Here</div>
+      <h2 class="font-ui font-extrabold text-[1.6rem] max-[760px]:text-[1.4rem] tracking-[-1px] text-white mb-[20px]">
+        Most popular <em class="text-cyan not-italic">reads</em>
+      </h2>
+      <div class="grid grid-cols-3 gap-[16px] max-[760px]:grid-cols-1">
+        {
+          featured.map((a) => (
+            <a
+              href={`/blog/${a.slug}`}
+              class="group relative overflow-hidden bg-panel border border-line rounded-[12px] p-[24px] no-underline transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:border-[rgba(0,255,200,0.3)] hover:-translate-y-[3px] before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-[1px] before:bg-[linear-gradient(90deg,transparent,var(--cyan),transparent)]"
+            >
+              <div class="font-mono text-[0.6rem] tracking-[2px] uppercase text-cyan mb-[12px]">
+                {a.category}
+              </div>
+              <div class="font-ui font-bold text-[1.05rem] text-white leading-[1.3] mb-[10px] group-hover:text-cyan transition-colors duration-200">
+                {a.h1}
+              </div>
+              <div class="text-[0.78rem] text-[#5a6a7a] leading-[1.6]">{a.excerpt}</div>
+              <div class="mt-[14px] font-mono text-[0.62rem] tracking-[1px] uppercase text-muted">
+                {a.readingTime} min read
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      grouped.map((group, gi) => (
+        <section class="mb-[56px] animate-fade-up" style={`animation-delay:${0.15 + gi * 0.05}s`}>
+          <div class="flex items-baseline justify-between mb-[18px] border-b border-line2 pb-[12px]">
+            <h2 class="font-ui font-extrabold text-[1.35rem] max-[760px]:text-[1.2rem] tracking-[-0.5px] text-white">
+              {group.category}
+            </h2>
+            <span class="font-mono text-[0.62rem] tracking-[1px] uppercase text-muted">
+              {group.items.length} articles
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-[14px] max-[760px]:grid-cols-1">
+            {group.items.map((a) => (
+              <a
+                href={`/blog/${a.slug}`}
+                class="group bg-panel border border-line2 rounded-[8px] p-[18px] no-underline transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:border-[rgba(0,255,200,0.25)] hover:-translate-y-[2px]"
+              >
+                <div class="font-ui font-bold text-[0.92rem] text-white leading-[1.35] mb-[6px] group-hover:text-cyan transition-colors duration-200">
+                  {a.h1}
+                </div>
+                <div class="text-[0.74rem] text-[#5a6a7a] leading-[1.6] mb-[10px]">{a.excerpt}</div>
+                <div class="font-mono text-[0.6rem] tracking-[1px] uppercase text-muted">
+                  {a.readingTime} min read
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <!-- CTA -->
+    <section class="mt-[40px] relative overflow-hidden bg-panel border border-line rounded-[12px] p-[32px] max-[760px]:p-[24px] text-center before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-[1px] before:bg-[linear-gradient(90deg,transparent,var(--cyan),transparent)]">
+      <h2 class="font-ui font-extrabold text-[1.4rem] tracking-[-1px] text-white mb-[10px]">
+        See the algorithms <em class="text-cyan not-italic">in motion</em>
+      </h2>
+      <p class="text-[0.82rem] text-[#5a6a7a] leading-[1.7] max-w-[480px] mx-auto mb-[20px]">
+        Reading is good — watching is better. Launch the interactive visualizer and see every
+        comparison and swap happen in real time.
+      </p>
+      <a
+        href="/visualiser"
+        class="inline-block font-mono text-[0.72rem] tracking-[1.5px] uppercase font-bold text-black no-underline px-[24px] py-[11px] rounded-[6px] bg-cyan border border-cyan transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:bg-white hover:shadow-[0_0_24px_rgba(0,255,200,0.5)] hover:-translate-y-px"
+        >▶ Launch Visualiser</a
+      >
+    </section>
+  </div>
+</BaseLayout>

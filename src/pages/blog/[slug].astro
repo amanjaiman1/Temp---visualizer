@@ -1,0 +1,311 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articles } from "../../data/articles";
+
+export function getStaticPaths() {
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+
+const related = article.related
+  .map((slug) => articles.find((a) => a.slug === slug))
+  .filter((a): a is (typeof articles)[number] => Boolean(a));
+
+const formattedDate = new Date(article.updated).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const baseUrl = "https://sortandvisualize.com";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.h1,
+    description: article.description,
+    url: `${baseUrl}/blog/${article.slug}`,
+    datePublished: article.updated,
+    dateModified: article.updated,
+    author: { "@type": "Organization", name: "Sort & Visualize" },
+    publisher: {
+      "@type": "Organization",
+      name: "Sort & Visualize",
+      url: `${baseUrl}/`,
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${baseUrl}/blog/${article.slug}` },
+    articleSection: article.category,
+    keywords: article.keywords,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${baseUrl}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${baseUrl}/blog` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.h1,
+        item: `${baseUrl}/blog/${article.slug}`,
+      },
+    ],
+  },
+  ...(article.faqs.length
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: article.faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        },
+      ]
+    : []),
+];
+---
+
+<BaseLayout
+  title={`${article.title} | Sort & Visualize`}
+  description={article.description}
+  keywords={article.keywords}
+  activePath="/blog"
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <article class="article-wrap max-w-[760px] mx-auto px-[40px] pt-[140px] pb-[100px] max-[980px]:px-[24px] max-[980px]:pt-[120px] max-[760px]:px-[18px] max-[760px]:pt-[108px]">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-[8px] font-mono text-[0.62rem] tracking-[1px] uppercase text-muted mb-[24px] flex-wrap" aria-label="Breadcrumb">
+      <a href="/" class="text-muted no-underline hover:text-cyan transition-colors duration-200">Home</a>
+      <span class="text-line">/</span>
+      <a href="/blog" class="text-muted no-underline hover:text-cyan transition-colors duration-200">Blog</a>
+      <span class="text-line">/</span>
+      <span class="text-cyan">{article.category}</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-[32px] animate-fade-up">
+      <div class="inline-block px-[12px] py-[5px] rounded-[3px] border border-[rgba(0,255,200,0.2)] bg-[rgba(0,255,200,0.05)] text-cyan font-mono text-[0.58rem] tracking-[2px] uppercase mb-[18px]">
+        {article.category}
+      </div>
+      <h1 class="font-ui font-black text-white leading-[1.1] tracking-[-1.5px] text-[clamp(1.8rem,4.5vw,2.8rem)] mb-[16px]">
+        {article.h1}
+      </h1>
+      <div class="flex items-center gap-[14px] font-mono text-[0.64rem] tracking-[1px] uppercase text-muted flex-wrap">
+        <span>Updated {formattedDate}</span>
+        <span class="text-line">•</span>
+        <span>{article.readingTime} min read</span>
+      </div>
+    </header>
+
+    <!-- Body -->
+    <div class="prose animate-fade-up [animation-delay:0.1s]" set:html={article.intro} />
+
+    {
+      article.sections.map((section) => (
+        <section class="prose mt-[12px]">
+          <h2>{section.heading}</h2>
+          <div set:html={section.html} />
+        </section>
+      ))
+    }
+
+    <!-- FAQ -->
+    {
+      article.faqs.length > 0 && (
+        <section class="mt-[48px] pt-[32px] border-t border-line2">
+          <h2 class="font-ui font-extrabold text-[1.4rem] tracking-[-1px] text-white mb-[20px]">
+            Frequently asked <em class="text-cyan not-italic">questions</em>
+          </h2>
+          <div class="flex flex-col gap-[12px]">
+            {article.faqs.map((f) => (
+              <details class="group bg-panel border border-line2 rounded-[8px] overflow-hidden transition-colors duration-200 hover:border-line">
+                <summary class="cursor-pointer list-none flex items-center justify-between gap-[12px] p-[16px] font-ui font-bold text-[0.92rem] text-ink">
+                  <span>{f.q}</span>
+                  <span class="text-cyan text-[1.1rem] transition-transform duration-300 group-open:rotate-45">+</span>
+                </summary>
+                <div class="px-[16px] pb-[16px] text-[0.82rem] text-[#6a7a8a] leading-[1.75]">{f.a}</div>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- CTA -->
+    <section class="mt-[40px] relative overflow-hidden bg-panel border border-line rounded-[12px] p-[28px] max-[760px]:p-[20px] text-center before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-[1px] before:bg-[linear-gradient(90deg,transparent,var(--cyan),transparent)]">
+      <h2 class="font-ui font-extrabold text-[1.25rem] tracking-[-0.5px] text-white mb-[8px]">
+        See it <em class="text-cyan not-italic">in motion</em>
+      </h2>
+      <p class="text-[0.8rem] text-[#5a6a7a] leading-[1.7] max-w-[440px] mx-auto mb-[18px]">
+        Watch this algorithm and 9 others run step by step in our free interactive visualizer.
+      </p>
+      <a
+        href="/visualiser"
+        class="inline-block font-mono text-[0.7rem] tracking-[1.5px] uppercase font-bold text-black no-underline px-[22px] py-[10px] rounded-[6px] bg-cyan border border-cyan transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:bg-white hover:shadow-[0_0_24px_rgba(0,255,200,0.5)] hover:-translate-y-px"
+        >▶ Launch Visualiser</a
+      >
+    </section>
+
+    <!-- Related -->
+    {
+      related.length > 0 && (
+        <section class="mt-[48px] pt-[32px] border-t border-line2">
+          <h2 class="font-ui font-extrabold text-[1.25rem] tracking-[-0.5px] text-white mb-[18px]">
+            Related <em class="text-cyan not-italic">articles</em>
+          </h2>
+          <div class="grid grid-cols-3 gap-[12px] max-[760px]:grid-cols-1">
+            {related.map((r) => (
+              <a
+                href={`/blog/${r.slug}`}
+                class="group bg-panel border border-line2 rounded-[8px] p-[16px] no-underline transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:border-[rgba(0,255,200,0.25)] hover:-translate-y-[2px]"
+              >
+                <div class="font-mono text-[0.56rem] tracking-[1.5px] uppercase text-cyan mb-[8px]">
+                  {r.category}
+                </div>
+                <div class="font-ui font-bold text-[0.84rem] text-white leading-[1.35] group-hover:text-cyan transition-colors duration-200">
+                  {r.h1}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Back link -->
+    <div class="mt-[40px]">
+      <a href="/blog" class="font-mono text-[0.68rem] tracking-[1px] uppercase text-cyan no-underline hover:underline">
+        ← Back to all articles
+      </a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* Long-form article prose — scoped to this page. */
+  .prose :global(p) {
+    font-size: 0.9rem;
+    color: #8a9aac;
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 760px) {
+    .prose :global(p) {
+      font-size: 0.95rem;
+    }
+  }
+  .prose :global(h2) {
+    font-family: var(--font-ui);
+    font-weight: 800;
+    font-size: 1.45rem;
+    letter-spacing: -1px;
+    color: #fff;
+    margin: 38px 0 16px;
+    scroll-margin-top: 100px;
+  }
+  .prose :global(strong) {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .prose :global(a) {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 255, 200, 0.25);
+    transition: border-color 0.2s ease;
+  }
+  .prose :global(a:hover) {
+    border-bottom-color: var(--cyan);
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 18px;
+    padding-left: 4px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .prose :global(li) {
+    position: relative;
+    padding-left: 22px;
+    font-size: 0.88rem;
+    color: #8a9aac;
+    line-height: 1.7;
+  }
+  @media (max-width: 760px) {
+    .prose :global(li) {
+      font-size: 0.93rem;
+    }
+  }
+  .prose :global(li)::before {
+    content: "›";
+    position: absolute;
+    left: 4px;
+    color: var(--cyan);
+    font-weight: 700;
+  }
+  /* Tables (complexity / comparison) */
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 24px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    display: block;
+    overflow-x: auto;
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    border: 1px solid var(--border2);
+    padding: 9px 12px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .prose :global(th) {
+    background: rgba(0, 255, 200, 0.05);
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.62rem;
+  }
+  .prose :global(td) {
+    color: #8a9aac;
+  }
+  /* Code blocks */
+  .prose :global(pre) {
+    background: #0a0e18;
+    border: 1px solid var(--border2);
+    border-left: 2px solid var(--cyan);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 8px 0 22px;
+    overflow-x: auto;
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+  .prose :global(pre code) {
+    color: #9fb4c8;
+    font-family: var(--font-mono);
+    background: none;
+    padding: 0;
+  }
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    color: var(--cyan);
+    background: rgba(0, 255, 200, 0.07);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
