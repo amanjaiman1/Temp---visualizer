@@ -74,13 +74,15 @@
 
 
       <div class="controls-bar">
-        <button class="btn btn-primary" id="btnSort" onclick="startSort()">▶ Sort</button>
-        <button class="btn btn-ghost" id="btnPause" onclick="togglePause()" disabled>⏸ Pause</button>
-        <button class="btn btn-ghost" id="btnStepBack" onclick="stepBackward()" disabled>⏮ Back</button>
-        <button class="btn btn-ghost" id="btnStep" onclick="stepForward()" disabled>⏭ Step</button>
-        <button class="btn btn-danger" id="btnReset" onclick="resetArray()">↺ Reset</button>
-        <button class="btn btn-ghost" onclick="generateArray()">⚄ Shuffle</button>
-        <button class="btn btn-teach" id="btnTeach" onclick="startTeachMode()">🎓 Teach Me</button>
+        <div class="btn-group">
+          <button class="btn btn-primary" id="btnSort" onclick="startSort()">▶ Sort</button>
+          <button class="btn btn-ghost" id="btnPause" onclick="togglePause()" disabled>⏸ Pause</button>
+          <button class="btn btn-ghost" id="btnStepBack" onclick="stepBackward()" disabled>⏮ Back</button>
+          <button class="btn btn-ghost" id="btnStep" onclick="stepForward()" disabled>⏭ Step</button>
+          <button class="btn btn-danger" id="btnReset" onclick="resetArray()">↺ Reset</button>
+          <button class="btn btn-ghost" onclick="generateArray()">⚄ Shuffle</button>
+          <button class="btn btn-teach" id="btnTeach" onclick="startTeachMode()">🎓 Teach Me</button>
+        </div>
 
         <div class="ctrl-group" id="sizeGroup">
           <div class="ctrl-label">Array Size <span id="sizeVal">10</span></div>

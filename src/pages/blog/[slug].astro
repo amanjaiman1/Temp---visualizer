@@ -109,6 +109,22 @@ const jsonLd = [
     <div class="prose animate-fade-up [animation-delay:0.1s]" set:html={article.intro} />
 
     {
+      article.layman && (
+        <aside class="layman relative my-[28px] rounded-[10px] border border-[rgba(0,255,200,0.22)] bg-[rgba(0,255,200,0.04)] p-[20px] max-[760px]:p-[16px] animate-fade-up [animation-delay:0.15s]">
+          <div class="flex items-center gap-[8px] font-mono text-[0.62rem] tracking-[2px] uppercase text-cyan mb-[10px]">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 18h6" />
+              <path d="M10 22h4" />
+              <path d="M12 2a7 7 0 0 0-4 12.7c.5.4.8 1 .9 1.6l.1.7h6l.1-.7c.1-.6.4-1.2.9-1.6A7 7 0 0 0 12 2Z" />
+            </svg>
+            In plain English
+          </div>
+          <div set:html={article.layman} />
+        </aside>
+      )
+    }
+
+    {
       article.sections.map((section) => (
         <section class="prose mt-[12px]">
           <h2>{section.heading}</h2>
@@ -307,5 +323,37 @@ const jsonLd = [
   }
   details summary::-webkit-details-marker {
     display: none;
+  }
+
+  /* "In plain English" callout — slightly larger, friendlier text. */
+  .layman :global(p) {
+    font-size: 0.92rem;
+    color: #aebccb;
+    line-height: 1.85;
+    margin: 0 0 12px;
+  }
+  .layman :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  @media (max-width: 760px) {
+    .layman :global(p) {
+      font-size: 0.97rem;
+    }
+  }
+  .layman :global(strong) {
+    color: #fff;
+    font-weight: 700;
+  }
+  .layman :global(em) {
+    color: var(--cyan);
+    font-style: italic;
+  }
+  .layman :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    color: var(--cyan);
+    background: rgba(0, 255, 200, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
   }
 </style>

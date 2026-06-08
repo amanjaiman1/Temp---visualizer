@@ -40,6 +40,13 @@ export interface Article {
   excerpt: string;
   /** Lead paragraph(s) rendered above the first heading (HTML). */
   intro: string;
+  /**
+   * Plain-English analogy block (HTML) rendered as an "In plain English"
+   * callout. Each article uses a distinct everyday example so the content
+   * reads uniquely and helps non-technical readers. Attached after the
+   * array via the laymanExplanations map below.
+   */
+  layman?: string;
   sections: ArticleSection[];
   faqs: ArticleFaq[];
   /** Slugs of related articles for internal linking. */
@@ -2181,3 +2188,131 @@ export const articles: Article[] = [
     related: ["what-is-a-sorting-algorithm", "do-you-need-to-memorize-sorting-algorithms", "how-to-use-a-sorting-visualizer-to-learn"],
   },
 ];
+
+
+// ============================================================
+// Plain-English analogies.
+//
+// One distinct, everyday analogy per article. These are written to be
+// original (not paraphrased from existing sources) and to let a reader
+// with zero computer-science background grasp the core idea before the
+// technical explanation begins. Rendered as an "In plain English" callout.
+// ============================================================
+const laymanExplanations: Record<string, string> = {
+  // ---------- Fundamentals ----------
+  "what-is-a-sorting-algorithm":
+    "<p>Picture a shelf of books shoved in at random. A sorting algorithm is simply the <em>method</em> you follow to line them up by height — maybe you compare two neighbours and swap them, or pull each book out and slot it where it belongs. The books are your data, 'by height' is the rule, and the routine you repeat until the shelf looks tidy is the algorithm. Computers do the exact same thing with numbers, names or dates; they just do it millions of times a second.</p>",
+  "how-sorting-algorithms-work":
+    "<p>Think about pairing up socks fresh out of the dryer. You pick two, decide if they match or which is which, and move them around — that is a <strong>compare</strong> and a <strong>swap</strong>. Tidying a hand of cards by sliding each new card into place is an <strong>insert</strong>. Zipping two already-sorted piles of paper into one ordered stack is a <strong>merge</strong>. Every sorting algorithm, no matter how clever it sounds, is just these few everyday moves repeated in a particular pattern.</p>",
+  "comparison-vs-non-comparison-sorting":
+    "<p>Imagine lining people up by height. The usual way is to stand two of them back-to-back and see who is taller — that is <strong>comparison</strong> sorting. Now imagine a mailroom with numbered pigeon-holes: you don't compare letters to each other at all, you just drop each one straight into the slot matching its number. That second approach is <strong>non-comparison</strong> sorting, and because it skips all the head-to-head checks, it can be faster — but only when your items have neat little 'slot numbers' to begin with.</p>",
+  "time-complexity-of-sorting-algorithms":
+    "<p>Think of planning a dinner and shaking hands with every guest. With 10 guests it is quick; with 1,000 it takes far longer — the effort grows as the crowd grows. <strong>Time complexity</strong> is just a way of describing <em>how fast the effort grows</em>, not the exact minutes. 'O(n²)' means doubling the guests roughly quadruples the work, while 'O(n log n)' means doubling them barely adds any. That difference is why one method finishes in a blink and another keeps your computer busy for minutes.</p>",
+  "space-complexity-in-sorting":
+    "<p>Say you are reorganising a messy desk. You could shuffle papers around on the desk itself using almost no extra room — that is an <strong>in-place</strong>, low-memory sort. Or you could grab a second empty table to lay things out before putting them back, which is faster to think about but needs a whole extra table. <strong>Space complexity</strong> measures how big that 'extra table' has to be. Some methods need none; others need one as large as the original pile.</p>",
+  "stable-vs-unstable-sorting":
+    "<p>Imagine a queue of people already standing in the order they arrived, and you re-sort them by age. A <strong>stable</strong> method keeps people of the same age in their original arrival order — fair, like a well-behaved queue. An <strong>unstable</strong> one might shuffle the same-age people around for no reason. It sounds minor, but if you sorted a spreadsheet by date and then by name, stability is what stops your earlier ordering from being scrambled.</p>",
+  "in-place-sorting-explained":
+    "<p>Rearranging your living-room furniture without renting a storage unit — you just slide the sofa and chairs around within the room itself — is the everyday version of <strong>in-place</strong> sorting. Some sorting methods work like that, using barely any extra space. Others insist on emptying everything into a storage unit first (a full second copy of your data) before putting it back. In-place is the thrifty option when space is tight.</p>",
+  "adaptive-sorting-algorithms":
+    "<p>Tidying a room that is already almost clean takes seconds; tidying one that has been ransacked takes ages. An <strong>adaptive</strong> sorting method behaves the same way — it notices when the data is already nearly in order and finishes early instead of doing the full job from scratch. A non-adaptive method is the stubborn cleaner who scrubs every surface even when the room was spotless to begin with.</p>",
+  "why-onlogn-is-the-lower-bound":
+    "<p>Remember the guessing game where you find a secret number by asking only yes/no questions? Each question can at best cut the possibilities in half, so there is a hard floor on how few questions you can get away with. Comparison sorting is the same: every 'is this bigger than that?' is one yes/no question, and there are so many possible orderings to tell apart that you simply <em>cannot</em> finish in fewer than a certain number of questions. That floor is what 'O(n log n) lower bound' means.</p>",
+  "best-average-worst-case-explained":
+    "<p>Think of your morning commute. On a perfect day with green lights all the way, you fly in — that is the <strong>best case</strong>. Most days are ordinary traffic — the <strong>average case</strong>. And occasionally there's an accident and you crawl — the <strong>worst case</strong>. A sorting method has the same three moods depending on how messy its input is, which is why we describe all three instead of pretending it always takes the same time.</p>",
+
+  // ---------- Algorithm Deep Dives ----------
+  "bubble-sort-explained":
+    "<p>Bubble Sort works like the bubbles in a glass of soda: the biggest one floats to the top first. The method keeps comparing two side-by-side items and swapping them if they are in the wrong order, so on each sweep the largest remaining value 'bubbles' all the way to the end. Sweep after sweep, the big values settle at the top until everything is in order. It is slow, but you can practically watch it happen — which is exactly why it is taught first.</p>",
+  "selection-sort-explained":
+    "<p>Imagine lining up a class of kids by height the lazy-but-tidy way: scan the whole group, pick out the very shortest, and put them at the front. Then scan the rest, find the next shortest, and put them second. You repeat until everyone is placed. That is Selection Sort. It does a lot of looking but very little actual moving — handy if shuffling people around were somehow expensive.</p>",
+  "insertion-sort-explained":
+    "<p>This is exactly how most people sort a hand of playing cards. You hold the cards you've already arranged, pick up the next one, and slide it leftwards until it sits in the right spot. The sorted part of your hand grows by one card at a time. Because each new card usually only moves a little, Insertion Sort is wonderfully fast when things are already <em>nearly</em> in order.</p>",
+  "merge-sort-explained":
+    "<p>Picture two teachers who have each sorted their own stack of graded papers. Combining them is easy: look at the top paper of each stack, take whichever comes first, and repeat — you 'zip' the two sorted piles into one. Merge Sort uses this trick on a grand scale. It keeps splitting the pile in half until each piece is a single paper, then zips the pieces back together, larger and larger, until the whole thing is sorted.</p>",
+  "quick-sort-explained":
+    "<p>Pick one student in a class and shout: 'everyone shorter than me, go left; everyone taller, go right.' Instantly that student is in their correct final spot, and you've split the class into two smaller groups. Now play the same game inside each group, and again inside those, until every group is a single person. That 'pick a reference and split around it' move is the heart of Quick Sort — simple, and astonishingly fast in practice.</p>",
+  "heap-sort-explained":
+    "<p>Imagine a company where the rule is that every boss earns more than the people under them, so the highest earner is always the CEO at the very top. Heap Sort builds the data into exactly this kind of pyramid, repeatedly plucks the 'CEO' off the top (the biggest value), and then promotes a replacement to restore the rule. Pull the top off enough times and you've removed everything in order, largest first.</p>",
+  "shell-sort-explained":
+    "<p>Think of sorting a long row of luggage. Carrying a bag one step at a time to its place is slow. So first you do a rough pass, swapping bags that are <em>far apart</em> to get big ones roughly into the right zone, then you tighten the gaps and do finer passes. By the time you compare neighbours, almost everything is close to home. Shell Sort is this 'coarse first, fine last' idea applied to Insertion Sort.</p>",
+  "counting-sort-explained":
+    "<p>Picture counting a jar of coins. You don't compare coins to each other — you just make piles: all the pennies here, nickels there, dimes there. Then you stack the piles back up in order. Counting Sort does the same with numbers: it tallies how many of each value there are, then rebuilds the list straight from the tallies. No comparisons at all, which makes it lightning fast — as long as there aren't too many <em>kinds</em> of coin.</p>",
+  "radix-sort-explained":
+    "<p>This is how old post offices sorted mail by ZIP code, and how punch-card machines worked a century ago. You sort by the last digit first, then the next digit, then the next — one column at a time. Because each pass keeps the previous order intact, after the final digit the whole list is perfectly sorted. It feels like magic the first time, but it is just careful, repeated digit-by-digit grouping.</p>",
+  "tim-sort-explained":
+    "<p>Imagine organising holiday photos that are <em>mostly</em> already in date order, with a few strays mixed in. The smart move isn't to start from scratch — it's to spot the long stretches that are already sorted and just stitch those stretches together, fixing the strays as you go. That is exactly what Tim Sort does, and because real-world data is usually already half-tidy, it is the default sorter built into Python, Java and your web browser.</p>",
+  "bucket-sort-explained":
+    "<p>Think of sorting loose change by dropping each coin into a labelled jar — 0–10 cents here, 10–20 there, and so on. Once the coins are spread across jars, each jar holds only a few coins that are quick to sort by hand, and you simply tip the jars out in order. Bucket Sort works best, like the jars, when the items spread out evenly instead of all landing in one jar.</p>",
+  "introsort-explained":
+    "<p>A good chef doesn't use one knife for everything — they switch tools when a job calls for it. Introsort is that chef. It starts with the fast, all-purpose method (Quick Sort), but if it notices the job going badly it switches to a slower-but-guaranteed method (Heap Sort), and for tiny leftovers it grabs the quick little tool (Insertion Sort). You get speed most of the time and a safety net for the rare bad case.</p>",
+
+  // ---------- Comparisons ----------
+  "quicksort-vs-mergesort":
+    "<p>Hire two removal crews. The first is blisteringly fast and works right inside your house with no extra vans — but on a really awkward day it can get tangled up. The second is calm and utterly dependable, never has a bad day, but needs a second van parked outside to stage your boxes. Quick Sort is the fast in-house crew; Merge Sort is the steady crew with the extra van. Which you 'hire' depends on whether you value raw speed or guaranteed predictability.</p>",
+  "why-quicksort-faster-than-mergesort":
+    "<p>Imagine doing a jigsaw at your own desk versus carrying pieces back and forth to a table in another room. Even if both take the same number of moves on paper, the constant trips to the other room waste real time. Quick Sort works right where the data already sits (great for the computer's fast 'desk', its cache), while Merge Sort keeps shuttling pieces to a separate table. That hidden travel time is why Quick Sort usually wins the stopwatch.</p>",
+  "quicksort-vs-heapsort":
+    "<p>It's a race car versus a reliable family sedan. The race car (Quick Sort) is faster almost every time — but push it badly and it can spin out. The sedan (Heap Sort) never wins the drag race, yet it <em>never</em> breaks down either, finishing in steady time no matter the road. When a missed deadline is unacceptable, you want the car that can't have a bad day.</p>",
+  "mergesort-vs-heapsort":
+    "<p>Both of these are the dependable sedans that never break down — but they pack differently. Merge Sort is roomy and keeps your luggage in its original order (stable), but it needs a bigger garage (extra memory). Heap Sort squeezes into a tiny parking spot (almost no extra memory) but tosses your luggage around a bit (not stable). Same reliability, opposite trade-off between space and tidiness.</p>",
+  "bubble-sort-vs-insertion-sort":
+    "<p>Two beginners sort a hand of cards. One keeps swapping every out-of-order neighbour over and over until things settle (Bubble Sort). The other simply picks up each card and slides it into place once (Insertion Sort). Both get there, but the second does far less fidgeting — which is why, given the choice, you'd always pick the card-slider.</p>",
+  "insertion-sort-vs-selection-sort":
+    "<p>Two styles of sorting cards. The 'insertion' player slides each new card into its place and is quick when the hand is already nearly tidy. The 'selection' player keeps scanning the whole hand for the smallest card to lay down next — more looking, but they touch each card the fewest possible times. Pick the slider for speed, the scanner only when actually moving cards is the costly part.</p>",
+  "quicksort-vs-timsort":
+    "<p>It's a generic power drill versus a drill pre-set for the exact wall you're drilling. Quick Sort is the fast generic tool. Tim Sort is tuned for the messy, half-organised data that shows up in real life — it spots the parts that are already in order and skips redoing them. That's why phones and websites ship Tim Sort by default, even though a raw drill can spin faster on a perfectly blank wall.</p>",
+  "counting-sort-vs-radix-sort":
+    "<p>Sorting house numbers on a street. Counting Sort is like having one pigeon-hole for every possible number — brilliant for a short street, hopeless for a city with millions of addresses. Radix Sort is the clever fix: sort by the last digit, then the next, using only ten little pigeon-holes (0–9) each time. Same idea of dropping items into slots, but Radix keeps the number of slots tiny no matter how big the numbers get.</p>",
+  "which-sorting-algorithm-is-fastest":
+    "<p>Asking 'what's the fastest sorting algorithm?' is like asking 'what's the fastest vehicle?' A sports car wins on a motorway, a speedboat wins on water, a snowmobile wins in the mountains. The honest answer is always 'it depends on the terrain' — here, the terrain is your kind of data. This guide hands you a simple map of which 'vehicle' wins on which 'road'.</p>",
+  "best-sorting-algorithm-for-large-data":
+    "<p>Tidying one bookshelf is nothing like relocating an entire library. Once the data is too big to fit 'in the room' (your computer's memory), you can't just shuffle it on the spot — you have to sort it in truck-sized chunks, write each sorted chunk down, then merge the chunks together. That's why the rules for enormous datasets are different from the rules for everyday lists.</p>",
+  "best-sorting-algorithm-for-nearly-sorted-data":
+    "<p>Imagine a bookshelf that's already alphabetised except for one or two books a visitor put back wrong. You wouldn't re-sort the whole shelf — you'd just grab the misplaced books and slot them home. Some sorting methods are smart enough to do exactly this, finishing almost instantly when the data is nearly tidy, while dumber methods pointlessly redo the entire shelf.</p>",
+  "best-sorting-algorithm-for-small-arrays":
+    "<p>To sort five napkins you just do it by hand in seconds. Wheeling in a big folding-and-sorting machine would actually be <em>slower</em> because setting it up takes longer than the job itself. Computers face the same thing: for a tiny handful of items, a simple by-hand method beats the fancy machinery, which is why the clever sorters quietly switch to a simple one once the pile gets small enough.</p>",
+
+  // ---------- Language Implementations ----------
+  "sorting-algorithms-in-python":
+    "<p>In Python, sorting is like having a professional organiser on call: you say <code>sorted(mylist)</code> and the expert handles it perfectly. This guide shows both how to phone the professional (the built-in tools you'll actually use) and how to do the organising yourself by hand (writing the classic methods), so you understand what the expert is really doing behind the scenes.</p>",
+  "sorting-algorithms-in-java":
+    "<p>Java is like a workshop that keeps two different tools and automatically grabs the right one for the material. For everyday objects it uses a careful, order-preserving tool; for plain numbers it uses a faster, rougher tool because the extra care isn't needed. Knowing which tool comes out, and why, explains a lot about how Java handles sorting for you.</p>",
+  "sorting-algorithms-in-javascript":
+    "<p>JavaScript's built-in sorter has a famous quirk: by default it lines numbers up the way a phone book lines up words, so 10 sneaks in front of 9 (because '1' comes before '9' as text). Once you know to hand it a simple rule for comparing numbers, it behaves perfectly. This guide covers that gotcha plus how to write the classic methods yourself.</p>",
+  "sorting-algorithms-in-cpp":
+    "<p>C++ gives you a high-performance sorting tool, a bit like a professional-grade power tool versus a household one — more raw speed and more knobs to turn. This guide explains the ready-made tools the language hands you and how the engine inside them works, then shows the classic methods written out so you can see what that engine is doing.</p>",
+  "what-algorithm-does-python-sort-use":
+    "<p>When you ask Python to sort something, it quietly hands the job to a built-in expert called Tim Sort. Think of it as a seasoned organiser who first glances at your pile, notices the bits that are already in order, and only bothers to fix the rest — which is why it feels so quick on the half-tidy data we deal with every day.</p>",
+  "what-algorithm-does-java-sort-use":
+    "<p>Java is the workshop that keeps two tools on the bench and picks for you. Sorting a list of objects (like customers)? It uses the careful tool that never scrambles equal items. Sorting plain numbers? It grabs the faster tool, because numbers have no hidden order to protect. Same workshop, two tools, chosen automatically by what you're sorting.</p>",
+  "javascript-array-sort-algorithm":
+    "<p>The thing to remember about JavaScript's sorter is that, left alone, it treats everything like words in a phone book — so it would file the number 100 before 9, just as 'apple' comes before 'banana'. Hand it a one-line rule for comparing numbers and the problem vanishes. Modern browsers also promise it now keeps equal items in their original order.</p>",
+  "cpp-stdsort-algorithm":
+    "<p>C++'s standard sorter is like a smart multi-tool that switches blades mid-job. It starts with the fast blade, swaps to a guaranteed-steady blade if the job turns nasty, and uses a tiny blade for the last few scraps. The result is something that's quick almost always and never catastrophically slow — which is why it's trusted for high-performance work.</p>",
+
+  // ---------- Interview & Career ----------
+  "sorting-algorithms-for-coding-interviews":
+    "<p>An interviewer asking about sorting is a bit like a driving examiner: they don't really care if you can recite the car manual, they want to see that you know <em>when</em> to brake and <em>why</em>. You'll rarely build a sorter from scratch on the job — but showing you understand which method fits which situation, and how to reason about speed, is exactly what wins the offer.</p>",
+  "sorting-algorithms-faang-interview":
+    "<p>At big tech interviews, sorting questions are less about memorising code and more about how you <em>think out loud</em> — like a driving test where the examiner watches your decisions, not just whether you reach the destination. Many tricky problems quietly become easy once you realise 'oh, if I sort this first, the rest falls into place.' Spotting that moment is the real skill being tested.</p>",
+  "how-to-explain-quicksort-in-interview":
+    "<p>Explaining Quick Sort well is like giving someone a clear recipe: keep it to a few confident steps rather than rambling. 'Pick one item as a reference, push smaller things to one side and bigger to the other, then repeat on each side.' Say it that simply, mention the one thing that can go wrong, and you'll sound like you truly get it — which you will.</p>",
+  "sorting-interview-questions-and-answers":
+    "<p>Treat this like a deck of flashcards for a test. Each question is one a real interviewer might fire at you, and each answer is the crisp, correct reply you can put in your own words. Cover the answer, try saying it aloud, then check — that simple quiz-yourself habit is far more effective than re-reading notes.</p>",
+  "do-you-need-to-memorize-sorting-algorithms":
+    "<p>Do you memorise a recipe word-for-word, or do you understand it well enough to cook it without the card? Cooking from understanding is what lasts. It's the same with sorting algorithms — cramming the exact code fades fast, but grasping the <em>idea</em> (split and conquer, build a pyramid, group into slots) means you can rebuild any of them on the spot and reason about new problems.</p>",
+
+  // ---------- Learning & Tools ----------
+  "best-sorting-algorithm-visualizer-tools":
+    "<p>Reading how a sort works is like reading a recipe; watching a visualiser is like watching the cooking show. Suddenly the abstract steps become bars sliding, swapping and settling into place in front of your eyes. This guide explains what makes a sorting visualiser genuinely useful for learning, so you pick one that teaches rather than just looks pretty.</p>",
+  "how-to-use-a-sorting-visualizer-to-learn":
+    "<p>Learning from a visualiser is like learning to drive with an instructor narrating every move — far better than silently watching traffic. Slow it right down, say out loud what's happening, try to predict the next move before it happens, and test the same method on tidy versus messy data. Those small active habits turn a pretty animation into real understanding.</p>",
+  "why-learn-sorting-algorithms":
+    "<p>We still teach kids arithmetic even though every phone has a calculator — because the thinking it builds underpins everything that comes later. Sorting algorithms play the same role in programming. You'll almost always use the built-in sorter day to day, but learning how sorting works trains the core skills (measuring effort, breaking big problems into small ones) that make you better at <em>all</em> programming.</p>",
+};
+
+// Attach each plain-English analogy to its article.
+for (const article of articles) {
+  article.layman = laymanExplanations[article.slug];
+}
