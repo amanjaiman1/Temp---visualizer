@@ -835,7 +835,7 @@ footer span { color: var(--cyan); }
   
   .visualiser { min-height: 0; }
   .bar-canvas-wrap { flex: 0 0 auto; height: 48vh; min-height: 280px; padding: 16px 14px 12px; }
-  .viz-top-bar { flex-wrap: wrap; gap: 8px; }
+  .viz-top-bar { flex-wrap: wrap; gap: 8px; background: rgba(6,8,16,1); backdrop-filter: none; }
   .complexity-pills { flex-wrap: wrap; gap: 6px; }
   .controls-bar { gap: 10px; padding: 12px 14px; }
   .ctrl-group { min-width: 100px; flex: 1 1 100px; }
@@ -1024,19 +1024,23 @@ footer span { color: var(--cyan); }
 
 @media (max-width: 680px) {
   .teach-popup {
-    /* Mobile: centred near the TOP of the array container (boxes sit in the
-       bottom half, so this never covers them and never goes off-screen). */
+    /* Mobile: a compact band pinned to the TOP of the array container. Height
+       is capped so it stays within the reserved top band — the bars (and the
+       lifted active boxes) are kept below it by the popup-reserve logic in
+       renderBars(), so the array boxes are always visible. */
     left: 50%;
     right: auto;
     bottom: auto;
     top: 8px;
     width: auto;
     transform: translateX(-50%) translateY(-10px);
-    padding: 14px 14px;
-    min-height: 70px;
+    padding: 10px 14px;
+    min-height: 0;
+    max-height: 84px;
+    overflow-y: auto;
     max-width: calc(100% - 16px);
     gap: 10px;
-    background: linear-gradient(135deg, rgba(16,12,30,0.95), rgba(8,16,24,0.95));
+    background: linear-gradient(135deg, rgba(16,12,30,0.97), rgba(8,16,24,0.97));
     backdrop-filter: blur(6px);
     border-radius: 10px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 16px rgba(176,111,255,0.2);

@@ -520,10 +520,18 @@ function renderBars(arr, stateMap) {
   const maxVal = Math.max(...arr, 1);
   const { startX, slot, barWidth } = geom(canvas, n);
   const stageH = canvas.clientHeight || 320;
-  const usableH = stageH * BAR_AREA;
+  // On narrow screens the Teach-mode popup sits across the TOP of the stage.
+  // While it's showing, reserve a band at the top and shrink the bar area so
+  // the active (lifted) boxes glide UP to just BELOW the popup instead of
+  // disappearing behind it — keeping every array box visible on mobile.
+  const narrow = (canvas.clientWidth || 600) <= 680;
+  const popupReserve = (narrow && teachMode) ? 96 : 0;
+  const barArea = popupReserve ? 0.42 : BAR_AREA;
+  const usableH = stageH * barArea;
   // Lift active boxes up into the empty top half. Cap so even the tallest
-  // box stays fully visible inside the container while it floats/glides.
-  const lift = Math.max(40, stageH - usableH - 40);
+  // box stays fully visible inside the container while it floats/glides, and
+  // so lifted boxes clear the teach popup on mobile.
+  const lift = Math.max(28, stageH - usableH - 40 - popupReserve);
 
   arr.forEach((value, i) => {
     const refEls = barEls.get(value);
